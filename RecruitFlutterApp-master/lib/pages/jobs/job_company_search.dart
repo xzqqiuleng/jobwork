@@ -387,7 +387,7 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                           ? GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               child: JobRowItem(
-                                  job: _jobList[index],
+//                                  job: _jobList[index],
                                   index: index,
                                   lastItem: index == _jobList.length - 1),
                               onTap: () {

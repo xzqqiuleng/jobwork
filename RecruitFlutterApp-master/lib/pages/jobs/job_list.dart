@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_list.dart';
 import 'package:recruit_app/pages/jobs/city_filter.dart';
@@ -9,6 +12,7 @@ import 'package:recruit_app/pages/jobs/job_company_search.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/jobs/job_filter.dart';
 import 'package:recruit_app/pages/jobs/job_row_item.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 
 class JobList extends StatefulWidget {
 
@@ -116,29 +120,73 @@ class JobBodyList extends StatefulWidget{
 }
 
 class _JobBodyListState extends State<JobBodyList>{
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: true);
+  int sortId;
+  List data =List();
+  _OnRefresh(){
+    sortId=null;
+
+    new MiviceRepository().getWorkList(sortId).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        data.clear();
+
+        setState(() {
+          data = reponse["result"];
+        });
+        print(data);
+        sortId = data[data.length-1]["sort_id"];
+        _refreshController.refreshCompleted();
+      }
+    });
+  }
+  _loadMore(){
+    new MiviceRepository().getWorkList(sortId).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        List  loaddata = reponse["result"];
+        setState(() {
+        data.addAll(loaddata);
+        });
+
+        sortId = data[data.length-1]["sort_id"];
+        _refreshController.loadComplete();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ListView.builder(itemBuilder: (context, index) {
-      if (index < widget._jobList.length) {
-        return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            child: JobRowItem(
-                job: widget._jobList[index],
-                index: index,
-                lastItem: index == widget._jobList.length - 1),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JobDetail(),
-                  ));
-            });
-      }
-      return null;
-    },
-    itemCount: widget._jobList.length,
-      );
+    return SmartRefresher(
+
+        header: WaterDropHeader(),
+        footer: ClassicFooter(),
+        controller: _refreshController,
+       onRefresh: _OnRefresh,
+       onLoading: _loadMore,
+        enablePullUp: true,
+        child: ListView.builder(itemBuilder: (context, index) {
+          if (index < data.length) {
+            return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                child: JobRowItem(
+                    job: data[index],
+                    index: index,
+                    lastItem: index == widget._jobList.length - 1),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => JobDetail(),
+                      ));
+                });
+          }
+          return null;
+        },
+          itemCount: data.length,
+        )
+    );
   }
 
 }

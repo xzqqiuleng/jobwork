@@ -23,7 +23,6 @@ class _CompanyListState extends State<CompanyList> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -170,6 +169,7 @@ class _CompanyListState extends State<CompanyList> {
                 physics: BouncingScrollPhysics(),
                 slivers: <Widget>[
                   SliverList(
+
                       delegate: SliverChildBuilderDelegate((context, index) {
                     if (index < _companyList.length) {
                       return GestureDetector(
