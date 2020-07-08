@@ -7,6 +7,12 @@ class RecruitApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
+      theme: ThemeData(
+        primaryIconTheme: const IconThemeData(color: Colors.white),
+        brightness: Brightness.light,
+        primaryColor: new Color.fromARGB(255, 15, 185, 125),
+        accentColor: Color.fromARGB(255, 15, 185, 125),
+      ),
       home: LoginType(),
     );
   }

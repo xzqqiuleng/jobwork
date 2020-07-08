@@ -97,9 +97,9 @@ class _JobBodyState extends State<JobBody> with SingleTickerProviderStateMixin{
       ),
       body: TabBarView(
         children: [
-          JobBodyList(widget._jobList),
-          JobBodyList(widget._jobList),
-          JobBodyList(widget._jobList),
+          JobBodyList(),
+          JobBodyList(),
+          JobBodyList(),
         ],
         controller: _tabController,
       ),
@@ -110,7 +110,7 @@ class _JobBodyState extends State<JobBody> with SingleTickerProviderStateMixin{
 
 class JobBodyList extends StatefulWidget{
   List _jobList;
-  JobBodyList(this._jobList);
+  JobBodyList();
   @override
   _JobBodyListState createState() {
     // TODO: implement createState
@@ -382,9 +382,9 @@ class _JobListState extends State<JobList> with SingleTickerProviderStateMixin{
 
           body:  TabBarView(
             children: [
-              JobBodyList(_jobList),
-              JobBodyList(_jobList),
-              JobBodyList(_jobList),
+              JobBodyList(),
+              JobBodyList(),
+              JobBodyList(),
             ],
             controller: _tabController,
           ),

@@ -4,6 +4,7 @@ import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/boss/boss.dart';
 import 'package:recruit_app/pages/companys/company_list.dart';
 import 'package:recruit_app/pages/employe/employe_list.dart';
+import 'package:recruit_app/pages/home/home_page.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/mine/me.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
@@ -92,7 +93,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
   ];
 
   static List<Widget> _widgetOptions = <Widget>[
-    JobList(),
+    HomePage(),
     CompanyList(),
     MsgList(),
     Mine(),
