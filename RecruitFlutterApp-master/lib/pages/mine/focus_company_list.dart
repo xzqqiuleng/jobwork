@@ -50,7 +50,7 @@ class _FocusCompanyListState extends State<FocusCompanyList> {
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               child: CompanyRowItem(
-                  company: _companyList[index],
+//                  company: _companyList[index],
                   index: index,
                   lastItem: index == _companyList.length - 1),
               onTap: () {

@@ -97,9 +97,9 @@ class _JobBodyState extends State<JobBody> with SingleTickerProviderStateMixin{
       ),
       body: TabBarView(
         children: [
-          JobBodyList(),
-          JobBodyList(),
-          JobBodyList(),
+//          JobBodyList(),
+//          JobBodyList(),
+//          JobBodyList(),
         ],
         controller: _tabController,
       ),
@@ -109,8 +109,9 @@ class _JobBodyState extends State<JobBody> with SingleTickerProviderStateMixin{
 }
 
 class JobBodyList extends StatefulWidget{
-  List _jobList;
-  JobBodyList();
+  bool isScrool;
+  int type;
+  JobBodyList(this.isScrool,this.type);
   @override
   _JobBodyListState createState() {
     // TODO: implement createState
@@ -119,15 +120,16 @@ class JobBodyList extends StatefulWidget{
 
 }
 
-class _JobBodyListState extends State<JobBodyList>{
+class _JobBodyListState extends State<JobBodyList> with AutomaticKeepAliveClientMixin{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
-  int sortId;
+  int page;
   List data =List();
-  _OnRefresh(){
-    sortId=null;
 
-    new MiviceRepository().getWorkList(sortId).then((value) {
+  _OnRefresh(){
+    page=0;
+
+    new MiviceRepository().getWorkList(page,widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -136,13 +138,13 @@ class _JobBodyListState extends State<JobBodyList>{
           data = reponse["result"];
         });
         print(data);
-        sortId = data[data.length-1]["sort_id"];
+        page++;
         _refreshController.refreshCompleted();
       }
     });
   }
   _loadMore(){
-    new MiviceRepository().getWorkList(sortId).then((value) {
+    new MiviceRepository().getWorkList(page,widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         List  loaddata = reponse["result"];
@@ -150,7 +152,7 @@ class _JobBodyListState extends State<JobBodyList>{
         data.addAll(loaddata);
         });
 
-        sortId = data[data.length-1]["sort_id"];
+        page++;
         _refreshController.loadComplete();
       }
     });
@@ -159,7 +161,7 @@ class _JobBodyListState extends State<JobBodyList>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return SmartRefresher(
-
+        physics:widget.isScrool?BouncingScrollPhysics () :NeverScrollableScrollPhysics (),
         header: WaterDropHeader(),
         footer: ClassicFooter(),
         controller: _refreshController,
@@ -167,13 +169,13 @@ class _JobBodyListState extends State<JobBodyList>{
        onLoading: _loadMore,
         enablePullUp: true,
         child: ListView.builder(itemBuilder: (context, index) {
-          if (index < data.length) {
+          if (data.length >0 && index < data.length) {
             return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 child: JobRowItem(
                     job: data[index],
                     index: index,
-                    lastItem: index == widget._jobList.length - 1),
+                    lastItem: index == data.length - 1),
                 onTap: () {
                   Navigator.push(
                       context,
@@ -188,6 +190,10 @@ class _JobBodyListState extends State<JobBodyList>{
         )
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }
 class _JobListState extends State<JobList> with SingleTickerProviderStateMixin{
@@ -382,9 +388,9 @@ class _JobListState extends State<JobList> with SingleTickerProviderStateMixin{
 
           body:  TabBarView(
             children: [
-              JobBodyList(),
-              JobBodyList(),
-              JobBodyList(),
+//              JobBodyList(),
+//              JobBodyList(),
+//              JobBodyList(),
             ],
             controller: _tabController,
           ),

@@ -13,6 +13,38 @@ class JobRowItem extends StatelessWidget {
   const JobRowItem({Key key, this.job, this.index, this.lastItem})
       : super(key: key);
 
+
+  Widget getImg(String imgUrl){
+    if(imgUrl.contains("http")){
+      return  ClipRRect(
+        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
+        child: Image.network(
+          imgUrl,
+          width: ScreenUtil().setWidth(56),
+          height: ScreenUtil().setWidth(56),
+          fit: BoxFit.cover,
+        ),
+      );
+    }else{
+      return Container(
+        alignment: Alignment.center,
+        height: 28,
+        width: 28,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color:Colours.slRandomColor()
+          ),
+        child: Text(
+            imgUrl,
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.white
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final jobItem = Card(
@@ -97,15 +129,7 @@ class JobRowItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(27)),
-                  child: Image.asset(
-                    'images/avatar_${index % 16 + 1}.png',
-                    width: ScreenUtil().setWidth(54),
-                    height: ScreenUtil().setWidth(54),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                getImg(job["company_img"].toString()),
                 SizedBox(
                   width: ScreenUtil().setWidth(12),
                 ),

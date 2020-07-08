@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_list.dart';
+import 'package:recruit_app/pages/utils/html_init.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
 class CompanyRowItem extends StatelessWidget {
-  final Company company;
+  final Map<String,dynamic> company;
   final int index;
   final bool lastItem;
 
@@ -56,7 +57,7 @@ class CompanyRowItem extends StatelessWidget {
                           children: <Widget>[
                             Flexible(
                               child: Text(
-                                company.name,
+                                company["name"],
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -74,7 +75,7 @@ class CompanyRowItem extends StatelessWidget {
                         ),
                         SizedBox(height: ScreenUtil().setWidth(10)),
                         Text(
-                          '福州 仓山区 金山',
+                          company["address"],
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(26),
                             color: Colors.black54,
@@ -129,7 +130,7 @@ class CompanyRowItem extends StatelessWidget {
               ],
             ),
             Text(
-              "公司简介把数字世界带入每个人、每个家庭、每个组织,构建万物互联的智能世界。 了解公司愿景 华为是谁 华为创立于1987年,是全球领先的ICT(信息与通信)基础设施和...",
+             HtmlInit.initHtml(company["company_info"].toString()),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -161,7 +162,7 @@ class CompanyRowItem extends StatelessWidget {
                         ),
                         Flexible(
                           child: Text(
-                            '平面设计师/美术指导',
+                            company["jobs"][0]["title"],
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -178,7 +179,7 @@ class CompanyRowItem extends StatelessWidget {
                     width: ScreenUtil().setWidth(22),
                   ),
                   Text(
-                    '7',
+                    company["nums"].toString(),
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(24),
                       color: Colours.app_main,

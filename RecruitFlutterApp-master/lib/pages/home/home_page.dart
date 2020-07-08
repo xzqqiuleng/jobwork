@@ -12,7 +12,7 @@ import 'home_joblist.dart';
 
 class HomePage extends StatefulWidget {
   final double _homeTopBannerHeight = 220;
-  final double _homeTopicHeight = 300;
+  final double _homeTopicHeight = 320;
   @override
   State<StatefulWidget> createState() {
 
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   bool _autoScroll = false;
   bool _isTabbarItemClick = false;
   bool _isNavgationBarHidden = false;
-
+  bool isScrool=false;
   void _rightTabItemPressed() {
 
   }
@@ -47,6 +47,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
     scrollController.animateTo(0.0,duration: new Duration(milliseconds: 300),curve: Curves.linear);
     setState(() {
+      isScrool = false;
       this._mainScrollable = true;
       this._contentScrollable = false;
       this._offset = (widget._homeTopicHeight - Screen.navigationBarHeight)*0.5;
@@ -92,6 +93,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           _navAplpha = 1 - (widget._homeTopBannerHeight - offset) / widget._homeTopBannerHeight;
            if(_navAplpha >=0.5){
              _navAplpha = 1;
+             isScrool = true;
            }
         });
       } else if (_navAplpha != 1) {
@@ -136,12 +138,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         this.topBannerDatas.add(bannerModel2);
 
 
-        TopicTabModel tabModel1 = TopicTabModel(picture: "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1203774205,2402277934&fm=26&gp=0.jpg");
-        TopicTabModel tabModel2 = TopicTabModel(picture: "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1203774205,2402277934&fm=26&gp=0.jpg");
-        TopicTabModel tabModel3 = TopicTabModel(picture: "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1203774205,2402277934&fm=26&gp=0.jpg");
+        TopicTabModel tabModel1 = TopicTabModel(picture: "images/home_tab1.png",link: "职位库");
+        TopicTabModel tabModel2 = TopicTabModel(picture: "images/home_tab2.png",link: "找工作");
+        TopicTabModel tabModel3 = TopicTabModel(picture: "images/home_tab3.png",link: "急聘");
+        TopicTabModel tabModel4 = TopicTabModel(picture: "images/home_tab4.png",link: "热门");
         this.topicTabMenus.add(tabModel1);
         this.topicTabMenus.add(tabModel2);
         this.topicTabMenus.add(tabModel3);
+        this.topicTabMenus.add(tabModel4);
 
       });
 
@@ -183,6 +187,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   child: HomeJobList(
                     contentScrollable: _contentScrollable,
                     tabbarItemClick: _statuTabbarItemPressed,
+                     isScrool:  isScrool,
                   ),
               )
             ],

@@ -15,14 +15,22 @@ class MiviceRepository{
 
   }
 
-   Future getWorkList(int sortId) async {
+   Future getWorkList(int page,int searchType) async {
       var response = await dio.post<Map>('/job/list', data: {
+
+      'pageSize': 10,
+      'page': page,
+      'searchType': searchType,
+    });
+    return response;
+  }
+  Future getCompanyList(int sortId) async {
+    var response = await dio.post<Map>('/company/list', data: {
 
       'pageSize': 10,
       'sortId': sortId,
     });
     return response;
   }
-
 
 }

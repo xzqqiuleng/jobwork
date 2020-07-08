@@ -28,12 +28,24 @@ class HomeHeadPlan extends StatelessWidget {
       children: topicTabMenus.map((model){
           return Expanded(
             flex: 1,
-            child: new Container(
-              child: new FadeInImage.assetNetwork(
-                placeholder: globalPlaceHolderImage,
-                image: model.picture ?? '',
-                fit: BoxFit.cover,
-              ),
+            child: new Column(
+              children: [
+                Image(
+                  width: 50,
+                  height: 50,
+                  image: AssetImage(model.picture),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  model.link,
+               style: TextStyle(
+                 fontWeight: FontWeight.w500
+               ),
+                )
+              ],
+
             ),
           );
         }).toList(),
@@ -55,10 +67,11 @@ class HomeHeadPlan extends StatelessWidget {
           new HomeBanner(bannerModels: bannerDatas,height: bannerHeight,placeholder:  globalPlaceHolderImage),
 
           new Container(
-            margin: new EdgeInsets.only(top: 10.0),
-            padding: new EdgeInsets.only(left: 15.0,right: 15.0),
+            alignment: Alignment.center,
+            margin: new EdgeInsets.only(top: 0.0),
+            padding: new EdgeInsets.only(left: 0.0,right: 0.0,bottom: 0,top: 20),
             width: Screen.width,
-            height: 68,
+            height: 100,
             color: Colors.white,
             child: _buildMiddelBar(),
           ),

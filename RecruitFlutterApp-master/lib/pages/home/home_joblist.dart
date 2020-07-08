@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
@@ -6,10 +7,11 @@ import 'package:recruit_app/pages/utils/screen.dart';
 class HomeJobList extends StatefulWidget {
   final bool contentScrollable;
   final ValueChanged<int> tabbarItemClick;
+  final bool isScrool;
 
 
 
-  HomeJobList({Key key,this.contentScrollable,this.tabbarItemClick}) : super(key:key);
+  HomeJobList({Key key,this.contentScrollable,this.tabbarItemClick,this.isScrool}) : super(key:key);
 
   @override
   _HomeJobListState createState() => _HomeJobListState();
@@ -34,9 +36,9 @@ class _HomeJobListState extends State<HomeJobList> with SingleTickerProviderStat
 
    Widget _buildTabViewContent() {
     return new TabBarView(children:  [
-        JobBodyList(),
-     JobBodyList(),
-     JobBodyList(),
+        JobBodyList(widget.isScrool,0),
+     JobBodyList(widget.isScrool,1),
+     JobBodyList(widget.isScrool,2),
      ],
             controller: _tabController,
           );
@@ -54,12 +56,12 @@ class _HomeJobListState extends State<HomeJobList> with SingleTickerProviderStat
                   controller: _tabController,
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: new Color.fromARGB(255, 15, 185, 125),
-                  indicatorWeight: 2.0,
-                  indicatorPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  indicatorColor: Colours.app_main,
+                  indicatorWeight: 4.0,
+                  indicatorPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                   labelColor: Colors.black87,
-                  labelPadding: new EdgeInsets.only(left: 10.0,right: 10.0),
-                  labelStyle: new TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold,fontFamily: ""),
+                  labelPadding: new EdgeInsets.only(left: 16.0,right: 16.0),
+                  labelStyle: new TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold,fontFamily: ""),
                   unselectedLabelColor: Colors.black54,
                   unselectedLabelStyle: new TextStyle(fontSize: 16.0),
                 ),
