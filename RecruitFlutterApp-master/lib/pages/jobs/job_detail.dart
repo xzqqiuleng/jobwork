@@ -10,7 +10,7 @@ class JobDetail extends StatefulWidget {
     return _JobDetailState();
   }
 }
-
+//这次基础款结帐一次，以后每次大版本更新再另算（包括新需求，新模块）。小功能的话，修bug免费。
 class _JobDetailState extends State<JobDetail> {
   @override
   Widget build(BuildContext context) {
@@ -18,11 +18,12 @@ class _JobDetailState extends State<JobDetail> {
     return Scaffold(
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',
-                width: 24,
-                height: 24,
+                width: 20,
+                height: 20,
               ),
               onPressed: () {
                 Navigator.pop(context);

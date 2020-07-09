@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:recruit_app/model/banner_model.dart';
 import 'package:recruit_app/model/topictab_model.dart';
+import 'package:recruit_app/pages/JobPage.dart';
+import 'package:recruit_app/pages/jobs/all/job_libsboard.dart';
+import 'package:recruit_app/pages/jobs/all/joball_page.dart';
 import 'package:recruit_app/pages/utils/resource.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
@@ -21,33 +24,37 @@ class HomeHeadPlan extends StatelessWidget {
 
 
 
-  Widget _buildMiddelBar() {
+  Widget _buildMiddelBar(BuildContext context) {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: topicTabMenus.map((model){
-          return Expanded(
-            flex: 1,
-            child: new Column(
-              children: [
+          return  Expanded(
+              flex: 1,
+              child:GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap:()=>  Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => JobAllPage())),
+                child:new Column(
+                children: [
                 Image(
-                  width: 50,
-                  height: 50,
-                  image: AssetImage(model.picture),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  model.link,
-               style: TextStyle(
-                 fontWeight: FontWeight.w500
-               ),
-                )
-              ],
-
-            ),
-          );
+        width: 50,
+        height: 50,
+        image: AssetImage(model.picture),
+        ),
+        SizedBox(
+        height: 5,
+        ),
+        Text(
+        model.link,
+        style: TextStyle(
+        fontWeight: FontWeight.w500
+        ),
+        )
+        ],
+        )
+        )
+        );
         }).toList(),
     );
   }
@@ -73,7 +80,7 @@ class HomeHeadPlan extends StatelessWidget {
             width: Screen.width,
             height: 100,
             color: Colors.white,
-            child: _buildMiddelBar(),
+            child: _buildMiddelBar(context),
           ),
 
         ],

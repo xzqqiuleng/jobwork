@@ -9,6 +9,7 @@ import 'package:recruit_app/pages/home/home_page.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/mine/me.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
+import 'package:recruit_app/pages/msg/new_msglist.dart';
 
 class RecruitHomeApp extends StatefulWidget {
   @override
@@ -96,7 +97,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     CompanyJobList(),
-    MsgList(),
+    NewMessageList(),
     Mine(),
   ];
 

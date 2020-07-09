@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
+import 'package:recruit_app/pages/mine/comunicate.dart';
 import 'package:recruit_app/pages/mine/focus_company_list.dart';
 import 'package:recruit_app/pages/mine/job_intent.dart';
+import 'package:recruit_app/pages/mine/send_resume.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
 
 class Mine extends StatefulWidget {
@@ -38,7 +41,7 @@ class _MineState extends State<Mine> {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Setting(), ),);
               }),
         ],
-        backgroundColor: Color.fromRGBO(68, 77, 151, 1),
+        backgroundColor: Colours.app_main,
       ),
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
@@ -50,7 +53,7 @@ class _MineState extends State<Mine> {
                   right: ScreenUtil().setWidth(48),
                   bottom: ScreenUtil().setWidth(48),
                   top: ScreenUtil().setWidth(30)),
-              color: Color.fromRGBO(68, 77, 151, 1),
+              color:  Colours.app_main,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,7 +120,10 @@ class _MineState extends State<Mine> {
                               ),
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>SendResumeJob(),),);
+
+                          },
                         ),
                       ),
                       Container(
@@ -193,7 +199,9 @@ class _MineState extends State<Mine> {
                               ),
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>ComunicateJob(),),);
+                          },
                         ),
                       ),
                     ],

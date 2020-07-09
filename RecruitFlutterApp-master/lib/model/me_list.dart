@@ -4,7 +4,7 @@ class MeOptions {
     Me(imgPath: 'images/img_job_intent_gray.png', itemName: '管理求职意向', itemStatus: '离职-随时到岗'),
     Me(imgPath: 'images/img_love_gray.png', itemName: '收藏夹', itemStatus: ''),
     Me(imgPath: 'images/img_blacklist_gray.png', itemName: '黑名单', itemStatus: ''),
-    Me(imgPath: 'images/img_help_gray.png', itemName: '帮助与反馈', itemStatus: '牛人'),
+    Me(imgPath: 'images/img_help_gray.png', itemName: '切换角色', itemStatus: '老板'),
     Me(imgPath: 'images/img_about_gray.png', itemName: '关于', itemStatus: ''),
   ];
 

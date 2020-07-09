@@ -4,45 +4,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
+import 'package:recruit_app/pages/msg/notice_list.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
+import 'package:recruit_app/widgets/slide_button.dart';
 
-import 'company_detail.dart';
-import 'company_row_item.dart';
-
-
-class CompanyJobList extends StatefulWidget {
-  final bool contentScrollable;
-  final ValueChanged<int> tabbarItemClick;
+import '../JobPage.dart';
+import 'msg_chat_item.dart';
 
 
 
-  CompanyJobList({Key key,this.contentScrollable,this.tabbarItemClick}) : super(key:key);
+class NewMessageList extends StatefulWidget {
+
+
 
   @override
-  _CompanyJobState createState() => _CompanyJobState();
+  _NewMessageListState createState() => _NewMessageListState();
 }
 
-class _CompanyJobState extends State<CompanyJobList> with SingleTickerProviderStateMixin {
+class _NewMessageListState extends State<NewMessageList> with SingleTickerProviderStateMixin {
   TabController _tabController;
   final List<Tab> _tabMenus = <Tab> [
-    new Tab(text: '推荐'),
-    new Tab(text: '最新'),
+    new Tab(text: '互动'),
+    new Tab(text: '通知'),
   ];
 
 
    int _currentPosition = 0;
 
    void _onTabbarItemPressed(index) {
-     widget.tabbarItemClick(index);
+//     final ValueChanged<int> tabbarItemClick;
    }
 
    Widget _buildTabViewContent() {
     return new TabBarView(children:  [
       CompanyBodyList(),
-      CompanyBodyList(),
+      NoticeList(),
      ],
             controller: _tabController,
           );
@@ -87,49 +87,7 @@ class _CompanyJobState extends State<CompanyJobList> with SingleTickerProviderSt
                  padding: EdgeInsets.only(left: 10),
                ),
              ),
-             SizedBox(
-               width: ScreenUtil().setWidth(10),
-             ),
-             GestureDetector(
-               behavior: HitTestBehavior.opaque,
-               onTap: () {
-                 Navigator.push(context,MaterialPageRoute(builder: (context)=>JobCompanySearch(searchType: SearchType.company,),),);
-               },
-               child: Container(
-                 width: ScreenUtil().setWidth(240),
 
-                 child: Row(
-                   children: <Widget>[
-                     Image.asset(
-                       'images/search_qy.png',
-                       width: ScreenUtil().setWidth(26),
-                       height: ScreenUtil().setWidth(26),
-                       fit: BoxFit.contain,
-                     ),
-                     Text(
-                       " ｜ 企业搜索",
-                       maxLines: 1,
-                       overflow: TextOverflow.ellipsis,
-                       style: TextStyle(
-                         fontSize: ScreenUtil().setSp(24),
-                         color: Color(0xFF80808080),
-                       ),
-                     ),
-                   ],
-                 ),
-                 padding: EdgeInsets.symmetric(
-                   horizontal: ScreenUtil().setWidth(30),
-                   vertical: ScreenUtil().setWidth(16),
-                 ),
-                 decoration: BoxDecoration(
-                   color: Color(0xFFF0F0F0F0),
-//                     border: Border.all(
-//                       color: Colo,
-//                       width: ScreenUtil().setWidth(2),
-//                     ),
-                     borderRadius:
-                     BorderRadius.circular(ScreenUtil().setWidth(1000))),
-               ),),
 
            ],
          ),
@@ -206,6 +164,8 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   RefreshController(initialRefresh: true);
   int sortId;
   List data =List();
+  List<TopicTabModel> topicTabMenus=List();
+
 
   _OnRefresh(){
     sortId=null;
@@ -240,36 +200,51 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return SmartRefresher(
+    topicTabMenus.clear();
+    TopicTabModel tabModel1 = TopicTabModel(picture: "images/m_icon1.png",link: "感兴趣");
+    TopicTabModel tabModel2 = TopicTabModel(picture: "images/m_icon2.png",link: "看过我的");
+    TopicTabModel tabModel3 = TopicTabModel(picture: "images/m_icon3.png",link: "智能推荐");
+    TopicTabModel tabModel4 = TopicTabModel(picture: "images/m_icon4.png",link: "职位上新");
+    this.topicTabMenus.add(tabModel1);
+    this.topicTabMenus.add(tabModel2);
+    this.topicTabMenus.add(tabModel3);
+    this.topicTabMenus.add(tabModel4);
 
-        header: WaterDropHeader(),
-        footer: ClassicFooter(),
-        controller: _refreshController,
-        onRefresh: _OnRefresh,
-        onLoading: _loadMore,
-        enablePullUp: true,
-        child: ListView.builder(itemBuilder: (context, index) {
-          if (data.length >0 && index < data.length) {
-            return  GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: CompanyRowItem(
-                  company: data[index],
-                  index: index,
-                  lastItem: index == data.length - 1),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CompanyDetail(),
-                    ));
-              },
-            );
-          }
-          return Text("");
-        },
-          itemCount: data.length,
+    // TODO: implement build
+    return Flex(
+      direction:Axis.vertical,
+      children: <Widget>[
+        Expanded(
+          flex: 0,
+child: _buildMiddelBar(topicTabMenus,context),
+        ),
+      Expanded(
+
+        child: SmartRefresher(
+
+            header: WaterDropHeader(),
+            footer: ClassicFooter(),
+            controller: _refreshController,
+            onRefresh: _OnRefresh,
+            onLoading: _loadMore,
+            enablePullUp: true,
+            child: ListView.builder(itemBuilder: (context, index) {
+//          if (data.length >0 && index < data.length) {
+//            return  GestureDetector(
+//              behavior: HitTestBehavior.opaque,
+//              child: MsgChatItem(btnKey: key),
+//            );
+//          }
+              var key = GlobalKey<SlideButtonState>();
+              return MsgChatItem(btnKey: key,);
+            },
+
+              itemCount: 10,
+            )
         )
+      )
+
+      ],
     );
   }
 
@@ -277,4 +252,46 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
+}
+
+Widget _buildMiddelBar( List<TopicTabModel> topicTabMenus,BuildContext context) {
+  return Container(
+    padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+    child:  Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: topicTabMenus.map((model){
+        return Expanded(
+          flex: 1,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap:()=>  Navigator.push(context, MaterialPageRoute(
+                builder: (context) => JobPage())),
+            child:new Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image(
+                  width: 46,
+                  height: 46,
+                  image: AssetImage(model.picture),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  model.link,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12
+                  ),
+                )
+              ],
+
+            ),
+          )
+        );
+      }).toList(),
+    ),
+  );
 }

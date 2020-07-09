@@ -12,7 +12,7 @@ class MsgList extends StatefulWidget {
   @override
   _MsgListState createState() => _MsgListState();
 }
-
+//看过我的 //感兴趣   //为你推荐  //新职位
 class _MsgListState extends State<MsgList> {
   bool _firstType = true;
   bool _secondType = true;
