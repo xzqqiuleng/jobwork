@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+//  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
 
   static Dio dio;
 
@@ -32,5 +33,11 @@ class MiviceRepository{
     });
     return response;
   }
+  Future getJobDetail(int jobId) async {
+    var response = await dio.post<Map>('/job/info',queryParameters: {
 
+      'jobId': jobId,
+    });
+    return response;
+  }
 }
