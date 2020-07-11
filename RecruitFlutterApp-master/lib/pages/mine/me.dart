@@ -8,6 +8,7 @@ import 'package:recruit_app/model/me_list.dart';
 import 'package:recruit_app/pages/mine/comunicate.dart';
 import 'package:recruit_app/pages/mine/focus_company_list.dart';
 import 'package:recruit_app/pages/mine/job_intent.dart';
+import 'package:recruit_app/pages/mine/online_resume.dart';
 import 'package:recruit_app/pages/mine/send_resume.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
 
@@ -58,39 +59,64 @@ class _MineState extends State<Mine> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          '哈哈哈哈哈登',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(48),
-                              fontWeight: FontWeight.bold),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: (){
+
+                    },
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            ScreenUtil().setWidth(70),
+                          ),
+                          child: Image.asset(
+                            'images/img_icon_harden.png',
+                            width: ScreenUtil().setWidth(140),
+                            height: ScreenUtil().setWidth(140),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(15),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(70),
+                        SizedBox(
+                          width: ScreenUtil().setWidth(15),
                         ),
-                        child: Image.asset(
-                          'images/img_icon_harden.png',
-                          width: ScreenUtil().setWidth(140),
-                          height: ScreenUtil().setWidth(140),
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    ],
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:<Widget>[
+                            Text(
+                              '哈哈哈哈哈登',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(40),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil().setWidth(20),
+                            ),
+                            Text(
+                              '点击登录',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(30),
+                              ),
+                            ),
+
+                          ],
+
+                        )
+                      ],
+                    ),
                   ),
+
                   SizedBox(
-                    height: ScreenUtil().setWidth(56),
+                    height: ScreenUtil().setWidth(76),
                   ),
                   Row(
                     children: <Widget>[
@@ -98,26 +124,29 @@ class _MineState extends State<Mine> {
                         flex: 1,
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          child: Row(
+                          child: Column(
                             children: <Widget>[
+                              Text(
+                                '18',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(36),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Text(
                                 '已投递',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                 ),
                               ),
-                              Text(
-                                '(18)',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
-                                ),
-                              ),
+
                             ],
                           ),
                           onTap: () {
@@ -138,25 +167,27 @@ class _MineState extends State<Mine> {
                         flex: 1,
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          child: Row(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
+                              Text(
+                                '18',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(36),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Text(
                                 '待面试',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
-                                ),
-                              ),
-                              Text(
-                                '(15)',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                 ),
                               ),
                             ],
@@ -176,25 +207,27 @@ class _MineState extends State<Mine> {
                         flex: 1,
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          child: Row(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
+                              Text(
+                                '18',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(36),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                               Text(
                                 '沟通过',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
-                                ),
-                              ),
-                              Text(
-                                '(13)',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Color.fromRGBO(227, 226, 226, 1),
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                 ),
                               ),
                             ],
@@ -288,6 +321,11 @@ class _MineState extends State<Mine> {
                               model.identity == Identity.employee
                                   ? Identity.boss
                                   : Identity.employee);
+                        }else if(index == 0){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OnlineResume()));
                         }
                       },
                     );

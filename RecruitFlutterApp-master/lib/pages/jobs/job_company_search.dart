@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_tag_layout/flutter_tag_layout.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_list.dart';
 import 'package:recruit_app/model/job_list.dart';
 import 'package:recruit_app/pages/companys/company_detail.dart';
 import 'package:recruit_app/pages/companys/company_row_item.dart';
+import 'package:recruit_app/pages/jobs/job_search.dart';
 import 'package:recruit_app/pages/jobs/city_filter.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/jobs/job_filter.dart';
@@ -20,10 +23,81 @@ class JobCompanySearch extends StatefulWidget {
   _JobCompanySearchState createState() => _JobCompanySearchState();
 }
 
-class _JobCompanySearchState extends State<JobCompanySearch> {
-  List<Company> _companyList = CompanyData.loadCompany();
-  List<Job> _jobList = JobData.loadJobs();
 
+class _JobCompanySearchState extends State<JobCompanySearch> {
+  List<String> hotlabels=["11","22","33"];
+  List<String> historylabels=["11","22","33"];
+  List<Widget> hotList=[];
+  List<Widget>historyList=[];
+
+  @override
+  void initState() {
+    _getHotLabel();
+    _getHistoryLabel();
+  }
+
+  Widget _getHotLabel(){
+    if(hotlabels != null && hotlabels.length >0){
+      hotList.add(SizedBox(width: ScreenUtil().setWidth(48)));
+
+      for (var i = 0; i < hotlabels.length; i++) {
+        var str = hotlabels[i];
+        hotList.add(GestureDetector(
+          onTap: (){
+            if(widget.searchType==SearchType.job){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => JobSearch(hotlabels[i])));
+            }
+
+          },
+          child:TextTagWidget("$str",
+            backgroundColor: Colors.white,
+            borderRadius: 2,
+            margin: EdgeInsets.fromLTRB(0, 0,12, 12),
+            padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
+            borderColor: Color(0xFFF0F0F0),
+            textStyle: TextStyle(
+                color: Colours.app_main,
+                fontSize: 14
+            ),
+          )
+        ));
+      }
+
+    }
+  }
+
+  Widget _getHistoryLabel(){
+    if(historylabels != null && historylabels.length >0){
+      historyList.add(SizedBox(width: ScreenUtil().setWidth(48)));
+
+      for (var i = 0; i < historylabels.length; i++) {
+        var str = historylabels[i];
+        historyList.add(GestureDetector(
+          onTap: (){
+            if(widget.searchType==SearchType.job){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => JobSearch(historylabels[i])));
+            }
+
+          },
+          child:TextTagWidget("$str",
+            backgroundColor: Color(0xFFF0F0F0),
+            margin: EdgeInsets.fromLTRB(0, 0, 10, 8),
+            padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+            borderColor: Color(0xFFF0F0F0),
+            textStyle: TextStyle(
+              color: Colors.black87,
+              fontSize: 12,
+
+            ),
+
+          ) ,
+        ));
+      }
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +152,11 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                               ),
                               height: ScreenUtil().setWidth(24),
                               width: ScreenUtil().setWidth(2),
-                              color: Color.fromRGBO(194, 203, 202, 1),
+                              color: Colors.black26,
                             ),
                             Expanded(
                               child: TextField(
+                                textInputAction:TextInputAction.search,
                                 autofocus: false,
                                 scrollPadding: EdgeInsets.all(0),
                                 textAlign: TextAlign.start,
@@ -91,6 +166,7 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                                     fontSize: ScreenUtil().setSp(24),
                                     color: Color.fromRGBO(95, 94, 94, 1)),
                                 decoration: InputDecoration(
+
                                   contentPadding: EdgeInsets.all(0),
                                   border: InputBorder.none,
                                   hintText: widget.searchType == SearchType.job
@@ -101,16 +177,22 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                                     color: Color.fromRGBO(176, 181, 180, 1),
                                   ),
                                 ),
-                                onSubmitted: (text) {},
+                                onSubmitted: (text) {
+                                  if(widget.searchType==SearchType.job){
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => JobSearch(text)));
+                                  }
+                                },
                               ),
                             ),
                           ],
                         ),
                         padding: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(40),
+                          vertical: 0,
                         ),
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(255, 248, 248, 1),
+                            color: Color(0xFFF0F0F0),
                             borderRadius: BorderRadius.circular(
                                 ScreenUtil().setWidth(1000))),
                       ),
@@ -130,8 +212,7 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil().setSp(32),
+                          fontSize: ScreenUtil().setSp(28),
                           color: Color.fromRGBO(57, 57, 57, 1),
                         ),
                       ),
@@ -152,274 +233,82 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                   ],
                 ),
               ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(48)),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: ScreenUtil().setWidth(16),
-                  runSpacing: ScreenUtil().setWidth(16),
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(28),
-                        ),
-                        vertical: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(15),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(1000),
-                        ),
-                        border: Border.all(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          width: ScreenUtil().setWidth(1),
-                        ),
-                      ),
-                      child: Text(
-                        '平面设计',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          fontSize: ScreenUtil().setSp(22),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(28),
-                        ),
-                        vertical: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(15),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(1000),
-                        ),
-                        border: Border.all(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          width: ScreenUtil().setWidth(1),
-                        ),
-                      ),
-                      child: Text(
-                        '平面设计',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          fontSize: ScreenUtil().setSp(22),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(28),
-                        ),
-                        vertical: ScreenUtil().setWidth(
-                          ScreenUtil().setWidth(15),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(1000),
-                        ),
-                        border: Border.all(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          width: ScreenUtil().setWidth(1),
-                        ),
-                      ),
-                      child: Text(
-                        '平面设计',
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Color.fromRGBO(159, 199, 235, 1),
-                          fontSize: ScreenUtil().setSp(22),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: ScreenUtil().setWidth(10),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(48),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(30),
-                ),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                        color: Color.fromRGBO(159, 199, 235, 1),
-                        width: ScreenUtil().setWidth(1)),
-                  ),
-                ),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: ScreenUtil().setWidth(16),
-                  runSpacing: ScreenUtil().setWidth(16),
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CityFilter()));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(
-                            ScreenUtil().setWidth(28),
-                          ),
-                          vertical: ScreenUtil().setWidth(
-                            ScreenUtil().setWidth(15),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(1000),
-                          ),
-                          border: Border.all(
-                            color: Color.fromRGBO(159, 199, 235, 1),
-                            width: ScreenUtil().setWidth(2),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '洛杉矶',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Color.fromRGBO(159, 199, 235, 1),
-                                fontSize: ScreenUtil().setSp(22),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(12),
-                            ),
-                            Image.asset(
-                              'images/img_arrow_down_blue.png',
-                              width: ScreenUtil().setWidth(10),
-                              height: ScreenUtil().setWidth(10),
-                              fit: BoxFit.contain,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => JobFilter()));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(
-                            ScreenUtil().setWidth(28),
-                          ),
-                          vertical: ScreenUtil().setWidth(
-                            ScreenUtil().setWidth(15),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(1000),
-                          ),
-                          border: Border.all(
-                            color: Color.fromRGBO(159, 199, 235, 1),
-                            width: ScreenUtil().setWidth(2),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              '筛选',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Color.fromRGBO(159, 199, 235, 1),
-                                fontSize: ScreenUtil().setSp(22),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ScreenUtil().setWidth(12),
-                            ),
-                            Image.asset(
-                              'images/img_arrow_down_blue.png',
-                              width: ScreenUtil().setWidth(10),
-                              height: ScreenUtil().setWidth(10),
-                              fit: BoxFit.contain,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              Row(
+
+                ///子标签
+                  children: historyList),
+              SizedBox(
+                height: ScreenUtil().setWidth(20),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    if (index <
-                        (widget.searchType == SearchType.job
-                            ? _jobList.length
-                            : _companyList.length)) {
-                      return widget.searchType == SearchType.job
-                          ? GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              child: JobRowItem(
-//                                  job: _jobList[index],
-                                  index: index,
-                                  lastItem: index == _jobList.length - 1),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => JobDetail(),
-                                    ));
-                              })
-                          : GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              child: CompanyRowItem(
-//                                  company: _companyList[index],
-                                  index: index,
-                                  lastItem: index == _companyList.length - 1),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CompanyDetail(),
-                                    ));
-                              },
-                            );
-                    }
-                    return null;
-                  },
-                  itemCount: widget.searchType == SearchType.job
-                      ? _jobList.length
-                      : _companyList.length,
-                  physics: const BouncingScrollPhysics(),
-                ),
+               Padding(
+                 padding: EdgeInsets.symmetric(
+                     horizontal: ScreenUtil().setWidth(48),
+                     vertical: ScreenUtil().setWidth(26)),
+                 child:    Text(
+                   '热门搜索',
+                   maxLines: 1,
+                   overflow: TextOverflow.ellipsis,
+                   style: TextStyle(
+                     fontSize: ScreenUtil().setSp(28),
+                     color: Color.fromRGBO(57, 57, 57, 1),
+                   ),
+                 ),
+               ),
+              SizedBox(
+                height: ScreenUtil().setWidth(10),
               ),
+              Row(
+
+                ///子标签
+                  children: hotList),
+
+//              Expanded(
+//                child: ListView.builder(
+//                  itemBuilder: (context, index) {
+//                    if (index <
+//                        (widget.searchType == SearchType.job
+//                            ? _jobList.length
+//                            : _companyList.length)) {
+//                      return widget.searchType == SearchType.job
+//                          ? GestureDetector(
+//                              behavior: HitTestBehavior.opaque,
+//                              child: JobRowItem(
+////                                  job: _jobList[index],
+//                                  index: index,
+//                                  lastItem: index == _jobList.length - 1),
+//                              onTap: () {
+//                                Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                      builder: (context) => JobDetail(),
+//                                    ));
+//                              })
+//                          : GestureDetector(
+//                              behavior: HitTestBehavior.opaque,
+//                              child: CompanyRowItem(
+////                                  company: _companyList[index],
+//                                  index: index,
+//                                  lastItem: index == _companyList.length - 1),
+//                              onTap: () {
+//                                Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                      builder: (context) => CompanyDetail(),
+//                                    ));
+//                              },
+//                            );
+//                    }
+//                    return null;
+//                  },
+//                  itemCount: widget.searchType == SearchType.job
+//                      ? _jobList.length
+//                      : _companyList.length,
+//                  physics: const BouncingScrollPhysics(),
+//                ),
+//              ),
             ],
           ),
         ));

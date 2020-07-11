@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:recruit_app/model/banner_model.dart';
 import 'package:recruit_app/model/topictab_model.dart';
+import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/home/search_bar.dart';
+import 'package:recruit_app/pages/jobs/city_filter.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
-
-
 import 'home_headplan.dart';
 import 'home_joblist.dart';
 
@@ -36,7 +36,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   bool _isNavgationBarHidden = false;
   bool isScrool=false;
   void _rightTabItemPressed() {
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CityPage()));
   }
 
   void _leftTabItemPressed() {
@@ -141,7 +144,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         TopicTabModel tabModel1 = TopicTabModel(picture: "images/home_tab1.png",link: "职位库");
         TopicTabModel tabModel2 = TopicTabModel(picture: "images/home_tab2.png",link: "找工作");
         TopicTabModel tabModel3 = TopicTabModel(picture: "images/home_tab3.png",link: "急聘");
-        TopicTabModel tabModel4 = TopicTabModel(picture: "images/home_tab4.png",link: "热门");
+        TopicTabModel tabModel4 = TopicTabModel(picture: "images/home_tab4.png",link: "官方保障");
         this.topicTabMenus.add(tabModel1);
         this.topicTabMenus.add(tabModel2);
         this.topicTabMenus.add(tabModel3);
@@ -204,6 +207,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return new Container(
             height: Screen.navigationBarHeight,
             child: new AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white.withOpacity(_navAplpha),
               elevation: _navAplpha == 1 ? 0.2: 0.0,
               leading: _mainScrollable ? null: new IconButton(
@@ -216,17 +220,43 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               titleSpacing: _mainScrollable ? 7.0 : 0.0,
               centerTitle: true,
               title: _isNavgationBarHidden ? null: SearchBar('images/icon_home_search_20x20_@3x.png',height: 32,
-                backgroudColor: Color.lerp(Colors.white, Colors.black12, _navAplpha),
+                backgroudColor: Color.lerp(Colors.white, Colors.black12, _navAplpha),txt: "职位快速搜索",
               ),
               actions: _isNavgationBarHidden ? null: <Widget>[
-                new IconButton(
-                    icon: Image.asset('images/home/icon_resume_edit_saoYsao_20x20_@3x.png',
-                      width: 20,
-                      height: 20,
-                      color: Color.lerp(Colors.white, Colors.black45, _navAplpha),
-                    ),
-                    onPressed: _rightTabItemPressed,
-                  ),
+                SizedBox(
+                  width: 20,
+                ),
+                GestureDetector(
+                  onTap: _rightTabItemPressed,
+                  child: Row(
+                    children: <Widget>[
+
+
+                      Image.asset('images/top_local.png',
+                          width: 16,
+                          height: 16,
+                          color: Color.lerp(Colors.white, Colors.black87, _navAplpha)),
+                      SizedBox(
+                        width:4,
+                      ),
+                      Center(
+                          child:  Text(
+                            "武汉",
+                            style: TextStyle(
+                              color: Color.lerp(Colors.white, Colors.black87, _navAplpha),
+                              fontSize: 16
+                            ),
+                          )
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  )
+                ),
+
+                SizedBox(
+                  width: 16,
+                ),
+
               ],
               bottomOpacity: 0,
             )

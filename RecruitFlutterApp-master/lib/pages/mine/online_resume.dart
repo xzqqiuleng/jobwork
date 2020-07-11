@@ -6,6 +6,8 @@ import 'package:recruit_app/model/mine_project_list.dart';
 import 'package:recruit_app/model/mine_work_list.dart';
 import 'package:recruit_app/pages/mine/edu_item.dart';
 import 'package:recruit_app/pages/mine/job_intent_item.dart';
+import 'package:recruit_app/pages/mine/me_desc.dart';
+import 'package:recruit_app/pages/mine/me_qw.dart';
 import 'package:recruit_app/pages/mine/project_item.dart';
 import 'package:recruit_app/pages/mine/work_item.dart';
 
@@ -28,8 +30,10 @@ class _OnlineResumeState extends State<OnlineResume> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+
       backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
+        elevation: 0,
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
@@ -72,6 +76,17 @@ class _OnlineResumeState extends State<OnlineResume> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
+
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      'images/avatar_15.png',
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+              SizedBox(width: 8),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,13 +108,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 8,),
-                                    Image.asset(
-                                      'images/ic_pop_up_edit.png',
-                                      width: 18,
-                                      height: 18,
-                                      fit: BoxFit.cover,
-                                    ),
+
                                   ],
                                 ),
                                 SizedBox(
@@ -115,15 +124,12 @@ class _OnlineResumeState extends State<OnlineResume> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 8),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.asset(
-                              'images/avatar_15.png',
-                              width: 60,
-                              height: 60,
-                              fit: BoxFit.cover,
-                            ),
+                          SizedBox(width: 8,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
                           ),
                         ],
                       ),
@@ -132,40 +138,52 @@ class _OnlineResumeState extends State<OnlineResume> {
                         color: Color.fromRGBO(242, 243, 244, 1),
                         height: 1,
                       ),
-
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '个人优势',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
-                              ),
+                      Text(
+                        '* 自我介绍',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(37, 38, 39, 1),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MeDesc(0),
+                              ));
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                                child:   Text('五年产品运营经验，时刻关注行业新动态，有项目管理经验，产品设计经验。',
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
                             ),
-                          ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/ic_pop_up_edit.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
+                            SizedBox(width: 8,),
+                            Image.asset(
+                              'images/arrow_right.png',
+                              width: 18,
+                              height: 18,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
                       ),
 
-                      SizedBox(height: 8),
-                      Text('五年产品运营经验，时刻关注行业新动态，有项目管理经验，产品设计经验。',
-                          style: TextStyle(
-                              wordSpacing: 1,
-                              letterSpacing: 1,
-                              fontSize: 14,
-                              color: Color.fromRGBO(136, 138, 138, 1))),
+
+
+
 
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
@@ -202,9 +220,19 @@ class _OnlineResumeState extends State<OnlineResume> {
                       ListView.builder(
                         itemBuilder: (context, index) {
                           if (index < _intentList.length) {
-                            return JobIntentItem(
-                              intentData: _intentList[index],
-                              index: index,
+                            return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeQW(),
+                                    ));
+                              },
+                              child: JobIntentItem(
+                                intentData: _intentList[index],
+                                index: index,
+                              ),
                             );
                           }
                           return null;

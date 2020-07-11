@@ -4,6 +4,9 @@ import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/JobPage.dart';
 import 'package:recruit_app/pages/jobs/all/job_libsboard.dart';
 import 'package:recruit_app/pages/jobs/all/joball_page.dart';
+import 'package:recruit_app/pages/jobs/all/jobbz_page.dart';
+import 'package:recruit_app/pages/jobs/all/jobji_page.dart';
+import 'package:recruit_app/pages/jobs/job_loc_select.dart';
 import 'package:recruit_app/pages/utils/resource.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
@@ -29,12 +32,33 @@ class HomeHeadPlan extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: topicTabMenus.map((model){
+
           return  Expanded(
               flex: 1,
               child:GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap:()=>  Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => JobAllPage())),
+                onTap:(){
+                  switch(model.link){
+                    case"职位库":
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => JobAllPage()));
+                      break;
+                    case"找工作":
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => JobLocSelelct()));
+                      break;
+                    case"急聘":
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => JobJiPage()));
+                      break;
+                    case"官方保障":
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => JobBzPage()));
+                      break;
+                  }
+
+
+                },
                 child:new Column(
                 children: [
                 Image(

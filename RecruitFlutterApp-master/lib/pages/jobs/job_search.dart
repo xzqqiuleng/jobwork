@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:recruit_app/pages/jobs/job_detail.dart';
+import 'package:recruit_app/pages/jobs/job_row_item.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
-import 'jobs/job_detail.dart';
-import 'jobs/job_row_item.dart';
 
-class JobPage extends StatefulWidget{
-
-
+class JobSearch extends StatefulWidget{
+  String txt;
+  JobSearch(this.txt);
   @override
   _JobState createState() {
     // TODO: implement createState
@@ -19,7 +19,7 @@ class JobPage extends StatefulWidget{
 
 }
 
-class _JobState extends State<JobPage>{
+class _JobState extends State<JobSearch>{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
   int page;
@@ -64,7 +64,7 @@ class _JobState extends State<JobPage>{
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text('',
+        title: Text(widget.txt,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -76,8 +76,8 @@ class _JobState extends State<JobPage>{
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
+              width: 16,
+              height: 16,
             ),
             onPressed: () {
               Navigator.pop(context);

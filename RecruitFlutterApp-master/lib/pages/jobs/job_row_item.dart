@@ -9,8 +9,10 @@ class JobRowItem extends StatelessWidget {
   final Map<String,dynamic> job;
   final int index;
   final bool lastItem;
+  final bool isJi;
+  final bool isBz;
 
-  const JobRowItem({Key key, this.job, this.index, this.lastItem})
+  const JobRowItem({Key key, this.job, this.index, this.lastItem,this.isJi,this.isBz})
       : super(key: key);
 
 
@@ -120,6 +122,61 @@ class JobRowItem extends StatelessWidget {
               height: 0.4,
               dashWidth:2,
             ),
+            Offstage(
+              offstage: (isJi == null || isJi == false) ? true :false,
+              child : Container(
+                  margin: EdgeInsets.fromLTRB(0,10,0,0),
+                  padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                  decoration: BoxDecoration(
+                    color: Colours.app_main.withOpacity(0.2),
+
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset("images/ji.png",height: 16,width: 16,),
+                      SizedBox(width: 6,),
+                      Text(
+                        "2020-07-12前停止招聘",
+                        style: TextStyle(
+                          color: Colours.app_main,
+                          fontWeight: FontWeight.bold
+                        ),
+                      )
+                    ],
+                  ),
+
+                )
+            ),
+            Offstage(
+                offstage: (isBz == null || isBz == false) ? true :false,
+                child : Container(
+                  margin: EdgeInsets.fromLTRB(0,10,0,0),
+                  padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                  decoration: BoxDecoration(
+                    color: Colours.blue_main.withOpacity(0.2),
+
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.asset("images/bz.png",height: 16,width: 16,),
+                      SizedBox(width: 6,),
+                      Text(
+                        "官方保障，24小时跟踪！",
+                        style: TextStyle(
+                            color: Colours.blue_main,
+                            fontWeight: FontWeight.bold
+                        ),
+                      )
+                    ],
+                  ),
+
+                )
+            ),
+
             SizedBox(
               height: ScreenUtil().setWidth(28),
             ),
