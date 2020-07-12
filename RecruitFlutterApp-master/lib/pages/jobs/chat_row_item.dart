@@ -59,13 +59,7 @@ class ChatRowItem extends StatelessWidget {
                   SizedBox(
                     height: ScreenUtil().setWidth(10),
                   ),
-                  Text(
-                    '已阅读',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Color.fromRGBO(176, 181, 180, 1),
-                    ),
-                  ),
+
                 ],
               ),
             ),
@@ -140,13 +134,7 @@ class ChatRowItem extends StatelessWidget {
                   SizedBox(
                     height: ScreenUtil().setWidth(10),
                   ),
-                  Text(
-                    '已阅读',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Color.fromRGBO(176, 181, 180, 1),
-                    ),
-                  ),
+
                 ],
               ),
             ),

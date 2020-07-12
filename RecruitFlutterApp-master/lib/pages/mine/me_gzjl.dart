@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recruit_app/pages/city_page.dart';
@@ -6,15 +7,17 @@ import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 import 'me_desc.dart';
 
-class MeQW extends StatefulWidget {
+class MeGzjl extends StatefulWidget {
+
   @override
-  _MeQWState createState() => _MeQWState();
+  _MeGzjlState createState() => _MeGzjlState();
 }
 
-class _MeQWState extends State<MeQW> {
+class _MeGzjlState extends State<MeGzjl> {
   TextEditingController _phoneController = TextEditingController();
-  String _qxresult="选择职位";
-  String _city="选择城市";
+  String gs_name="公司名称";
+  String gs_work="工作职位";
+  String gs_desc="工作内容";
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +37,7 @@ class _MeQWState extends State<MeQW> {
 
         elevation: 0,
         centerTitle: true,
-        title: Text("求职意向",
+        title: Text("工作经历",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -77,7 +80,7 @@ class _MeQWState extends State<MeQW> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: <Widget>[
       Text(
-        '* 意向职位',
+        '* 公司名称',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -91,14 +94,14 @@ class _MeQWState extends State<MeQW> {
         child:   GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () async{
-        var    reslut = await  Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => WorkPage(),
-                ));
+        var   reslut = await    Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MeDesc(1),
+            ));
             setState(() {
            if(reslut != null){
-              _qxresult = reslut;
+              gs_name = reslut;
            }
             });
           },
@@ -107,7 +110,7 @@ class _MeQWState extends State<MeQW> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child:   Text(_qxresult,
+                child:   Text(gs_name,
                     style: TextStyle(
                         wordSpacing: 1,
                         letterSpacing: 1,
@@ -134,7 +137,7 @@ class _MeQWState extends State<MeQW> {
       ),
 
       Text(
-        '* 工作城市',
+        '* 工作职位',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -151,11 +154,16 @@ class _MeQWState extends State<MeQW> {
             var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CityPage(),
+                  builder: (context) => MeDesc(2),
                 ));
             setState(() {
               if(reslut != null){
-                _city = reslut;
+                gs_name = reslut;
+              }
+            });
+            setState(() {
+              if(reslut != null){
+                gs_work = reslut;
               }
             });
           },
@@ -164,7 +172,7 @@ class _MeQWState extends State<MeQW> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child:   Text(_city,
+                child:   Text(gs_work,
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,
@@ -190,7 +198,68 @@ class _MeQWState extends State<MeQW> {
         height: 1,
       ),
       Text(
-        '* 期望薪资',
+        '* 工作内容',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          fontSize: 14,
+          color:Colors.black38,
+        ),
+      ),
+      SizedBox(height: 16),
+      Padding(
+        padding: EdgeInsets.only(top: 10,bottom: 10),
+        child:   GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () async{
+            var    reslut = await  Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MeDesc(3),
+                ));
+            setState(() {
+              if(reslut != null){
+                gs_name = reslut;
+              }
+            });
+            setState(() {
+              if(reslut != null){
+                gs_work = reslut;
+              }
+            });
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child:   Text(gs_work,
+                    style: TextStyle(
+                      wordSpacing: 1,
+                      letterSpacing: 1,
+                      fontSize: 16,
+                      color:Colors.black87,
+                    )),
+              ),
+              SizedBox(width: 8,),
+              Image.asset(
+                'images/arrow_right.png',
+                width: 18,
+                color: Colors.black87,
+                height: 18,
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 15),
+        color: Color.fromRGBO(242, 243, 244, 1),
+        height: 1,
+      ),
+      Text(
+        '* 入职时间',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -204,14 +273,61 @@ class _MeQWState extends State<MeQW> {
         child:   GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-          _showSexPop(context);
+          _showDatePop(context,0);
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child:   Text(_salary,
+                child:   Text(startDate,
+                    style: TextStyle(
+                      wordSpacing: 1,
+                      letterSpacing: 1,
+                      fontSize: 16,
+                      color:Colors.black87,
+                    )),
+              ),
+              SizedBox(width: 8,),
+              Image.asset(
+                'images/arrow_right.png',
+                width: 18,
+                color: Colors.black87,
+                height: 18,
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.symmetric(vertical: 15),
+        color: Color.fromRGBO(242, 243, 244, 1),
+        height: 1,
+      ),
+      Text(
+        '* 离职时间',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          fontSize: 14,
+          color:Colors.black38,
+        ),
+      ),
+      SizedBox(height: 16),
+      Padding(
+        padding: EdgeInsets.only(top: 10,bottom: 10),
+        child:   GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            _showDatePop(context,0);
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child:   Text(stopDate,
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,
@@ -247,39 +363,33 @@ class _MeQWState extends State<MeQW> {
 
   }
 
-  List _salaryList=["2000以上","3000以上","4000以上","5000以上","6000以上","7000以上","8000以上","9000以上","1万以上","2万以上","3万以上","4万以上","5万以上"];
+  DateTime _initDate = DateTime.now();
   String _salary="选择薪资";
-  void _showSexPop(BuildContext context){
-    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context){
-          return _buildBottonPicker(
-              CupertinoPicker(
+ String startDate="";
+ String stopDate="";
 
-                magnification: 1,
-                itemExtent:58 ,
-                backgroundColor: Colors.white,
-                useMagnifier: true,
-                scrollController: scrollController,
-                onSelectedItemChanged: (int index){
-                  if(mounted){
-                    setState(() {
+  void _showDatePop(BuildContext context,int type){
 
-                        _salary = _salaryList[index];
+    showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
 
-
-                    });
-                  }
-                },
-                children: List<Widget>.generate(_salaryList.length, (index){
-                  return Center(
-                    child: Text(_salaryList[index]),
-                  );
-                }),
-              )
-          );
-        });
+      return _buildBottonPicker(CupertinoDatePicker(
+        minimumYear: _initDate.year-100,
+        maximumYear: _initDate.year,
+        mode: CupertinoDatePickerMode.date,
+        initialDateTime: _initDate,
+        onDateTimeChanged: (DateTime dataTime){
+          if(mounted){
+            setState(() {
+              if(type == 0){
+                startDate =     formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+              }else{
+                stopDate =  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+              }
+            });
+          }
+        },
+      ));
+    });
   }
   Widget _buildBottonPicker(Widget picker){
     return Container(

@@ -5,8 +5,10 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/topictab_model.dart';
+import 'package:recruit_app/pages/jobs/chat_room.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
+import 'package:recruit_app/pages/msg/msg_job.dart';
 import 'package:recruit_app/pages/msg/notice_list.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
@@ -42,7 +44,7 @@ class _NewMessageListState extends State<NewMessageList> with SingleTickerProvid
    Widget _buildTabViewContent() {
     return new TabBarView(children:  [
       CompanyBodyList(),
-      NoticeList(),
+      XTList(),
      ],
             controller: _tabController,
           );
@@ -236,7 +238,14 @@ child: _buildMiddelBar(topicTabMenus,context),
 //            );
 //          }
               var key = GlobalKey<SlideButtonState>();
-              return MsgChatItem(btnKey: key,);
+              return GestureDetector(
+                 onTap: (){
+                   Navigator.push(context,
+                       MaterialPageRoute(builder: (context) => ChatRoom()));
+                 },
+                behavior: HitTestBehavior.opaque,
+                child:MsgChatItem(btnKey: key) ,
+              ) ;
             },
 
               itemCount: 10,
@@ -266,8 +275,38 @@ Widget _buildMiddelBar( List<TopicTabModel> topicTabMenus,BuildContext context) 
           flex: 1,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap:()=>  Navigator.push(context, MaterialPageRoute(
-                builder: (context) => JobPage())),
+            onTap:(){
+              switch(model.link){
+                case "感兴趣":
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MsgJob(0),
+                      ));
+                  break;
+                case "看过我的":
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MsgJob(1),
+                      ));
+                  break;
+                case "智能推荐":
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MsgJob(2),
+                      ));
+                  break;
+                case "职位上新":
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MsgJob(3),
+                      ));
+                  break;
+              }
+            },
             child:new Column(
               mainAxisSize: MainAxisSize.min,
               children: [

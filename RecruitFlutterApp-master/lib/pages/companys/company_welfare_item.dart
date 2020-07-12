@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/model/company_welfare_list.dart';
 
 class CompanyWelfareItem extends StatelessWidget {
-  final WelfareData welfareData;
+  final String welfareData;
   final int index;
   final bool isLastItem;
 
@@ -18,14 +18,14 @@ class CompanyWelfareItem extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-              width: 1.5,
-              color: Color(0xFFF0F0F0),
+              width: 0.4,
+              color: Colors.black87,
               style: BorderStyle.solid)),
       child: Text(
-        '${welfareData.welfare}',
+       welfareData == ""?"公司福利": '${welfareData}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 14, color: Colors.black54),
+        style: TextStyle(fontSize: 14, color: Colors.black87),
       ),
     );
 

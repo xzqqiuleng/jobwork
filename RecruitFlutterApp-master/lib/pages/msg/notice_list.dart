@@ -287,8 +287,8 @@ class _XTListState extends State<XTList> with AutomaticKeepAliveClientMixin{
                   ? '明天您将参加一场面试，请您注意安排好行程做好 准备，祝您面试顺利。'
                   : '您好，请问有什么可以为您服务的吗？',
               imgPath: index % 2 == 0
-                  ? 'images/img_notify_blue.png'
-                  : 'images/img_service_blue.png',
+                  ? 'images/notice_m.png'
+                  : 'images/kf_m.png',
             ),
             onTap: () {
               if(index%2==0){

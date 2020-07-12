@@ -1,15 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/companys/company_c_item.dart';
+import 'package:recruit_app/pages/jobs/job_detail.dart';
 
-import 'jobs/job_detail.dart';
-import 'jobs/job_row_item.dart';
 
-class JobPage extends StatefulWidget{
 
+
+
+class CompanyJob extends StatefulWidget{
+  List data;
+  CompanyJob(this.data);
 
   @override
   _JobState createState() {
@@ -19,42 +20,21 @@ class JobPage extends StatefulWidget{
 
 }
 
-class _JobState extends State<JobPage>{
+class _JobState extends State<CompanyJob>{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
-  int page;
-  List data =List();
 
   _OnRefresh(){
-    page=0;
-
-    new MiviceRepository().getWorkList(page,0).then((value) {
-      var reponse = json.decode(value.toString());
-      if(reponse["status"] == "success"){
-        data.clear();
-
-        setState(() {
-          data = reponse["result"];
-        });
-        print(data);
-        page++;
-        _refreshController.refreshCompleted();
-      }
-    });
+    _refreshController.refreshCompleted();
   }
   _loadMore(){
-    new MiviceRepository().getWorkList(page,0).then((value) {
-      var reponse = json.decode(value.toString());
-      if(reponse["status"] == "success"){
-        List  loaddata = reponse["result"];
-        setState(() {
-          data.addAll(loaddata);
-        });
+    _refreshController.loadComplete();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
-        page++;
-        _refreshController.loadComplete();
-      }
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -64,7 +44,7 @@ class _JobState extends State<JobPage>{
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text('',
+        title: Text("在招职位",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -76,8 +56,8 @@ class _JobState extends State<JobPage>{
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
+              width: 18,
+              height: 18,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -94,24 +74,24 @@ class _JobState extends State<JobPage>{
           onLoading: _loadMore,
           enablePullUp: true,
           child: ListView.builder(itemBuilder: (context, index) {
-            if (data.length >0 && index < data.length) {
+            if (widget.data.length >0 && index <widget. data.length) {
               return GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  child: JobRowItem(
-                      job: data[index],
+                  child: CompanyCItem(
+                      job: widget.data[index],
                       index: index,
-                      lastItem: index == data.length - 1),
+                      lastItem: index ==  widget.data.length - 1),
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>JobDetail(data[index]["job_id"]),
+                          builder: (context) => JobDetail( widget.data[index]["job_id"]),
                         ));
                   });
             }
             return null;
           },
-            itemCount: data.length,
+            itemCount: widget.data.length,
           )
       )
     );

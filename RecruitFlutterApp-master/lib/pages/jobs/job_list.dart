@@ -180,7 +180,7 @@ class _JobBodyListState extends State<JobBodyList> with AutomaticKeepAliveClient
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobDetail(),
+                        builder: (context) => JobDetail(data[index]["job_id"]),
                       ));
                 });
           }

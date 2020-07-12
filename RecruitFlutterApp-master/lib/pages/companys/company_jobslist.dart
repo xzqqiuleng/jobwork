@@ -41,8 +41,8 @@ class _CompanyJobState extends State<CompanyJobList> with SingleTickerProviderSt
 
    Widget _buildTabViewContent() {
     return new TabBarView(children:  [
-      CompanyBodyList(),
-      CompanyBodyList(),
+      CompanyBodyList(0),
+      CompanyBodyList(1),
      ],
             controller: _tabController,
           );
@@ -191,8 +191,9 @@ class _CompanyJobState extends State<CompanyJobList> with SingleTickerProviderSt
   }
 }
 class CompanyBodyList extends StatefulWidget{
+  int type;
 
-  CompanyBodyList();
+  CompanyBodyList(this.type);
   @override
   _CompanyBodyListState createState() {
     // TODO: implement createState
@@ -204,13 +205,13 @@ class CompanyBodyList extends StatefulWidget{
 class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAliveClientMixin{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
-  int sortId;
+  int page;
   List data =List();
 
   _OnRefresh(){
-    sortId=null;
+    page=0;
 
-    new MiviceRepository().getCompanyList(sortId).then((value) {
+    new MiviceRepository().getCompanyList(page,searchType:widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -219,13 +220,13 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
           data = reponse["result"];
         });
         print(data);
-        sortId = data[data.length-1]["sort_id"];
+        page++;
         _refreshController.refreshCompleted();
       }
     });
   }
   _loadMore(){
-    new MiviceRepository().getCompanyList(sortId).then((value) {
+    new MiviceRepository().getCompanyList(page,searchType: widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         List  loaddata = reponse["result"];
@@ -233,7 +234,7 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
           data.addAll(loaddata);
         });
 
-        sortId = int.parse(data[data.length-1]["sort_id"]);
+       page++;
         _refreshController.loadComplete();
       }
     });
@@ -261,7 +262,7 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompanyDetail(),
+                      builder: (context) => CompanyDetail( data[index]["id"]),
                     ));
               },
             );

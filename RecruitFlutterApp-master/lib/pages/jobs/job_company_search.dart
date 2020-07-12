@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tag_layout/flutter_tag_layout.dart';
 import 'package:recruit_app/colours.dart';
-import 'package:recruit_app/model/company_list.dart';
-import 'package:recruit_app/model/job_list.dart';
-import 'package:recruit_app/pages/companys/company_detail.dart';
-import 'package:recruit_app/pages/companys/company_row_item.dart';
-import 'package:recruit_app/pages/jobs/job_search.dart';
-import 'package:recruit_app/pages/jobs/city_filter.dart';
-import 'package:recruit_app/pages/jobs/job_detail.dart';
-import 'package:recruit_app/pages/jobs/job_filter.dart';
-import 'package:recruit_app/pages/jobs/job_row_item.dart';
+import 'package:recruit_app/pages/companys/company_search.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
+import '../share_helper.dart';
+import 'jobsearch_page.dart';
 
 enum SearchType { job, company }
 
@@ -25,28 +20,51 @@ class JobCompanySearch extends StatefulWidget {
 
 
 class _JobCompanySearchState extends State<JobCompanySearch> {
-  List<String> hotlabels=["11","22","33"];
-  List<String> historylabels=["11","22","33"];
+  List<dynamic> hotlabels=List();
+  List<dynamic> historylabels;
   List<Widget> hotList=[];
   List<Widget>historyList=[];
 
   @override
   void initState() {
+    
+    if(widget.searchType == SearchType.job){
+      hotlabels.add("销售");
+      hotlabels.add("客服");
+      hotlabels.add("电气");
+      hotlabels.add("电商");
+      hotlabels.add("运维");
+      hotlabels.add("财务");
+      hotlabels.add("java");
+      hotlabels.add("保险");
+
+      historylabels = ShareHelper.getSearchJob();
+    }else{
+      hotlabels.add("亚信科技");
+      hotlabels.add("亚马逊中国");
+      hotlabels.add("光明乳业");
+      hotlabels.add("伊利");
+      hotlabels.add("长虹电器");
+      hotlabels.add("奇安信集团");
+
+    }
     _getHotLabel();
     _getHistoryLabel();
   }
 
   Widget _getHotLabel(){
     if(hotlabels != null && hotlabels.length >0){
-      hotList.add(SizedBox(width: ScreenUtil().setWidth(48)));
 
       for (var i = 0; i < hotlabels.length; i++) {
         var str = hotlabels[i];
         hotList.add(GestureDetector(
           onTap: (){
             if(widget.searchType==SearchType.job){
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => JobSearch(hotlabels[i])));
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => JobSearchPage(hotlabels[i])));
+            }else{
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => CompanySearch(hotlabels[i])));
             }
 
           },
@@ -69,15 +87,17 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
 
   Widget _getHistoryLabel(){
     if(historylabels != null && historylabels.length >0){
-      historyList.add(SizedBox(width: ScreenUtil().setWidth(48)));
 
       for (var i = 0; i < historylabels.length; i++) {
         var str = historylabels[i];
         historyList.add(GestureDetector(
           onTap: (){
             if(widget.searchType==SearchType.job){
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => JobSearch(historylabels[i])));
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => JobSearchPage(historylabels[i])));
+            }else{
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => CompanySearch(historylabels[i])));
             }
 
           },
@@ -179,8 +199,15 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                                 ),
                                 onSubmitted: (text) {
                                   if(widget.searchType==SearchType.job){
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => JobSearch(text)));
+                                    if(text.trim().length <=0){
+                                      return;
+                                    }
+                                    ShareHelper.putSearchJob(text);
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                        builder: (context) => JobSearchPage(text)));
+                                  }else{
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                        builder: (context) => CompanySearch(text)));
                                   }
                                 },
                               ),
@@ -222,7 +249,25 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                     ),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: () {},
+                      onTap: () {
+
+                          if(historylabels == null || historyList == null || historylabels.length == 0|| historyList.length == 0){
+                            return;
+                          }
+
+                        if(widget.searchType == SearchType.job){
+                          StorageManager.sharedPreferences.setString(ShareHelper.search_history_job, "");
+
+
+
+                        }else{
+                          StorageManager.sharedPreferences.setString(ShareHelper.search_history_company, "");
+                        }
+                        setState(() {
+                          historylabels.clear();
+                          historyList.clear();
+                        });
+                      },
                       child: Image.asset(
                         'images/img_del_gray.png',
                         width: ScreenUtil().setWidth(20),
@@ -236,10 +281,13 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
               SizedBox(
                 height: ScreenUtil().setWidth(10),
               ),
-              Row(
+              Padding(
+                padding: EdgeInsets.only(left: ScreenUtil().setWidth(48),right: ScreenUtil().setWidth(48)),
+                child:Wrap(
 
-                ///子标签
-                  children: historyList),
+                  ///子标签
+                    children: historyList) ,
+              ),
               SizedBox(
                 height: ScreenUtil().setWidth(20),
               ),
@@ -260,10 +308,13 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
               SizedBox(
                 height: ScreenUtil().setWidth(10),
               ),
-              Row(
+              Padding(
+                padding: EdgeInsets.only(left: ScreenUtil().setWidth(48),right: ScreenUtil().setWidth(48)),
+                child:Wrap(
 
-                ///子标签
-                  children: hotList),
+                  ///子标签
+                    children: hotList) ,
+              ),
 
 //              Expanded(
 //                child: ListView.builder(

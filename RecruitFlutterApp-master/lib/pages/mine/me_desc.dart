@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class MeDesc extends StatefulWidget {
-  int type; //0,自我介绍
+  int type; //0,自我介绍 1，公司名称 2，工作职位 3.工作内容
   MeDesc(this.type);
   @override
   _MeDescState createState() => _MeDescState();

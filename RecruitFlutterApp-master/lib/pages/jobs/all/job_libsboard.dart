@@ -5,6 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/jobs/all/job_select.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
 import '../job_detail.dart';
@@ -17,8 +18,8 @@ import 'job_tabbar.dart';
 
 class JobLibsboard extends StatefulWidget {
 
-
-  JobLibsboard({Key key}):super(key:key);
+  String searchTxt;
+  JobLibsboard({Key key,this.searchTxt}):super(key:key);
 
   @override
   _JobLibsboardState createState() => _JobLibsboardState();
@@ -28,18 +29,24 @@ class _JobLibsboardState extends State<JobLibsboard> {
   @override
   TabbarPopType popType =TabbarPopType.popSelectNone;
   Function tabbarReset;
-  String cityName;
+  String cityName=ShareHelper.getCity();
   String sortName;
-
+  Map filters;
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
   int page;
   List data =List();
-
+  String filet1;
+  String filet2;
+  String filet3;
+  int sortType = 0;
   _OnRefresh(){
     page=0;
 
-    new MiviceRepository().getWorkList(page,0).then((value) {
+
+
+
+    new MiviceRepository().getFilterList(page,sortType,address: cityName,education: filet1,experience: filet2,salary: filet3,jobType: 0,searchText: widget.searchTxt).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -54,7 +61,7 @@ class _JobLibsboardState extends State<JobLibsboard> {
     });
   }
   _loadMore(){
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getFilterList(page,sortType,address: cityName,education: filet1,experience: filet2,salary: filet3,jobType: 0,searchText: widget.searchTxt).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         List  loaddata = reponse["result"];
@@ -74,7 +81,7 @@ class _JobLibsboardState extends State<JobLibsboard> {
     super.initState();
 
   }
-
+  
   Widget _buildContent() {
     return new Container(
       child: SmartRefresher(
@@ -85,7 +92,19 @@ class _JobLibsboardState extends State<JobLibsboard> {
           onRefresh: _OnRefresh,
           onLoading: _loadMore,
           enablePullUp: true,
-          child: ListView.builder(itemBuilder: (context, index) {
+          child: data.length == 0?
+          Center(
+            child:  Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset("images/empty_work.png",width: 60,height: 60,),
+                Text(
+                    "暂未搜到相关数据"
+                )
+              ],
+            )
+          )
+         :ListView.builder(itemBuilder: (context, index) {
             if (data.length >0 && index < data.length) {
               return GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -97,7 +116,7 @@ class _JobLibsboardState extends State<JobLibsboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => JobDetail(),
+                          builder: (context) => JobDetail(data[index]["job_id"]),
                         ));
                   });
             }
@@ -135,7 +154,7 @@ class _JobLibsboardState extends State<JobLibsboard> {
                     tabbarReset();
                     setState(() {
                       popType = TabbarPopType.popSelectNone;
-
+                      _OnRefresh();
                     });
                   });
                 });
@@ -144,8 +163,21 @@ class _JobLibsboardState extends State<JobLibsboard> {
       case TabbarPopType.popSelectType:
         return JobTypeSelect(height: contentHeight + kToolbarHeight,
           themeColor: Colours.app_main,
-          onSureButtonClick: () {
+          onSureButtonClick: (map) {
             tabbarReset();
+            filters = map;
+            if(filters != null){
+              if(filters.containsKey("0")){
+                filet1 = filters["0"];
+              }
+              if(filters.containsKey("1")){
+                filet2 = filters["1"];
+              }if(filters.containsKey("2")){
+                filet3 = filters["2"];
+              }
+
+            }
+            _OnRefresh();
             setState(() {
               popType = TabbarPopType.popSelectNone;
 
@@ -166,7 +198,18 @@ class _JobLibsboardState extends State<JobLibsboard> {
           onSortItemClick: (index,text) {
             tabbarReset();
             setState(() {
+
               sortName = text;
+              if(sortName == null){
+                sortType = 0;
+              }else if(sortName=="智能排序"){
+                sortType = 1;
+              } if(sortName=="热门优先"){
+                sortType = 1;
+              } if(sortName=="最近发布"){
+                sortType = 2;
+              }
+              _OnRefresh();
               popType = TabbarPopType.popSelectNone;
 
             });

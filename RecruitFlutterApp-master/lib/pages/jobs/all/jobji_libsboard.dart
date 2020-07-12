@@ -28,18 +28,21 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
   @override
   TabbarPopType popType =TabbarPopType.popSelectNone;
   Function tabbarReset;
-  String cityName;
+  String cityName="北京";
   String sortName;
-
+  Map filters;
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
   int page;
   List data =List();
-
+  String filet1;
+  String filet2;
+  String filet3;
+  int sortType = 0;
   _OnRefresh(){
     page=0;
 
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getFilterList(page,sortType,address: cityName,education: filet1,experience: filet2,salary: filet3,jobType: 2).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -54,7 +57,7 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
     });
   }
   _loadMore(){
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getFilterList(page,sortType,address: cityName,education: filet1,experience: filet2,salary: filet3,jobType: 2).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         List  loaddata = reponse["result"];
@@ -85,7 +88,19 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
           onRefresh: _OnRefresh,
           onLoading: _loadMore,
           enablePullUp: true,
-          child: ListView.builder(itemBuilder: (context, index) {
+          child: data.length == 0?
+          Center(
+              child:  Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset("images/empty_work.png",width: 60,height: 60,),
+                  Text(
+                      "暂未搜到相关数据"
+                  )
+                ],
+              )
+          )
+              :ListView.builder(itemBuilder: (context, index) {
             if (data.length >0 && index < data.length) {
               return GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -98,7 +113,7 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => JobDetail(),
+                          builder: (context) => JobDetail(data[index]["job_id"]),
                         ));
                   });
             }
@@ -136,7 +151,7 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
                     tabbarReset();
                     setState(() {
                       popType = TabbarPopType.popSelectNone;
-
+                      _OnRefresh();
                     });
                   });
                 });
@@ -145,8 +160,21 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
       case TabbarPopType.popSelectType:
         return JobTypeSelect(height: contentHeight + kToolbarHeight,
           themeColor: Colours.app_main,
-          onSureButtonClick: () {
+          onSureButtonClick: (map) {
             tabbarReset();
+            filters = map;
+            if(filters != null){
+              if(filters.containsKey("0")){
+                filet1 = filters["0"];
+              }
+              if(filters.containsKey("1")){
+                filet2 = filters["1"];
+              }if(filters.containsKey("2")){
+                filet3 = filters["2"];
+              }
+
+            }
+            _OnRefresh();
             setState(() {
               popType = TabbarPopType.popSelectNone;
 
@@ -169,7 +197,17 @@ class _JobJiLibsboardState extends State<JobJiLibsboard> {
             setState(() {
               sortName = text;
               popType = TabbarPopType.popSelectNone;
-
+              sortName = text;
+              if(sortName == null){
+                sortType = 0;
+              }else if(sortName=="智能排序"){
+                sortType = 1;
+              } if(sortName=="热门优先"){
+                sortType = 1;
+              } if(sortName=="最近发布"){
+                sortType = 2;
+              }
+              _OnRefresh();
             });
           });
       default:

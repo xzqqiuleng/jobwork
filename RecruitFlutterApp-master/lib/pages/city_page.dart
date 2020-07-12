@@ -40,9 +40,7 @@ class _CityPageState extends State<CityPage> {
       body:  CitysSelect(themeColor: Colours.app_main,
         locationIcon: "images/select_loc.png",
         onValueChanged: (city) {
-          setState(() {
-
-          });
+            Navigator.of(context).pop(city);
         },
       ),
     );

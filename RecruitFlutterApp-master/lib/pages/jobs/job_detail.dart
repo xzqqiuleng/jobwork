@@ -14,7 +14,7 @@ import 'job_row_item.dart';
 
 class JobDetail extends StatefulWidget {
   int id;
-  JobDetail({this.id});
+  JobDetail(this.id);
   @override
   _JobDetailState createState() {
     // TODO: implement createState
@@ -317,7 +317,7 @@ class _JobDetailState extends State<JobDetail> {
                                                         Color.fromRGBO(37, 38, 39, 1))),
                                               ),
                                               SizedBox(width: 8),
-                                              Text('今日活跃',
+                                              Text('',
                                                   style: const TextStyle(
                                                       wordSpacing: 1,
                                                       letterSpacing: 1,
@@ -327,7 +327,7 @@ class _JobDetailState extends State<JobDetail> {
                                             ],
                                           ),
                                           SizedBox(height: 5),
-                                          Text('腾讯•招聘者',
+                                          Text('',
                                               style: TextStyle(
                                                   wordSpacing: 1,
                                                   letterSpacing: 1,
@@ -412,7 +412,7 @@ class _JobDetailState extends State<JobDetail> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => CompanyDetail()));
+                                          builder: (context) => CompanyDetail(infors["com_id"])));
                                 },
                               ),
                               SizedBox(
@@ -493,7 +493,7 @@ class _JobDetailState extends State<JobDetail> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => JobDetail(id:datalist[index]["job_id"]),
+                                      builder: (context) => JobDetail(datalist[index]["job_id"]),
                                     ));
                               });
                         }

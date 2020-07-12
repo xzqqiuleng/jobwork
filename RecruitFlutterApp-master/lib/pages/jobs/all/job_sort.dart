@@ -15,7 +15,7 @@ class JobSort extends StatefulWidget {
 }
 
 class _JobSortState extends State<JobSort> {
-  List<String> sorts = [ "智能排序","好评优先","最近发布职位"];
+  List<String> sorts = [ "智能排序","热门优先","最近发布"];
   int selectIndex = 0;
 
 

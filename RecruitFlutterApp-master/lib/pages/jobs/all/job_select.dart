@@ -12,7 +12,7 @@ import 'companytypes_model.dart';
 class JobTypeSelect extends StatefulWidget {
   final double height;
   final Color themeColor;
-  final Function onSureButtonClick;
+  final ValueChanged<Map> onSureButtonClick;
 
   JobTypeSelect({Key key,this.height,this.themeColor,this.onSureButtonClick}) :super(key:key);
   @override
@@ -21,7 +21,7 @@ class JobTypeSelect extends StatefulWidget {
 
 class _JobTypeSelectState extends State<JobTypeSelect> {
  CompanyTypesModel typesModel = CompanyTypesModel();
-
+ Map<String,String>map = new Map();
  Future<void> fetchData() async {
     try {
 
@@ -48,7 +48,7 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
     fetchData();
   }
 
-  Widget _buildSelectItem(List<String> items) {
+  Widget _buildSelectItem(List<String> items,int type) {
     return GridView.count(
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
@@ -60,7 +60,7 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
           title: name,
           themeColor: widget.themeColor,
           onValueChanged: (isSelect) {
-            
+            map[type.toString()] = name;
           },
         );
       }).toList(),
@@ -84,11 +84,11 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("融资情况",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
+                new Text("学历筛选",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
                 new Container(
                   margin: EdgeInsets.only(top: 15.0),
                   height: financingHeight,
-                  child:_buildSelectItem(typesModel.financing),
+                  child:_buildSelectItem(typesModel.financing,0),
                 )
               ],
             )
@@ -99,11 +99,11 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("公司规模",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
+                new Text("经验筛选",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
                 new Container(
                   margin: EdgeInsets.only(top: 15.0),
                   height: scaleHeight,
-                  child:_buildSelectItem(typesModel.scale),
+                  child:_buildSelectItem(typesModel.scale,1),
                 )
               ],
             )
@@ -114,11 +114,11 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("选择行业",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
+                new Text("工资待遇",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
                 new Container(
                   margin: EdgeInsets.only(top: 15.0),
                   height: industryHeight,
-                  child:_buildSelectItem(typesModel.industry),
+                  child:_buildSelectItem(typesModel.industry,2),
                 )
               ],
             )
@@ -129,7 +129,6 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("其他",style: new TextStyle(fontSize: 16.0,color: Colors.black)),
                 new Container(
                   margin: EdgeInsets.only(top: 5.0),
                   height: height * 1.5,
@@ -202,7 +201,8 @@ class _JobTypeSelectState extends State<JobTypeSelect> {
                       color: widget.themeColor,
                       onPressed: () {
                         if (widget.onSureButtonClick != null) {
-                          widget.onSureButtonClick();
+
+                          widget.onSureButtonClick(map);
                         }
                       },
                       textColor: Colors.white,

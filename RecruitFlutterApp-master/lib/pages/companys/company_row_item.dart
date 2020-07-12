@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_list.dart';
+import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/utils/html_init.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
@@ -42,7 +43,7 @@ class CompanyRowItem extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular(ScreenUtil().setWidth(10))),
-                  child: Image.asset('images/avatar_1.png',
+                  child: Image.network( company["company_img"] == ""?Constant.deault_compay:company["company_img"] ,
                       width: ScreenUtil().setWidth(100),
                       height: ScreenUtil().setWidth(100),
                       fit: BoxFit.cover),

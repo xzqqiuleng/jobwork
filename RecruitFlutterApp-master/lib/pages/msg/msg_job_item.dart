@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_list.dart';
+import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
-import '../constant.dart';
-
-class JobRowItem extends StatelessWidget {
+class MsgRowItem extends StatelessWidget {
   final Map<String,dynamic> job;
   final int index;
+  final int type;
   final bool lastItem;
-  final bool isJi;
-  final bool isBz;
 
-  const JobRowItem({Key key, this.job, this.index, this.lastItem,this.isJi,this.isBz})
+
+  const MsgRowItem({Key key, this.job, this.index, this.lastItem,this.type})
       : super(key: key);
 
 
@@ -29,7 +28,7 @@ class JobRowItem extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       );
-    }else{
+    }else {
       return ClipRRect(
         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(28)),
         child: Image.network(
@@ -41,7 +40,33 @@ class JobRowItem extends StatelessWidget {
       );
     }
   }
-
+ Widget _getrihgt(){
+    switch(type){
+      case 0:
+        return Text(
+          "对我感兴趣",
+            style: TextStyle(
+              color: Colors.grey
+            ),
+        );
+      case 1:
+        return Text(
+          "看过我",
+          style: TextStyle(
+              color: Colors.grey
+          ),
+        );
+      case 2:
+        return Text(
+          "推荐度${99 - index % 10}%",
+          style: TextStyle(
+              color: Colors.grey
+          ),
+        );
+      case 3:
+        return Image.asset("images/work_new.png",width: 20,height: 20,);
+    }
+ }
   @override
   Widget build(BuildContext context) {
     final jobItem = Card(
@@ -117,60 +142,7 @@ class JobRowItem extends StatelessWidget {
               height: 0.4,
               dashWidth:2,
             ),
-            Offstage(
-              offstage: (isJi == null || isJi == false) ? true :false,
-              child : Container(
-                  margin: EdgeInsets.fromLTRB(0,10,0,0),
-                  padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
-                  decoration: BoxDecoration(
-                    color: Colours.app_main.withOpacity(0.2),
 
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset("images/ji.png",height: 16,width: 16,),
-                      SizedBox(width: 6,),
-                      Text(
-                        "2020-07-12前停止招聘",
-                        style: TextStyle(
-                          color: Colours.app_main,
-                          fontWeight: FontWeight.bold
-                        ),
-                      )
-                    ],
-                  ),
-
-                )
-            ),
-            Offstage(
-                offstage: (isBz == null || isBz == false) ? true :false,
-                child : Container(
-                  margin: EdgeInsets.fromLTRB(0,10,0,0),
-                  padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
-                  decoration: BoxDecoration(
-                    color: Colours.blue_main.withOpacity(0.2),
-
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Image.asset("images/bz.png",height: 16,width: 16,),
-                      SizedBox(width: 6,),
-                      Text(
-                        "官方保障，24小时跟踪！",
-                        style: TextStyle(
-                            color: Colours.blue_main,
-                            fontWeight: FontWeight.bold
-                        ),
-                      )
-                    ],
-                  ),
-
-                )
-            ),
 
             SizedBox(
               height: ScreenUtil().setWidth(28),
@@ -208,7 +180,7 @@ class JobRowItem extends StatelessWidget {
                       color: Color.fromRGBO(176, 181, 180, 1),
                     ),
                   ),
-               )
+               ),
 
               ],
             ),
@@ -216,39 +188,51 @@ class JobRowItem extends StatelessWidget {
               height: ScreenUtil().setWidth(18),
             ),
 
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
+            Container(
+              height: 30,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
 
 
-                Image.asset(
-                  'images/qyrz.png',
-                  width: ScreenUtil().setWidth(24),
-                  height: ScreenUtil().setWidth(24),
-                  fit: BoxFit.cover,
-                ),
+                      Image.asset(
+                        'images/qyrz.png',
+                        width: ScreenUtil().setWidth(24),
+                        height: ScreenUtil().setWidth(24),
+                        fit: BoxFit.cover,
+                      ),
 
-                SizedBox(
-                  width: ScreenUtil().setWidth(4),
-                ),
-                Flexible(
-                  child: Text(
-                    job["company"].toString(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Color.fromRGBO(57, 57, 57, 1),
-                    ),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(4),
+                      ),
+                      Flexible(
+                        child: Text(
+                          job["company"].toString(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(22),
+                            color: Color.fromRGBO(57, 57, 57, 1),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
                   ),
-                ),
+                  Positioned(
+                    right: 0,
+                   child: _getrihgt(),
+                  )
+                ],
+              ),
+            )
 
-
-
-              ],
-            ),
 
           ],
         ),

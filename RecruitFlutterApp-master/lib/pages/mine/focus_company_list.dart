@@ -57,7 +57,7 @@ class _FocusCompanyListState extends State<FocusCompanyList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CompanyDetail(),
+                      builder: (context) => CompanyDetail(1),
                     ));
               },
             );

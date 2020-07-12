@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/home/search_bar.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 
 import '../city_page.dart';
+import 'jobsearch_page.dart';
 
 class JobLocSelelct extends StatefulWidget{
   @override
@@ -16,11 +18,14 @@ class JobLocSelelct extends StatefulWidget{
 }
 
 class _JobLocSelectState extends State<JobLocSelelct>{
+  TextEditingController textEditingController = TextEditingController();
+  String city="选择城市";
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
    return Scaffold(
      backgroundColor: Colors.white,
+     resizeToAvoidBottomPadding: false,
      appBar: AppBar(
        elevation: 0,
        centerTitle: true,
@@ -66,34 +71,59 @@ class _JobLocSelectState extends State<JobLocSelelct>{
          SizedBox(height: 60),
          Padding(
              padding: EdgeInsets.symmetric(horizontal: 40),
-             child:GestureDetector(
-               behavior: HitTestBehavior.opaque,
-               onTap: (){
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) => CityPage()));
-               },
-               child: SearchBar('images/icon_home_search_20x20_@3x.png',height: 38,
-                 backgroudColor: Colours.app_main.withOpacity(0.1),txt: "选择你期望的职位",
+             child:Container(
+
+                 decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(34 * 0.5),
+                   color: Colours.app_main.withOpacity(0.2),
+                 ),
+                 child: TextField(
+                    controller: textEditingController,
+                   textAlign: TextAlign.center,
+                   decoration: InputDecoration(
+                     border: InputBorder.none,
+                     contentPadding: const EdgeInsets.symmetric(vertical: 2.0),
+                     hintText: "请输入期望职位",
+                     hintStyle: TextStyle(
+                       fontSize: 12
+                     )
+                   ),
+                 ),
                ),
-             )
+
          )
          ,
          SizedBox(height: 20),
          Padding(
              padding: EdgeInsets.symmetric(horizontal: 40),
              child:GestureDetector(
+               onTap: ()async {city = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CityPage()));setState(() {
+
+               });},
                behavior: HitTestBehavior.opaque,
-               onTap: (){
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) => CityPage()));
-               },
-               child:SearchBar('images/icon_home_search_20x20_@3x.png',height: 38,
-                 backgroudColor: Colours.app_main.withOpacity(0.1),txt: "武汉",
-               ) ,
+               child:Container(
+
+                 height: 50,
+                 decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(34 * 0.5),
+                   color: Colours.app_main.withOpacity(0.2),
+                 ),
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     new Image.asset("images/icon_home_search_20x20_@3x.png",
+                         width: 14,
+                         height: 14,
+                         color: Colors.black45),
+                     new Container(
+                       padding: new EdgeInsets.only(left: 5.0),
+                       child: new Text(city,
+                         style: new TextStyle(fontSize: 12.0,color: Colors.black45),
+                       ),
+                     )
+                   ],
+                 ),
+               ),
              )
          )
          ,
@@ -101,7 +131,13 @@ class _JobLocSelectState extends State<JobLocSelelct>{
          CustomBtnWidget(
            text: "开始查找",
            btnColor: Colours.app_main,
-           onPressed: null
+           onPressed: (){
+             if(textEditingController.text.trim().length > 0 && city != "选择城市"){
+               ShareHelper.putCity(city);
+               Navigator.pushReplacement(context, MaterialPageRoute(
+                   builder: (context) => JobSearchPage(textEditingController.text)));
+             }
+           }
          )
        ],
      ),

@@ -57,7 +57,7 @@ class _SendResumeJobState extends State<SendResumeJob> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobDetail(),
+                        builder: (context) => JobDetail(1),
                       ));
                 });
           }

@@ -288,7 +288,7 @@ class _JobManageDetailState extends State<JobManageDetail> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CompanyDetail()));
+                                  builder: (context) => CompanyDetail(1)));
                         },
                       ),
                       SizedBox(

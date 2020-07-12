@@ -7,10 +7,13 @@ import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/jobs/job_row_item.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
+import 'msg_job_item.dart';
 
-class JobSearch extends StatefulWidget{
-  String txt;
-  JobSearch(this.txt);
+
+class MsgJob extends StatefulWidget{
+  int type;
+  MsgJob(this.type);
+
   @override
   _JobState createState() {
     // TODO: implement createState
@@ -19,16 +22,16 @@ class JobSearch extends StatefulWidget{
 
 }
 
-class _JobState extends State<JobSearch>{
+class _JobState extends State<MsgJob>{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
   int page;
   List data =List();
-
+ String title="";
   _OnRefresh(){
     page=0;
 
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getMsgWorkList(page,widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -43,7 +46,7 @@ class _JobState extends State<JobSearch>{
     });
   }
   _loadMore(){
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getWorkList(page,widget.type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         List  loaddata = reponse["result"];
@@ -57,6 +60,25 @@ class _JobState extends State<JobSearch>{
     });
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    switch(widget.type){
+      case 0:
+        title = "对我感兴趣的";
+        break;
+      case 1:
+        title = "看过我的";
+        break;
+      case 2:
+        title = "智能推荐";
+        break;
+      case 3:
+        title = "职位上新";
+        break;
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
@@ -64,7 +86,7 @@ class _JobState extends State<JobSearch>{
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text(widget.txt,
+        title: Text(title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -76,8 +98,8 @@ class _JobState extends State<JobSearch>{
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 16,
-              height: 16,
+              width: 18,
+              height: 18,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -97,15 +119,16 @@ class _JobState extends State<JobSearch>{
             if (data.length >0 && index < data.length) {
               return GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  child: JobRowItem(
+                  child: MsgRowItem(
                       job: data[index],
+                      type: widget.type,
                       index: index,
                       lastItem: index == data.length - 1),
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => JobDetail(),
+                          builder: (context) => JobDetail(data[index]["job_id"]),
                         ));
                   });
             }

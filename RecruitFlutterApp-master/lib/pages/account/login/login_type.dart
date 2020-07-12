@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/pages/account/login/login_in.dart';
+import 'package:recruit_app/pages/account/register/login_pd_page.dart';
 
 class LoginType extends StatelessWidget {
   @override
@@ -41,7 +42,7 @@ class LoginType extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginIn()),
+                      MaterialPageRoute(builder: (context) => LoginPdPage()),
                     );
                   },
                   textColor: Color.fromRGBO(159, 199, 235, 1),
@@ -71,7 +72,7 @@ class LoginType extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginIn()),
+                      MaterialPageRoute(builder: (context) => LoginPdPage()),
                     );
                   },
                   textColor: Color.fromRGBO(159, 199, 235, 1),

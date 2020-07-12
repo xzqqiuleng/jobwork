@@ -57,7 +57,7 @@ class _ComunicateJobState extends State<ComunicateJob> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobDetail(),
+                        builder: (context) =>  JobDetail(1)
                       ));
                 });
           }

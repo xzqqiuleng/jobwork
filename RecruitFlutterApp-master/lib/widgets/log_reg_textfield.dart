@@ -72,7 +72,7 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
      textInputAction: widget.textInputAction,
        obscureText: widget.obscureText,
       cursorColor: Colours.app_main,
-      maxLines: 10,
+      maxLines: 1,
       decoration: InputDecoration(
 
           enabledBorder: UnderlineInputBorder(

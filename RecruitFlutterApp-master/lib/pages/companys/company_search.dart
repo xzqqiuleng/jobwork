@@ -1,25 +1,25 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
-import 'jobs/job_detail.dart';
-import 'jobs/job_row_item.dart';
-
-class JobPage extends StatefulWidget{
+import 'company_row_item.dart';
 
 
+class CompanySearch extends StatefulWidget{
+  String txt;
+  CompanySearch(this.txt);
   @override
-  _JobState createState() {
+  _csState createState() {
     // TODO: implement createState
-    return _JobState();
+    return _csState();
   }
 
 }
 
-class _JobState extends State<JobPage>{
+class _csState extends State<CompanySearch>{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
   int page;
@@ -28,7 +28,7 @@ class _JobState extends State<JobPage>{
   _OnRefresh(){
     page=0;
 
-    new MiviceRepository().getWorkList(page,0).then((value) {
+    new MiviceRepository().getCompanyList(page,searchText:widget.txt).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -42,11 +42,12 @@ class _JobState extends State<JobPage>{
       }
     });
   }
-  _loadMore(){
-    new MiviceRepository().getWorkList(page,0).then((value) {
+  _loadMore() {
+    new MiviceRepository().getCompanyList(page, searchText: widget.txt).then((
+        value) {
       var reponse = json.decode(value.toString());
-      if(reponse["status"] == "success"){
-        List  loaddata = reponse["result"];
+      if (reponse["status"] == "success") {
+        List loaddata = reponse["result"];
         setState(() {
           data.addAll(loaddata);
         });
@@ -64,7 +65,7 @@ class _JobState extends State<JobPage>{
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text('',
+        title: Text(widget.txt,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -76,8 +77,8 @@ class _JobState extends State<JobPage>{
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
+              width: 16,
+              height: 16,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -97,15 +98,15 @@ class _JobState extends State<JobPage>{
             if (data.length >0 && index < data.length) {
               return GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  child: JobRowItem(
-                      job: data[index],
+                  child: CompanyRowItem(
+                      company: data[index],
                       index: index,
                       lastItem: index == data.length - 1),
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>JobDetail(data[index]["job_id"]),
+                          builder: (context) => JobDetail(data[index]["job_id"])
                         ));
                   });
             }

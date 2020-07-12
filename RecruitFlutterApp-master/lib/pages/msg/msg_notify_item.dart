@@ -20,9 +20,9 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SlideButton(
+        Container(
           key: widget.btnKey,
-          singleButtonWidth: ScreenUtil().setWidth(116),
+
           child: Container(
             color: Colors.white,
             padding: EdgeInsets.only(
@@ -41,7 +41,7 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
                       height: ScreenUtil().setWidth(88),
                       fit: BoxFit.cover),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(32)),
+                SizedBox(width: ScreenUtil().setWidth(16)),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -55,8 +55,9 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(28),
-                                color: Color.fromRGBO(57, 57, 57, 1),
+                                fontSize: ScreenUtil().setSp(30),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
                               ),
                             ),
                           ),
@@ -67,7 +68,7 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
                             '20:30',
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(24),
-                              color: Color.fromRGBO(159, 199, 235, 1),
+                              color: Colors.grey,
                             ),
                           ),
                         ],
@@ -88,18 +89,14 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
               ],
             ),
           ),
-          buttons: <Widget>[
-            buildAction(widget.btnKey, Colors.red, () {
-              widget.btnKey.currentState.close();
-            }),
-          ],
+
         ),
         Container(
           margin: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(48),
+
           ),
           height: ScreenUtil().setWidth(1),
-          color: Color.fromRGBO(159, 199, 235, 1),
+          color: Color(0xfff0f0f0),
         ),
       ],
     );

@@ -1,35 +1,93 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_pic_list.dart';
 import 'package:recruit_app/model/company_welfare_list.dart';
 import 'package:recruit_app/model/job_list.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/companys/company_job.dart';
 import 'package:recruit_app/pages/companys/company_job_item.dart';
 import 'package:recruit_app/pages/companys/company_pic_item.dart';
 import 'package:recruit_app/pages/companys/company_welfare_item.dart';
+import 'package:recruit_app/pages/companys/gs_info.dart';
+import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/widgets/bottom_drawer_widget.dart';
 
 class CompanyDetail extends StatefulWidget {
+  int id;
+  CompanyDetail(this.id);
   @override
   _CompanyDetailState createState() => _CompanyDetailState();
 }
 
 class _CompanyDetailState extends State<CompanyDetail> {
-  List<WelfareData> _welfareList = WelfareList.loadWelfareList();
   List<CompanyPicData> _picList = CompanyPicList.loadCompanyPicList();
-
+  Map infors ;
+//  List<String> labels=["五险一金"];
+  List<String>tip=["五险一金"];
+  List datalist=List() ;
   List<Job> _jobList = JobData.loadJobs();
-
+  Map com_label;
+  Map compay_info;
+  List<GSInfo> gsInfos=List();
   @override
   void initState() {
     super.initState();
-  }
 
+
+
+    _loadData();
+  }
+  _loadData(){
+
+    if(widget.id == null){
+      widget.id = 8192;
+    }
+    new MiviceRepository().getCompanyDetail(widget.id).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        var   data = reponse["result"];
+
+
+        setState(() {
+          infors = data["com"];
+        List  jobList = data["jobs"];
+        datalist.clear();
+          datalist.addAll(jobList);
+          compay_info = json.decode(infors["company_info"].toString());
+
+          if(infors["label"] !=null && infors["label"] != ""){
+            com_label = json.decode(infors["label"].toString());
+          }
+
+
+          tip = data["tip"].toString().split(" ");
+
+          _getContent();
+
+
+        });
+
+      }
+    });
+  }
+  void _getContent(){
+    gsInfos.clear();
+    if(com_label == null){
+      return;
+    }
+    com_label.forEach((key, value) {
+ GSInfo gsInfo = GSInfo(key, value);
+     gsInfos.add(gsInfo);
+     });
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,8 +171,9 @@ class _CompanyDetailState extends State<CompanyDetail> {
                                Positioned(
                                  left: 76,
                                  top: 22,
-                                 child:  Text('腾讯',
-                                     maxLines: 1,
+                                 right: 90,
+                                 child:  Text( infors == null?"": infors["name"],
+                                     maxLines: 2,
                                      overflow: TextOverflow.ellipsis,
                                      style: const TextStyle(
                                          wordSpacing: 1,
@@ -128,8 +187,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
                                 top: 20,
                                 child:  ClipRRect(
                                   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                  child: Image.asset(
-                                      'images/ic_ask_resume_action.png',
+                                  child: Image.network(
+                                      infors == null|| infors["company_img"].toString() ==""?Constant.deault_compay:infors["company_img"],
                                       width: 50,
                                       height: 50,
                                       fit: BoxFit.fill),
@@ -137,7 +196,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
                               ),
                               Positioned(
                                 left: 76,
-                                top: 60,
+                                top: 80,
                                 child:Row(
                                   children: <Widget>[
                                     Image.asset('images/company_icon1.png',
@@ -205,62 +264,73 @@ class _CompanyDetailState extends State<CompanyDetail> {
                                 bottom: 20,
                                 left:16,
                                 right: 16,
-                                child:  Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            '热招中: ',
-                                            style: TextStyle(
-                                              fontSize: ScreenUtil().setSp(30),
-                                              color: Color.fromRGBO(151, 151, 151, 1),
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              "2222",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                child:  GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CompanyJob(datalist),
+                                        ));
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
+                                              '热招中: ',
                                               style: TextStyle(
                                                 fontSize: ScreenUtil().setSp(30),
-                                                color: Colors.black54,
+                                                color: Color.fromRGBO(151, 151, 151, 1),
                                               ),
                                             ),
-                                          ),
+                                            Flexible(
+                                              child: Text(
+                                                datalist.length == 0? "暂无招聘职位":datalist[0]["title"],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: ScreenUtil().setSp(30),
+                                                  color: Colors.black87,
+                                                ),
+                                              ),
+                                            ),
 
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: ScreenUtil().setWidth(22),
-                                    ),
-                                    Text(
-                                      "2",
-                                      style: TextStyle(
-                                          fontSize: ScreenUtil().setSp(32),
-                                          color: Colours.app_main,
-                                          fontWeight: FontWeight.bold
+                                      SizedBox(
+                                        width: ScreenUtil().setWidth(22),
                                       ),
-                                    ),
-                                    Text(
-                                      '个岗位',
-                                      style: TextStyle(
-                                        fontSize: ScreenUtil().setSp(30),
-                                        color: Color.fromRGBO(151, 151, 151, 1),
+                                      Text(
+                                        datalist.length.toString(),
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(32),
+                                            color: Colours.app_main,
+                                            fontWeight: FontWeight.bold
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: ScreenUtil().setWidth(22),
-                                    ),
-                                    Image.asset('images/img_arrow_right_blue.png',
-                                        width: ScreenUtil().setWidth(10),
-                                        height: ScreenUtil().setWidth(20),
-                                        fit: BoxFit.cover)
-                                  ],
-                                ),
+                                      Text(
+                                        '个岗位',
+                                        style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(30),
+                                          color: Color.fromRGBO(151, 151, 151, 1),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: ScreenUtil().setWidth(22),
+                                      ),
+                                      Image.asset('images/img_arrow_right_blue.png',
+                                          width: ScreenUtil().setWidth(10),
+                                          height: ScreenUtil().setWidth(20),
+                                          color: Colors.black87,
+                                          fit: BoxFit.cover)
+                                    ],
+                                  ),
+                                )
                               )
                             ],
                           ),
@@ -276,13 +346,13 @@ class _CompanyDetailState extends State<CompanyDetail> {
                             physics: BouncingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: _welfareList.length,
+                            itemCount: tip.length,
                             itemBuilder: (context, index) {
-                              if (index < _welfareList.length) {
+                              if (index < tip.length) {
                                 return CompanyWelfareItem(
-                                  welfareData: _welfareList[index],
+                                  welfareData: tip[index],
                                   index: index,
-                                  isLastItem: index == _welfareList.length - 1,
+                                  isLastItem: index == tip.length - 1,
                                 );
                               }
                               return null;
@@ -350,49 +420,43 @@ class _CompanyDetailState extends State<CompanyDetail> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                          '深圳市腾讯计算机系统有限公司成立于1998年11月，由马化腾、张志东、许晨晔、陈一丹、曾李青五位创始人共同创立。是中国最大的互联网综合服务提供商之一，也是中国服务用户最多的互联网企业之一。\n腾讯多元化的服务包括：社交和通信服务QQ及微信/WeChat、社交网络平台QQ空间、腾讯游戏旗下QQ游戏平台、门户网站腾讯网、腾讯新闻客户端和网络视频服务腾讯视频等。\n2004年腾讯公司在香港联交所主板公开上市（股票代号00700），董事会主席兼首席执行官是马化腾。',
-                          style: const TextStyle(
-                              wordSpacing: 2,
-                              letterSpacing: 1,
-                              fontSize: 14,
-                              color: Colors.black54)),
+                    Html(data: compay_info== null?"":compay_info["公司信息"].replaceAll("微信分享", "").replaceAll("地图", "")),
                       SizedBox(
                         height: 20,
                       ),
-                      Text('公司照片',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              wordSpacing: 1,
-                              letterSpacing: 1,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87)),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        height: 150,
-                        child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _picList.length,
-                            itemBuilder: (context, index) {
-                              if (index < _picList.length) {
-                                return CompanyPicItem(
-                                  picData: _picList[index],
-                                  index: index,
-                                  isLastItem: index == _picList.length - 1,
-                                );
-                              }
-                              return null;
-                            }),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
+//                      Text('公司照片',
+//                          maxLines: 1,
+//                          overflow: TextOverflow.ellipsis,
+//                          style: const TextStyle(
+//                              wordSpacing: 1,
+//                              letterSpacing: 1,
+//                              fontSize: 18,
+//                              fontWeight: FontWeight.bold,
+//                              color: Colors.black87)),
+//                      SizedBox(
+//                        height: 20,
+//                      ),
+//                      Container(
+//                        height: 150,
+//                        child: ListView.builder(
+//                            physics: BouncingScrollPhysics(),
+//                            shrinkWrap: true,
+//                            scrollDirection: Axis.horizontal,
+//                            itemCount: _picList.length,
+//                            itemBuilder: (context, index) {
+//                              if (index < _picList.length) {
+//                                return CompanyPicItem(
+//                                  picData: _picList[index],
+//                                  index: index,
+//                                  isLastItem: index == _picList.length - 1,
+//                                );
+//                              }
+//                              return null;
+//                            }),
+//                      ),
+//                      SizedBox(
+//                        height: 20,
+//                      ),
                       Text('公司地址',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -407,8 +471,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(8)),
-                        child: Image.asset('images/img_location_example.png',
-                            height: 200, fit: BoxFit.cover),
+                        child: Image.asset('images/map_icon.jpg',
+                            height: 100, fit: BoxFit.cover),
                       ),
                       SizedBox(
                         height: 20,
@@ -496,9 +560,9 @@ class _CompanyDetailState extends State<CompanyDetail> {
                         height: 20,
                       ),
                      ListView.builder(itemBuilder: (BuildContext context,int index){
-                       return GsItemwidget();
+                       return GsItemwidget(gsInfos[index]);
                      },
-                       itemCount: 4,
+                       itemCount: gsInfos.length,
                          shrinkWrap: true,
                          physics: const NeverScrollableScrollPhysics()
                      ),
@@ -515,16 +579,40 @@ class _CompanyDetailState extends State<CompanyDetail> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black87)),
                       SizedBox(
-                        height: 16,
+                        height: 8,
+                      ),
+
+                      ListView.builder(itemBuilder: (BuildContext context,int index){
+                        if(datalist.length ==0 || datalist[index]== null){
+
+                          return Text("");
+                        }else{
+                          return PositionItem(datalist[index]);
+                        }
+
+                      },
+                          itemCount: datalist.length >3 ? 3 :datalist.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics()
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       CustomBtnWidget(
                         radius: 30,
                         fontSize: 12,
-                        text:"查看职位详情",
+                        text:"查看所有职位",
                         btnColor: Colours.app_main,
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompanyJob(datalist),
+                              ));
+                        },
                       ),
                       SizedBox(
-                        height: 106,
+                        height: 20,
                       ),
                     ],
                   ),
@@ -587,7 +675,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => JobDetail(),
+                                builder: (context) => JobDetail(1),
                               ));
                         });
                   }
@@ -604,6 +692,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
   }
 }
 class GsItemwidget extends StatelessWidget{
+  GSInfo gsInfo;
+  GsItemwidget(this.gsInfo);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -613,7 +703,7 @@ class GsItemwidget extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text('注册时间',
+            Text(gsInfo.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -625,7 +715,7 @@ class GsItemwidget extends StatelessWidget{
               width: 15,
             ),
             Expanded(
-              child: Text('2000-02-24',
+              child: Text(gsInfo.txt,
                   textAlign: TextAlign.end,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -639,6 +729,60 @@ class GsItemwidget extends StatelessWidget{
         ),
         SizedBox(
           height: 10,
+        ),
+      ],
+    );
+  }
+
+}
+
+
+
+class PositionItem extends StatelessWidget{
+  Map info;
+  PositionItem(this.info);
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      children: <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+
+          children: <Widget>[
+            SizedBox(
+              height: 12,
+            ),
+            Text(info["title"],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    wordSpacing: 1,
+                    letterSpacing: 1,
+                    fontSize: 16,
+                    color: Colors.black87)),
+            SizedBox(
+              height: 12,
+            ),
+         Text(info["salary"],
+
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                      wordSpacing: 1,
+                      letterSpacing: 1,
+                      fontSize: 16,
+                      color: Colours.app_main)),
+          ],
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        Container(
+          height: 4,
+          color:Color(0xfff8f8f8),
         ),
       ],
     );

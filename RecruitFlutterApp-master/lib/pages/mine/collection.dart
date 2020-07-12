@@ -57,7 +57,7 @@ class _CollectionJobSate extends State<CollectionJob> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobDetail(),
+                        builder: (context) => JobDetail(1),
                       ));
                 });
           }

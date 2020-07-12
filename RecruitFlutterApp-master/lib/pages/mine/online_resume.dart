@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_intent_list.dart';
 import 'package:recruit_app/model/mine_edu_list.dart';
 import 'package:recruit_app/model/mine_project_list.dart';
@@ -7,9 +8,12 @@ import 'package:recruit_app/model/mine_work_list.dart';
 import 'package:recruit_app/pages/mine/edu_item.dart';
 import 'package:recruit_app/pages/mine/job_intent_item.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
+import 'package:recruit_app/pages/mine/me_gzjl.dart';
 import 'package:recruit_app/pages/mine/me_qw.dart';
 import 'package:recruit_app/pages/mine/project_item.dart';
 import 'package:recruit_app/pages/mine/work_item.dart';
+
+import 'me_edu.dart';
 
 class OnlineResume extends StatefulWidget {
   @override
@@ -143,9 +147,8 @@ class _OnlineResumeState extends State<OnlineResume> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(37, 38, 39, 1),
+                          fontSize: 14,
+                          color: Colours.app_main,
                         ),
                       ),
                       SizedBox(height: 8),
@@ -197,23 +200,33 @@ class _OnlineResumeState extends State<OnlineResume> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              '求职期望',
+                              '* 工作期望',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
+                                fontSize: 14,
+                                color: Colours.app_main,
                               ),
                             ),
                           ),
                           SizedBox(width: 8,),
-                          Image.asset(
-                            'images/icon_increase.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
+                       GestureDetector(
+                         onTap: (){
+                           Navigator.push(
+                               context,
+                               MaterialPageRoute(
+                                 builder: (context) => MeQW(),
+                               ));
+                         },
+                         child: Text(
+                           "添加",
+                           style: TextStyle(
+                               color: Colours.app_main,
+                               fontWeight: FontWeight.bold
+                           ),
+                         )
+                       )
+                         ,
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -254,32 +267,51 @@ class _OnlineResumeState extends State<OnlineResume> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              '工作经历',
+                              '* 工作经历',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
+                                fontSize: 14,
+                                color: Colours.app_main,
                               ),
                             ),
                           ),
                           SizedBox(width: 8,),
-                          Image.asset(
-                            'images/icon_increase.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
+                          GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeGzjl(),
+                                    ));
+                              },
+                              child: Text(
+                                "添加",
+                                style: TextStyle(
+                                    color: Colours.app_main,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              )
+                          )
                         ],
                       ),
                       SizedBox(height: 8,),
                       ListView.builder(
                         itemBuilder: (context, index) {
                           if (index < _workList.length) {
-                            return WorkItem(
-                              workData: _workList[index],
-                              index: index,
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeGzjl(),
+                                    ));
+                              },
+                                behavior: HitTestBehavior.opaque,
+                              child:  WorkItem(
+                                workData: _workList[index],
+                                index: index,
+                              )
                             );
                           }
                           return null;
@@ -289,6 +321,54 @@ class _OnlineResumeState extends State<OnlineResume> {
                         physics: const NeverScrollableScrollPhysics(),
                       ),
 
+//                      Container(
+//                        margin: EdgeInsets.symmetric(vertical: 15),
+//                        color: Color.fromRGBO(242, 243, 244, 1),
+//                        height: 1,
+//                      ),
+
+//                      Row(
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Text(
+//                              '项目经历',
+//                              maxLines: 1,
+//                              overflow: TextOverflow.ellipsis,
+//                              style: const TextStyle(
+//                                fontSize: 16,
+//                                fontWeight: FontWeight.bold,
+//                                color: Color.fromRGBO(37, 38, 39, 1),
+//                              ),
+//                            ),
+//                          ),
+//                          SizedBox(width: 8,),
+//                          Image.asset(
+//                            'images/icon_increase.png',
+//                            width: 18,
+//                            height: 18,
+//                            fit: BoxFit.cover,
+//                          ),
+//                        ],
+//                      ),
+//
+//                      SizedBox(height: 8,),
+//                      ListView.builder(
+//                        itemBuilder: (context, index) {
+//                          if (index < _projectList.length) {
+//                            return ProjectItem(
+//                              projectData: _projectList[index],
+//                              index: index,
+//                            );
+//                          }
+//                          return null;
+//                        },
+//                        shrinkWrap: true,
+//                        itemCount: _projectList.length,
+//                        physics: const NeverScrollableScrollPhysics(),
+//                      ),
+
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
                         color: Color.fromRGBO(242, 243, 244, 1),
@@ -301,80 +381,50 @@ class _OnlineResumeState extends State<OnlineResume> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              '项目经历',
+                              '* 教育经历',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
+                                fontSize: 14,
+                                color: Colours.app_main,
                               ),
                             ),
                           ),
                           SizedBox(width: 8,),
-                          Image.asset(
-                            'images/icon_increase.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 8,),
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          if (index < _projectList.length) {
-                            return ProjectItem(
-                              projectData: _projectList[index],
-                              index: index,
-                            );
-                          }
-                          return null;
-                        },
-                        shrinkWrap: true,
-                        itemCount: _projectList.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                      ),
-
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
-
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '教育经历',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/icon_increase.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
+                          GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeEdu(),
+                                    ));
+                              },
+                              child: Text(
+                                "添加",
+                                style: TextStyle(
+                                    color: Colours.app_main,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              )
+                          )
                         ],
                       ),
                       SizedBox(height: 8,),
                       ListView.builder(
                         itemBuilder: (context, index) {
                           if (index < _eduList.length) {
-                            return EduItem(
-                              eduData: _eduList[index],
-                              index: index,
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeEdu(),
+                                    ));
+                              },
+                              child: EduItem(
+                                eduData: _eduList[index],
+                                index: index,
+                              )
                             );
                           }
                           return null;
@@ -396,23 +446,16 @@ class _OnlineResumeState extends State<OnlineResume> {
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              '资格证书',
+                              '* 资格证书',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(37, 38, 39, 1),
+                                fontSize: 14,
+                                color: Colours.app_main,
                               ),
                             ),
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/icon_increase.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
+
                         ],
                       ),
                       Container(

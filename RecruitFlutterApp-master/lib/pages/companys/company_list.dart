@@ -182,7 +182,7 @@ class _CompanyListState extends State<CompanyList> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CompanyDetail(),
+                                builder: (context) => CompanyDetail(0),
                               ));
                         },
                       );
