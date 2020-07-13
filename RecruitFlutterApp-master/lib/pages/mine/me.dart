@@ -8,6 +8,7 @@ import 'package:recruit_app/model/me_list.dart';
 import 'package:recruit_app/pages/mine/comunicate.dart';
 import 'package:recruit_app/pages/mine/focus_company_list.dart';
 import 'package:recruit_app/pages/mine/job_intent.dart';
+import 'package:recruit_app/pages/mine/mine_infor.dart';
 import 'package:recruit_app/pages/mine/online_resume.dart';
 import 'package:recruit_app/pages/mine/send_resume.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
@@ -62,7 +63,7 @@ class _MineState extends State<Mine> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: (){
-
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(),),);
                     },
                     child:Row(
                       mainAxisAlignment: MainAxisAlignment.start,
