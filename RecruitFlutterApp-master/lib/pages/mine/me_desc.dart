@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class MeDesc extends StatefulWidget {
@@ -13,6 +15,22 @@ class _MeDescState extends State<MeDesc> {
   String title = "";
   String hint = "";
   int line = 1;
+
+   Map jl = Map();
+  void _updete(String json){
+    if(_phoneController.text.trim().length <= 0){
+      showToast("请输入内容");
+    }
+    switch(widget.type){
+      case 0:
+        jl["desc"] =  _phoneController.text;
+        break;
+    }
+    MiviceRepository().upDateJL(json).then((value) {
+
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -26,32 +44,32 @@ class _MeDescState extends State<MeDesc> {
       case 1:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
       case 2:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
       case 3:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
       case 4:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
       case 5:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
       case 6:
         title = "自我介绍";
         hint = "请用简单的自我介绍，展示你的优势";
-        line = 10;
+        line = 1;
         break;
 
     }

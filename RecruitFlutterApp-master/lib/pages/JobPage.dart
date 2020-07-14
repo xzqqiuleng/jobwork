@@ -27,7 +27,6 @@ class _JobState extends State<JobPage>{
 
   _OnRefresh(){
     page=0;
-
     new MiviceRepository().getWorkList(page,0).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){

@@ -123,4 +123,13 @@ class MiviceRepository{
     });
     return response;
   }
+
+  Future upDateJL(String json)async{
+    var response = await dio.post<Map>('/user/getMsgList', data: {
+
+      'userId': 10,
+      'type': json,
+    });
+    return response;
+  }
 }
