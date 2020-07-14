@@ -1,4 +1,4 @@
-package com.recruit.recruit_app
+package com.pinpin.jobwork
 
 import android.os.Bundle
 import io.flutter.app.FlutterActivity
@@ -8,5 +8,11 @@ class MainActivity: FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
+
+
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+     }
 }

@@ -25,6 +25,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.mob.sdk'
+MobSDK {
+    appKey "m300ee9a78350b"
+    appSecret "c051bb0b1084c5b30c7c92d1def05f0c"
+
+}
 android {
     compileSdkVersion 28
 
@@ -38,7 +43,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.recruit.recruit_app"
+        applicationId "com.pinpin.jobwork"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()

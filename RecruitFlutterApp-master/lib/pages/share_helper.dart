@@ -13,7 +13,13 @@ class ShareHelper{
  static String city = "city";
  static String is_Login = "is_Login";
  static String kUser = "kUser";
-
+ static bool isAgree(){
+   if(StorageManager.sharedPreferences != null &&StorageManager.sharedPreferences.getBool("is_agree") !=null &&StorageManager.sharedPreferences.getBool("is_agree")){
+     return true;
+   }else{
+     return false;
+   }
+ }
  static bool isLogin(){
    if(StorageManager.sharedPreferences != null &&StorageManager.sharedPreferences.getBool(is_Login) !=null &&StorageManager.sharedPreferences.getBool(is_Login) ){
      return true;

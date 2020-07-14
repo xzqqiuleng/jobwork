@@ -52,6 +52,16 @@ dependencies:
     # 本地json对象存储
   localstorage: ^2.0.0
   web_socket_channel: ^1.0.13
+  url_launcher: ^5.1.6 #启动第三方app
+  launch_review: ^2.0.0
+  open_file: ^2.0.3
+  device_info: ^0.4.0+1
+  package_info: ^0.4.0+6
+    #图片选择
+  image_picker: ^0.6.7+2
+  webview_flutter: ^0.3.19
+  flutter_webview_plugin: ^0.3.10
+
   mobsms:
 
 #  google_maps_flutter: ^0.5.24+1

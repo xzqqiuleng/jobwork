@@ -8,6 +8,7 @@ import 'package:recruit_app/pages/boss/boss_collection.dart';
 import 'package:recruit_app/pages/boss/boss_comunicate.dart';
 import 'package:recruit_app/pages/boss/company_info.dart';
 import 'package:recruit_app/pages/boss/job_manage.dart';
+import 'package:recruit_app/pages/employe/company_edit.dart';
 import 'package:recruit_app/pages/mine/mine_infor.dart';
 
 class BossMine extends StatefulWidget {
@@ -341,6 +342,11 @@ class _BossMineState extends State<BossMine> {
                               model.identity == Identity.employee
                                   ? Identity.boss
                                   : Identity.employee);
+                        }else if (index == 1) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CompanyEdit()));
                         }
                       },
                     );

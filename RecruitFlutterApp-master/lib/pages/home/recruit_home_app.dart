@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/boss/boss.dart';
 import 'package:recruit_app/pages/companys/company_jobslist.dart';
@@ -8,8 +12,10 @@ import 'package:recruit_app/pages/employe/employe_list.dart';
 import 'package:recruit_app/pages/home/home_page.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/mine/me.dart';
+import 'package:recruit_app/pages/msg/agreement_detail.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
 import 'package:recruit_app/pages/msg/new_msglist.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
 
 class RecruitHomeApp extends StatefulWidget {
   @override
@@ -27,6 +33,8 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
     MsgList(),
     BossMine(),
   ];
+
+
 
   static List<BottomNavigationBarItem> _bossBottoms = <BottomNavigationBarItem>[
     BottomNavigationBarItem(

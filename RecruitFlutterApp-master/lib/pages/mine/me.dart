@@ -12,6 +12,8 @@ import 'package:recruit_app/pages/mine/mine_infor.dart';
 import 'package:recruit_app/pages/mine/online_resume.dart';
 import 'package:recruit_app/pages/mine/send_resume.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
+import 'package:recruit_app/pages/utils/cashfile_utils.dart';
+import 'package:recruit_app/widgets/progress_dialog.dart';
 
 class Mine extends StatefulWidget {
   @override
@@ -23,6 +25,49 @@ class Mine extends StatefulWidget {
 
 class _MineState extends State<Mine> {
   List<Me> options = MeOptions.loadOptions();
+
+
+  _clearCach(){
+    ProgressDialog.showProgress(context);
+    CashFileUtils.clearCache().then((value) {
+      ProgressDialog.dismiss(context);
+    });
+  }
+  void _showDeleteDialog(BuildContext buildContext) async{
+    print("show");
+    await showDialog(context: buildContext,builder: (BuildContext context){
+
+      return CupertinoAlertDialog(
+        title: Text("账号注销后无法恢复，请谨慎操作",style: TextStyle(color: Colours.black_1e211c,fontSize: 17,fontWeight: FontWeight.bold),),
+        content:Text(""),
+        actions:<Widget>[
+
+          CupertinoDialogAction(
+            child: Text("取消",style: TextStyle(color: Colours.gray_C8C7CC,fontSize: 17,fontWeight: FontWeight.bold)),
+            onPressed: (){
+              Navigator.of(context).pop();
+
+            },
+          ),
+
+          CupertinoDialogAction(
+            child:  Text("删除",style: TextStyle(color: Colours.app_main,fontSize: 17,fontWeight: FontWeight.bold)),
+            onPressed: (){
+//              if(UserHelper.isLogin()){
+//                MiviceRepository().deleteAccount().then((value) {
+//                  UserModel usermodel = Provider.of<UserModel>(buildContext,listen: false);
+//                  usermodel.logout();
+//                  Navigator.of(context).pop();
+//                  eventBus.fire(HomeRefreshEvent(true));
+//                });
+//              }
+
+            },
+          ),
+        ],
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
