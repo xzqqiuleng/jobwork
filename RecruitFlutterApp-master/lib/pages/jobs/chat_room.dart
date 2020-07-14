@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/chat_list.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
@@ -11,6 +12,11 @@ import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ChatRoom extends StatefulWidget {
+  String reply_id;
+  String user_id;
+  String title;
+  String head_icon;
+  ChatRoom({this.reply_id,this.user_id,this.title,this.head_icon});
   @override
   _ChatRoomState createState() {
     // TODO: implement createState
@@ -19,7 +25,7 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
-  List<Chat> _chatList = ChatData.loadChats();
+  List<Chat> _chatList = [];
   final ScrollController _scrollController = ScrollController();
   var channel;
   @override
@@ -55,7 +61,7 @@ class _ChatRoomState extends State<ChatRoom> {
           elevation: 0,
           centerTitle: true,
           title: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text('胡京茹',
@@ -71,9 +77,10 @@ class _ChatRoomState extends State<ChatRoom> {
           ),
           leading: IconButton(
               icon: Image.asset(
-                'images/img_arrow_left_black.png.png',
+                'images/img_arrow_left_black.png',
                 width: 20,
                 height: 20,
+                color: Colors.black87,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -83,7 +90,7 @@ class _ChatRoomState extends State<ChatRoom> {
           actions: <Widget>[
             IconButton(
                 icon: Image.asset(
-                  'images/pingbi.png',
+                  'images/jubao.png',
                   width: 20,
                   height: 20,
                 ),
@@ -142,12 +149,12 @@ class _ChatRoomState extends State<ChatRoom> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Image.asset('images/ic_resume_send.png',
+                        Image.asset('images/email.png',
                             width: 25, height: 25, fit: BoxFit.cover),
                         SizedBox(
                           height: 3,
                         ),
-                        Text('发简历',
+                        Text('邮箱',
                             style: const TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
@@ -210,7 +217,7 @@ class _ChatRoomState extends State<ChatRoom> {
             SafeArea(
               top: false,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -275,7 +282,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                      
+                        SystemChannels.textInput.invokeMethod("TextInput.hide");
                          Map map = Map();
                          map["user_id"] ="14243b0f437841629f840b65ffb3fbce";
                          map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
@@ -285,13 +292,14 @@ class _ChatRoomState extends State<ChatRoom> {
                           _chatList.add(Chat(
                               sender: 'images/avatar_14.png',
                               content: editController.text));
+                          editController.text = "";
                         });
 
 
                       },
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        EdgeInsets.symmetric(horizontal:18, vertical:10),
                         child: Text(
                           "发送",
                           style: TextStyle(
@@ -318,13 +326,20 @@ class TopWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Row(
-               children: [
-                 Image.asset("images/warn_icon.png",width: 20,height: 20,),
-                 Text(
-                   "聊天需谨慎，不要轻易泄露私人信息！"
-                 )
-               ],
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          
+          Image.asset("images/warn_icon.png",width: 20,height: 20,),
+          Text(
+              "聊天需谨慎，谨防诈骗消息！"
+          )
+        ],
+      ),
     );
   }
 

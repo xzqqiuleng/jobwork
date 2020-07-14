@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
 import 'package:recruit_app/pages/boss/boss_collection.dart';
 import 'package:recruit_app/pages/boss/boss_comunicate.dart';
 import 'package:recruit_app/pages/boss/company_info.dart';
 import 'package:recruit_app/pages/boss/job_manage.dart';
+import 'package:recruit_app/pages/mine/mine_infor.dart';
 
 class BossMine extends StatefulWidget {
   @override
@@ -29,7 +31,7 @@ class _BossMineState extends State<BossMine> {
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: Container(
-              color: Color.fromRGBO(70, 192, 182, 1),
+              color: Colours.app_main,
               child: SafeArea(
                   bottom: false,
                   child: Padding(
@@ -40,49 +42,55 @@ class _BossMineState extends State<BossMine> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.asset(
-                                  'images/avatar_2.png',
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.cover,
+                          child: GestureDetector(
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.asset(
+                                    'images/avatar_2.png',
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                  child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '黄小姐',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '零一跳动•招聘者',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 13),
-                                  ),
-                                ],
-                              )),
-                            ],
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          '黄小姐',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          '零一跳动•招聘者',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 13),
+                                        ),
+                                      ],
+                                    )),
+                              ],
+                            ),
+                            onTap: (){
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(),),);
+                            },
+                            behavior: HitTestBehavior.opaque,
                           ),
                         ),
                         SizedBox(
@@ -318,7 +326,7 @@ class _BossMineState extends State<BossMine> {
                         ),
                       ),
                       onTap: () {
-                        if (index == 3) {
+                        if (index == 2) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -328,7 +336,7 @@ class _BossMineState extends State<BossMine> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => JobManage()));
-                        } else if (index == 4) {
+                        } else if (index == 3) {
                           model.changeIdentity(
                               model.identity == Identity.employee
                                   ? Identity.boss

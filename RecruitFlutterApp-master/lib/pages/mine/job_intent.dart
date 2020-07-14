@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_intent_list.dart';
 import 'package:recruit_app/pages/mine/job_intent_item.dart';
 
@@ -20,10 +21,11 @@ class _JobIntentState extends State<JobIntent> {
     return Scaffold(
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',
-                width: 24,
+                width: 18,
                 height: 24,
               ),
               onPressed: () {
@@ -32,7 +34,7 @@ class _JobIntentState extends State<JobIntent> {
           automaticallyImplyLeading: false,
           backgroundColor: Color.fromRGBO(255, 255, 255, 1),
           centerTitle: true,
-          title: Text('求职期望',
+          title: Text('求职状态',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
@@ -61,7 +63,7 @@ class _JobIntentState extends State<JobIntent> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
-                            child: Text('想找什么工作？',
+                            child: Text('求职状态将要改变？',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -72,35 +74,12 @@ class _JobIntentState extends State<JobIntent> {
                                     color: Color.fromRGBO(37, 38, 39, 1))),
                           ),
                           SizedBox(width: 8),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '${_intentList.length}',
-                                    style: const TextStyle(
-                                        wordSpacing: 1,
-                                        letterSpacing: 1,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromRGBO(70, 192, 182, 1))),
-                                TextSpan(
-                                    text: '/3',
-                                    style: TextStyle(
-                                        wordSpacing: 1,
-                                        letterSpacing: 1,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromRGBO(37, 38, 39, 1))),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
                       SizedBox(
                         height: 8,
                       ),
-                      Text('添加多个求职期望，可获得更多精准高薪工作机会',
+                      Text('正确的更新求职状态，才能获得更多的面试机会！',
                           style: const TextStyle(
                             wordSpacing: 1,
                             letterSpacing: 1,
@@ -110,20 +89,7 @@ class _JobIntentState extends State<JobIntent> {
                       SizedBox(
                         height: 8,
                       ),
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          if (index < _intentList.length) {
-                            return JobIntentItem(
-                              intentData: _intentList[index],
-                              index: index,
-                            );
-                          }
-                          return null;
-                        },
-                        shrinkWrap: true,
-                        itemCount: _intentList.length,
-                        physics:const NeverScrollableScrollPhysics(),
-                      ),
+
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         child: Padding(
@@ -147,7 +113,7 @@ class _JobIntentState extends State<JobIntent> {
                                 width: 15,
                               ),
                               Text(
-                                '在职-暂不考虑',
+                                _xl,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: const TextStyle(
@@ -166,7 +132,10 @@ class _JobIntentState extends State<JobIntent> {
                             ],
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          _showSexPop(context);
+
+                        },
                       ),
                       Container(
                         color: Color.fromRGBO(242, 243, 244, 1),
@@ -182,12 +151,13 @@ class _JobIntentState extends State<JobIntent> {
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                   child: MaterialButton(
-                    color: Color.fromRGBO(70, 192, 182, 1),
+                    color: Colours.app_main,
                     onPressed: () {
-//                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatRoom()));
+//
+
                     },
                     textColor: Colors.white,
-                    child: Text("添加期望"),
+                    child: Text("更新状态"),
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -196,5 +166,60 @@ class _JobIntentState extends State<JobIntent> {
             ),
           ],
         ));
+  }
+
+
+  List _salaryList=["离职-找工作","在职—找工作","在职-考虑机会","暂不考虑"];
+  String _xl="离职-找工作";
+  void _showSexPop(BuildContext context){
+    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context){
+          return _buildBottonPicker(
+              CupertinoPicker(
+
+                magnification: 1,
+                itemExtent:58 ,
+                backgroundColor: Colors.white,
+                useMagnifier: true,
+                scrollController: scrollController,
+                onSelectedItemChanged: (int index){
+                  if(mounted){
+                    setState(() {
+
+                      _xl = _salaryList[index];
+
+
+                    });
+                  }
+                },
+                children: List<Widget>.generate(_salaryList.length, (index){
+                  return Center(
+                    child: Text(_salaryList[index]),
+                  );
+                }),
+              )
+          );
+        });
+  }
+  Widget _buildBottonPicker(Widget picker){
+    return Container(
+      height: 190,
+      padding: EdgeInsets.only(top: 6),
+      color: Colors.white,
+      child: DefaultTextStyle(
+        style: const TextStyle(
+            color:Colors.black87,
+            fontSize: 18
+        ),
+        child: GestureDetector(
+          child: SafeArea(
+            top: false,
+            child: picker,
+          ),
+        ),
+      ),
+    );
   }
 }

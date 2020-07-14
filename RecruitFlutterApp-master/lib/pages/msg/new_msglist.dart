@@ -167,12 +167,12 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   int sortId;
   List data =List();
   List<TopicTabModel> topicTabMenus=List();
-
+  int type = 0;
 
   _OnRefresh(){
     sortId=null;
 
-    new MiviceRepository().getCompanyList(sortId).then((value) {
+    new MiviceRepository().getMessageList("",type).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -180,24 +180,15 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
         setState(() {
           data = reponse["result"];
         });
-        print(data);
-        sortId = data[data.length-1]["sort_id"];
+
         _refreshController.refreshCompleted();
       }
     });
   }
   _loadMore(){
     new MiviceRepository().getCompanyList(sortId).then((value) {
-      var reponse = json.decode(value.toString());
-      if(reponse["status"] == "success"){
-        List  loaddata = reponse["result"];
-        setState(() {
-          data.addAll(loaddata);
-        });
-
-        sortId = int.parse(data[data.length-1]["sort_id"]);
         _refreshController.loadComplete();
-      }
+
     });
   }
   @override

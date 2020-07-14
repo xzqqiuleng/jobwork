@@ -9,6 +9,7 @@ class ShareHelper{
  static String is_fist = "is_first";
  static String search_history_job = "search_history_job";
  static String search_history_company = "search_history_company";
+ static String search_history_jl = "search_history_jl";
  static String city = "city";
  static String is_Login = "is_Login";
  static String kUser = "kUser";
@@ -60,6 +61,53 @@ class ShareHelper{
    }
 
    StorageManager.sharedPreferences.setString(search_history_job, json.encode(searchLists));
+
+
+ }
+
+ static List<dynamic> getSearchCompany(){
+   List <dynamic> searchLists ;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(search_history_company) !=null&&StorageManager.sharedPreferences.getString(search_history_company) !=""){
+
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(search_history_company));
+   }
+   return searchLists;
+
+ }
+ static void putSearchCompany(String job){
+   List <dynamic> searchLists;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(search_history_company) !=null&&StorageManager.sharedPreferences.getString(search_history_company) !=""){
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(search_history_company));
+     searchLists.insert(0,job);
+   }else{
+     searchLists= new List();
+     searchLists.add(job);
+   }
+
+   StorageManager.sharedPreferences.setString(search_history_company, json.encode(searchLists));
+
+
+ }
+ static List<dynamic> getSearchJl(){
+   List <dynamic> searchLists ;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(search_history_jl) !=null&&StorageManager.sharedPreferences.getString(search_history_jl) !=""){
+
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(search_history_jl));
+   }
+   return searchLists;
+
+ }
+ static void putSearchJl(String job){
+   List <dynamic> searchLists;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(search_history_jl) !=null&&StorageManager.sharedPreferences.getString(search_history_jl) !=""){
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(search_history_jl));
+     searchLists.insert(0,job);
+   }else{
+     searchLists= new List();
+     searchLists.add(job);
+   }
+
+   StorageManager.sharedPreferences.setString(search_history_jl, json.encode(searchLists));
 
 
  }

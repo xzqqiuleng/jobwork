@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tag_layout/flutter_tag_layout.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/companys/company_search.dart';
+import 'package:recruit_app/pages/employe/employsearch_page.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 import '../share_helper.dart';
 import 'jobsearch_page.dart';
 
-enum SearchType { job, company }
+enum SearchType { job, company,jl }
 
 class JobCompanySearch extends StatefulWidget {
   final SearchType searchType;
@@ -39,13 +40,21 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
       hotlabels.add("保险");
 
       historylabels = ShareHelper.getSearchJob();
-    }else{
+    }else if(widget.searchType == SearchType.company){
       hotlabels.add("亚信科技");
       hotlabels.add("亚马逊中国");
       hotlabels.add("光明乳业");
       hotlabels.add("伊利");
       hotlabels.add("长虹电器");
       hotlabels.add("奇安信集团");
+      historylabels = ShareHelper.getSearchCompany();
+    }else if(widget.searchType == SearchType.jl){
+      hotlabels.add("销售");
+      hotlabels.add("互联网");
+      hotlabels.add("金融");
+      hotlabels.add("物流");
+      hotlabels.add("酒店");
+      historylabels = ShareHelper.getSearchJl();
 
     }
     _getHotLabel();
@@ -62,9 +71,12 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
             if(widget.searchType==SearchType.job){
               Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) => JobSearchPage(hotlabels[i])));
-            }else{
+            }else if(widget.searchType==SearchType.company){
               Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) => CompanySearch(hotlabels[i])));
+            }else{
+              Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) => EmploySearchPage(hotlabels[i])));
             }
 
           },
@@ -95,9 +107,12 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
             if(widget.searchType==SearchType.job){
               Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) => JobSearchPage(historylabels[i])));
-            }else{
+            }else if(widget.searchType==SearchType.company){
               Navigator.pushReplacement(context, MaterialPageRoute(
                   builder: (context) => CompanySearch(historylabels[i])));
+            }else{
+            Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) => EmploySearchPage(historylabels[i])));
             }
 
           },
@@ -191,23 +206,29 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
                                   border: InputBorder.none,
                                   hintText: widget.searchType == SearchType.job
                                       ? '输入岗位名称'
-                                      : '输入企业名称',
+                                      : '快速搜索',
                                   hintStyle: TextStyle(
                                     fontSize: ScreenUtil().setSp(24),
                                     color: Color.fromRGBO(176, 181, 180, 1),
                                   ),
                                 ),
                                 onSubmitted: (text) {
+                                  if(text.trim().length <=0){
+                                    return;
+                                  }
                                   if(widget.searchType==SearchType.job){
-                                    if(text.trim().length <=0){
-                                      return;
-                                    }
+
                                     ShareHelper.putSearchJob(text);
                                     Navigator.pushReplacement(context, MaterialPageRoute(
                                         builder: (context) => JobSearchPage(text)));
-                                  }else{
+                                  }else if (widget.searchType==SearchType.company){
+                                    ShareHelper.putSearchCompany(text);
                                     Navigator.pushReplacement(context, MaterialPageRoute(
                                         builder: (context) => CompanySearch(text)));
+                                  }else {
+                                    ShareHelper.putSearchJl(text);
+                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                        builder: (context) => EmploySearchPage(text)));
                                   }
                                 },
                               ),
@@ -260,8 +281,10 @@ class _JobCompanySearchState extends State<JobCompanySearch> {
 
 
 
-                        }else{
+                        }else if(widget.searchType == SearchType.company){
                           StorageManager.sharedPreferences.setString(ShareHelper.search_history_company, "");
+                        }else{
+                          StorageManager.sharedPreferences.setString(ShareHelper.search_history_jl, "");
                         }
                         setState(() {
                           historylabels.clear();

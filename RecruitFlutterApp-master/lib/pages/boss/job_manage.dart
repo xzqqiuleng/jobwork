@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_manage_list.dart';
 import 'package:recruit_app/pages/boss/job_manage_detail.dart';
 import 'package:recruit_app/pages/boss/job_manage_item.dart';
+import 'package:recruit_app/pages/boss/work_post.dart';
 
 class JobManage extends StatefulWidget {
   @override
@@ -21,6 +23,7 @@ class _JobManageState extends State<JobManage> {
     return Scaffold(
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: AppBar(
+          elevation: 1,
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',
@@ -73,10 +76,17 @@ class _JobManageState extends State<JobManage> {
             ),
             SafeArea(
               top: false,
+              child:GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WorkPost()));
+                },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                   child: MaterialButton(
-                    color: Color.fromRGBO(70, 192, 182, 1),
+                    color: Colours.app_main,
                     onPressed: () {
                     },
                     textColor: Colors.white,
@@ -86,6 +96,8 @@ class _JobManageState extends State<JobManage> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                   )),
+
+     )
             ),
           ],
         ));

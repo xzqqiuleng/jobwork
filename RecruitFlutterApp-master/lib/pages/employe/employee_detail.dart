@@ -21,6 +21,7 @@ class _EmployeeDetailState extends State<EmployeeDetail> {
     return Scaffold(
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         appBar: AppBar(
+          elevation: 0,
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',

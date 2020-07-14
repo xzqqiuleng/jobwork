@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/employe_list.dart';
+import 'package:recruit_app/pages/employe/employ_libsboard.dart';
 import 'package:recruit_app/pages/employe/employe_row_item.dart';
 import 'package:recruit_app/pages/employe/employee_detail.dart';
+import 'package:recruit_app/pages/home/search_bar.dart';
+import 'package:recruit_app/pages/jobs/job_company_search.dart';
 
 class EmployeeList extends StatefulWidget {
   @override
@@ -20,35 +24,28 @@ class _EmployeeListState extends State<EmployeeList> {
     // TODO: implement build
     return Scaffold(
       backgroundColor: Color.fromRGBO(248, 248, 248, 1),
-      appBar: AppBar(
+      appBar: AppBar (
+         elevation: 0,
         title: Text("人才库",style: TextStyle(
           color: Colors.white
         ),),
-        backgroundColor: Color.fromRGBO(70, 192, 182, 1),
+        backgroundColor: Colours.app_main,
+
+        actions: [
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context)=>JobCompanySearch(searchType: SearchType.jl)));
+            },
+
+          child: Image.asset("images/icon_home_search_20x20_@3x.png",height: 22,width: 22,
+                color: Colors.white),
+          ),
+          SizedBox(
+            width: 16,
+          )
+        ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          if (index < _employeeList.length) {
-            return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                child: EmployeeRowItem(
-                    employee: _employeeList[index],
-                    index: index,
-                    lastItem: index == _employeeList.length - 1),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EmployeeDetail(),
-                      ));
-                });
-          }
-          return null;
-        },
-        itemCount: _employeeList.length,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-      ),
+      body: EmployLibsboard()
     );
   }
 }

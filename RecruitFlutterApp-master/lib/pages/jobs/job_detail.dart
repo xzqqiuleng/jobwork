@@ -44,9 +44,9 @@ class _JobDetailState extends State<JobDetail> {
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
 
-
+        print(data);
         setState(() {
-          infors = data["info"];
+          infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
           datalist = data["jobs"];
            summary = json.decode(infors["summary"].toString());
 
@@ -513,10 +513,10 @@ class _JobDetailState extends State<JobDetail> {
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                   child: MaterialButton(
-                    color: Color.fromRGBO(70, 192, 182, 1),
+                    color: Colours.app_main,
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom()));
+                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: "",)));
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),

@@ -70,7 +70,7 @@ class _CompanyInfoState extends State<CompanyInfo> {
                       SizedBox(
                         height: 8,
                       ),
-                      Text('公司LOGO是构成完整的品牌概念的要素，完善后有利于品牌建设。',
+                      Text('构建完善的公司信息，才能更好的吸引人才！。',
                           style: const TextStyle(
                             wordSpacing: 1,
                             letterSpacing: 1,
@@ -80,65 +80,7 @@ class _CompanyInfoState extends State<CompanyInfo> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text('完善程度5%',
-                          style: const TextStyle(
-                            wordSpacing: 1,
-                            letterSpacing: 1,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(37, 38, 39, 1),
-                          )),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      SizedBox(
-                        height: 22.0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                          child: LinearProgressIndicator(
-                            value: 0.05,
-                            backgroundColor: Color.fromRGBO(241, 241, 244, 1),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Color.fromRGBO(255, 46, 72, 1),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text('基本信息0/5',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    wordSpacing: 2,
-                                    letterSpacing: 2,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(37, 38, 39, 1))),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          MaterialButton(
-                            color: Color.fromRGBO(70, 192, 182, 1),
-                            onPressed: () {},
-                            textColor: Colors.white,
-                            child: Text("继续完善"),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 12),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                            ),
-                          )
-                        ],
-                      ),
+
                       Container(
                         margin: EdgeInsets.only(top: 15),
                         height: 1,

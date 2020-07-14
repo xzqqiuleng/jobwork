@@ -36,7 +36,7 @@ class ChatRowItem extends StatelessWidget {
                   Material(
                     child: Container(
                       decoration: new BoxDecoration(
-                        color: Color.fromRGBO(159, 199, 235, 1),
+                        color: Colors.white,
                         borderRadius: new BorderRadius.circular(
                           ScreenUtil().setWidth(20),
                         ),
@@ -47,11 +47,11 @@ class ChatRowItem extends StatelessWidget {
                         style: TextStyle(
                           height: 1.4,
                           fontSize: ScreenUtil().setSp(28),
-                          color: Color.fromRGBO(255, 255, 255, 1),
+                          color: Colors.black87,
                         ),
                       ),
                     ),
-                    elevation: 3,
+                    elevation: 0.2,
                     borderRadius: BorderRadius.circular(
                       ScreenUtil().setWidth(20),
                     ),
@@ -114,7 +114,7 @@ class ChatRowItem extends StatelessWidget {
                     ),
                     child: Container(
                       decoration: new BoxDecoration(
-                        color: Color.fromRGBO(159, 199, 235, 1),
+                        color: Colors.white,
                         borderRadius: new BorderRadius.circular(
                           ScreenUtil().setWidth(20),
                         ),
@@ -125,11 +125,11 @@ class ChatRowItem extends StatelessWidget {
                         style: TextStyle(
                           height: 1.4,
                           fontSize: ScreenUtil().setSp(28),
-                          color: Color.fromRGBO(255, 255, 255, 1),
+                          color: Colors.black87,
                         ),
                       ),
                     ),
-                    elevation: 3,
+                    elevation: 0.2,
                   ),
                   SizedBox(
                     height: ScreenUtil().setWidth(10),

@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+//  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-//  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
+  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
   static String socketUrl = 'ws://192.168.1.14:8080/ws/msg?';      //开发
 
   static Dio dio;
@@ -92,6 +92,33 @@ class MiviceRepository{
 
       'user_mail': phone,
       'password': pwd,
+      'type': type,
+    });
+    return response;
+  }
+
+
+  Future getFilterJlList(int page,{int searchType,String address,String education,String sex,String salary,int jobType,String searchText}) async {
+    var response = await dio.post<Map>('/resume/list', data: {
+
+      'pageSize': 10,
+      'page': page,
+      'searchType': searchType,  //4
+      'address': address,
+      'sex': sex,
+      'education': education,
+      'salary': salary,
+      'jobType': jobType,   //3
+      'searchText': searchText
+
+    });
+    return response;
+  }
+
+  Future getMessageList(String userId,int type) async {
+    var response = await dio.post<Map>('/user/getMsgList', data: {
+
+      'userId': 10,
       'type': type,
     });
     return response;
