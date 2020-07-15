@@ -10,6 +10,7 @@ import 'package:recruit_app/pages/mine/job_intent_item.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/mine/me_gzjl.dart';
 import 'package:recruit_app/pages/mine/me_qw.dart';
+import 'package:recruit_app/pages/mine/mine_infor.dart';
 import 'package:recruit_app/pages/mine/project_item.dart';
 import 'package:recruit_app/pages/mine/work_item.dart';
 
@@ -76,67 +77,78 @@ class _OnlineResumeState extends State<OnlineResume> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MineInfor(),
+                              ));
+                        },
+                        child:   Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
 
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.asset(
-                      'images/avatar_15.png',
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-              SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: Text(
-                                        '狐说',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromRGBO(37, 38, 39, 1),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image.asset(
+                                'images/avatar_15.png',
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Flexible(
+                                        child: Text(
+                                          '狐说',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromRGBO(37, 38, 39, 1),
+                                          ),
                                         ),
                                       ),
-                                    ),
 
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text('5年经验•26岁•本科',
-                                    style: const TextStyle(
-                                      wordSpacing: 1,
-                                      letterSpacing: 1,
-                                      fontSize: 14,
-                                      color: Color.fromRGBO(164, 165, 166, 1),
-                                    )),
-                              ],
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text('5年经验•26岁•本科',
+                                      style: const TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(164, 165, 166, 1),
+                                      )),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
+                            SizedBox(width: 8,),
+                            Image.asset(
+                              'images/arrow_right.png',
+                              width: 18,
+                              height: 18,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
                       ),
+
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
                         color: Color.fromRGBO(242, 243, 244, 1),
@@ -148,10 +160,10 @@ class _OnlineResumeState extends State<OnlineResume> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 14,
-                          color: Colours.app_main,
+                          color: Colors.black87,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 16),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: (){
@@ -205,31 +217,31 @@ class _OnlineResumeState extends State<OnlineResume> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 14,
-                                color: Colours.app_main,
+                                color: Colors.black87,
                               ),
                             ),
                           ),
-                          SizedBox(width: 8,),
-                       GestureDetector(
-                         onTap: (){
-                           Navigator.push(
-                               context,
-                               MaterialPageRoute(
-                                 builder: (context) => MeQW(),
-                               ));
-                         },
-                         child: Text(
-                           "添加",
-                           style: TextStyle(
-                               color: Colours.app_main,
-                               fontWeight: FontWeight.bold
-                           ),
-                         )
-                       )
-                         ,
+                          SizedBox(width: 16,),
+//                       GestureDetector(
+//                         onTap: (){
+//                           Navigator.push(
+//                               context,
+//                               MaterialPageRoute(
+//                                 builder: (context) => MeQW(),
+//                               ));
+//                         },
+//                         child: Text(
+//                           "添加",
+//                           style: TextStyle(
+//                               color: Colours.app_main,
+//                               fontWeight: FontWeight.bold
+//                           ),
+//                         )
+//                       )
+//                         ,
                         ],
                       ),
-                      SizedBox(height: 8,),
+                      SizedBox(height: 16,),
                       ListView.builder(
                         itemBuilder: (context, index) {
                           if (index < _intentList.length) {
@@ -251,7 +263,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                           return null;
                         },
                         shrinkWrap: true,
-                        itemCount: _intentList.length,
+                        itemCount: 1,
                         physics: const NeverScrollableScrollPhysics(),
                       ),
 
