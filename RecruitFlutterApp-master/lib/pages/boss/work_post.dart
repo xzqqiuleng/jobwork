@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/work_page.dart';
+import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class WorkPost extends StatefulWidget {
   @override
@@ -11,6 +12,16 @@ class WorkPost extends StatefulWidget {
 }
 
 class _WorkPostState extends State<WorkPost> {
+  TextEditingController _ConfirmPdController = TextEditingController();
+  String type="";
+  String workStr="";
+  String xl="";
+  String work_time="";
+  String salary="";
+  String work_deteail ="";
+  String address ="";
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,8 +66,8 @@ class _WorkPostState extends State<WorkPost> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
@@ -74,14 +85,14 @@ class _WorkPostState extends State<WorkPost> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(type,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
                                 fontSize: 14,
                                 color: Color.fromRGBO(136, 138, 138, 1))),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(width: 8,height: 40,),
                       Image.asset(
                         'images/arrow_right.png',
                         width: 18,
@@ -92,7 +103,7 @@ class _WorkPostState extends State<WorkPost> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
                 ),
@@ -101,8 +112,8 @@ class _WorkPostState extends State<WorkPost> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13,
+                      fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
@@ -120,14 +131,14 @@ class _WorkPostState extends State<WorkPost> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(workStr,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
                                 fontSize: 14,
                                 color: Color.fromRGBO(136, 138, 138, 1))),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(width: 8,height: 40,),
                       Image.asset(
                         'images/arrow_right.png',
                         width: 18,
@@ -138,38 +149,37 @@ class _WorkPostState extends State<WorkPost> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
                 ),
                 Text(
-                  '* 学历',
+                  '* 学历要求',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13, fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: (){
-                   _showSexPop(context);
+                   _showSexPop(context,0);
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(xl,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
                                 fontSize: 14,
                                 color: Color.fromRGBO(136, 138, 138, 1))),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(width: 8,height: 40,),
                       Image.asset(
                         'images/arrow_right.png',
                         width: 18,
@@ -180,7 +190,7 @@ class _WorkPostState extends State<WorkPost> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
                 ),
@@ -189,29 +199,29 @@ class _WorkPostState extends State<WorkPost> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13,
+                      fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: (){
-                    _showSexPop(context);
+                    _showSexPop(context,1);
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(work_time,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
                                 fontSize: 14,
                                 color: Color.fromRGBO(136, 138, 138, 1))),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(width: 8,height: 40,),
                       Image.asset(
                         'images/arrow_right.png',
                         width: 18,
@@ -222,7 +232,48 @@ class _WorkPostState extends State<WorkPost> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  color: Color.fromRGBO(242, 243, 244, 1),
+                  height: 1,
+                ),     Text(
+                  '* 薪资要求',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600
+                  ),
+                ),
+                SizedBox(height: 8),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: (){
+                    _showSexPop(context,2);
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child:   Text(salary,
+                            style: TextStyle(
+                                wordSpacing: 1,
+                                letterSpacing: 1,
+                                fontSize: 14,
+                                color: Color.fromRGBO(136, 138, 138, 1))),
+                      ),
+                      SizedBox(width: 8,height: 40,),
+                      Image.asset(
+                        'images/arrow_right.png',
+                        width: 18,
+                        height: 18,
+                        fit: BoxFit.cover,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
                 ),
@@ -231,8 +282,8 @@ class _WorkPostState extends State<WorkPost> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13,
+                      fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
@@ -250,14 +301,14 @@ class _WorkPostState extends State<WorkPost> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(work_deteail,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
                                 fontSize: 14,
                                 color: Color.fromRGBO(136, 138, 138, 1))),
                       ),
-                      SizedBox(width: 8,),
+                      SizedBox(width: 8,height: 40,),
                       Image.asset(
                         'images/arrow_right.png',
                         width: 18,
@@ -268,17 +319,17 @@ class _WorkPostState extends State<WorkPost> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
+                  margin: EdgeInsets.symmetric(vertical: 10),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
                 ),
                 Text(
-                  '* 邮箱',
+                  '* 工作地点',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colours.app_main,
+                    fontSize: 13,
+                      fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 8),
@@ -296,7 +347,7 @@ class _WorkPostState extends State<WorkPost> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child:   Text('',
+                        child:   Text(address,
                             style: TextStyle(
                                 wordSpacing: 1,
                                 letterSpacing: 1,
@@ -317,6 +368,15 @@ class _WorkPostState extends State<WorkPost> {
                   margin: EdgeInsets.symmetric(vertical: 15),
                   color: Color.fromRGBO(242, 243, 244, 1),
                   height: 1,
+                ),
+                LogRegTextField(
+
+                  label: "请输入具体的地址",
+                  controller:  _ConfirmPdController,
+                  textInputAction: TextInputAction.next,
+                  textInputType: TextInputType.text,
+                  obscureText: true,
+
                 ),
               ],
             ),
@@ -325,9 +385,21 @@ class _WorkPostState extends State<WorkPost> {
       ),
     );
   }
-  List _sexList=["男","女"];
-  String _sex="男";
-  void _showSexPop(BuildContext context){
+  List xlList=["不限","初中", "高中", "中专" , "大专", "本科", "硕士", "博士"];
+  List salaryList=[ "面议" ,"4-6千/月", "6-8千/月", "0.8-1万/月", "1-1.5万/月", "1.5-2万/月 ",
+    "15-20万/年", "20-30万/年", "30-40万/年"];
+  List timeList=["不限","1年经验", "2年经验", "3-4年经验", "5-7年经验", "8-9年经验","10年及以上"];
+
+  void _showSexPop(BuildContext contex, int type){
+     List popList = List();
+    if(type == 0){
+      popList = xlList;
+    }else if(type == 1){
+      popList = timeList;
+    }else if(type == 2){
+       popList = salaryList;
+    }
+
     FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
     showCupertinoModalPopup<void>(
         context: context,
@@ -344,15 +416,22 @@ class _WorkPostState extends State<WorkPost> {
                   if(mounted){
                     setState(() {
 
-                      _sex = _sexList[index];
+                       if(type == 0){
+                         xl = popList[index];
+                       }else if(type == 1){
+                         work_time = popList[index];
+                       }else if(type == 2){
+                         salary= popList[index];
+                       }
+
 
 
                     });
                   }
                 },
-                children: List<Widget>.generate(_sexList.length, (index){
+                children: List<Widget>.generate(popList.length, (index){
                   return Center(
-                    child: Text(_sexList[index]),
+                    child: Text(popList[index]),
                   );
                 }),
               )

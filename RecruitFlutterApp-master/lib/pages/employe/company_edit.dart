@@ -13,6 +13,7 @@ class _CompanyEditState extends State<CompanyEdit> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      backgroundColor: Colors.white,
     appBar:AppBar(
 
         elevation: 0,
@@ -49,6 +50,7 @@ class _CompanyEditState extends State<CompanyEdit> {
       ),
       body:SafeArea(
         top: false,
+
         child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
       padding: const EdgeInsets.only(
@@ -58,19 +60,35 @@ class _CompanyEditState extends State<CompanyEdit> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         SizedBox(height: 30),
-        Text("请完成公司实名认证！",
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold
-        ),),
+        Row(
+          children: <Widget>[
+          Container(
+            width: 70,
+            height: 70,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              image: DecorationImage(
+                image: NetworkImage("http://www.zaojiong.com/data/logo/20170418/14906489056.PNG")
+              )
+            ),
+          ),
+            SizedBox(width: 16),
+            Text("请完成公司实名认证！",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+              ),),
+          ],
+        ),
+
         SizedBox(height: 30),
         Text(
           '* 公司名称',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            fontSize: 14,
-            color:Colors.black38,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 10),
@@ -89,8 +107,8 @@ class _CompanyEditState extends State<CompanyEdit> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            fontSize: 14,
-            color:Colors.black38,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 16),
@@ -137,8 +155,8 @@ class _CompanyEditState extends State<CompanyEdit> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
-            fontSize: 14,
-            color:Colors.black38,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 16),

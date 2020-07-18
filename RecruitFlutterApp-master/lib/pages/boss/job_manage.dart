@@ -76,18 +76,15 @@ class _JobManageState extends State<JobManage> {
             ),
             SafeArea(
               top: false,
-              child:GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WorkPost()));
-                },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WorkPost()));
                     },
                     textColor: Colors.white,
                     child: Text("发布新职位"),
@@ -97,7 +94,6 @@ class _JobManageState extends State<JobManage> {
                     ),
                   )),
 
-     )
             ),
           ],
         ));

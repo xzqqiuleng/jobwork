@@ -180,7 +180,7 @@ class _CompanyJobState extends State<CompanyJobList> with SingleTickerProviderSt
               ),
               new Container(
                 color: Colors.white,
-                height:Screen.height - 96 - kBottomNavigationBarHeight-6,
+                height:Screen.height - 96 - kBottomNavigationBarHeight-10,
                 child: DefaultTabController(
                   length: _tabMenus.length,
                   child: _buildTabViewContent(),
