@@ -37,30 +37,30 @@ class _LoginPdState extends State<LoginPdPage>{
   }
 
   void loginPd(){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RecruitHomeApp(),
-        ));
-//    MiviceRepository().loginPd(_phoneController.text,_PdController.text,0).then((value)  {
-//      var reponse = json.decode(value.toString());
-//
-//      if(reponse["status"] == "success") {
-//        var data = reponse["result"];
-//
-//
-//        User user = User.fromJson(data);
-//        StorageManager.localStorage.setItem(ShareHelper.kUser, user);
-//        StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
-//        Navigator.pushReplacement(
-//            context,
-//            MaterialPageRoute(
-//              builder: (context) => RecruitHomeApp(),
-//            ));
-//      }else{
-//        showToast(reponse["msg"]);
-//      }
-//    });
+//    Navigator.pushReplacement(
+//        context,
+//        MaterialPageRoute(
+//          builder: (context) => RecruitHomeApp(),
+//        ));
+    MiviceRepository().loginPd(_phoneController.text,_PdController.text,1).then((value)  {
+      var reponse = json.decode(value.toString());
+
+      if(reponse["status"] == "success") {
+        var data = reponse["result"];
+
+
+        User user = User.fromJson(data);
+        StorageManager.localStorage.setItem(ShareHelper.kUser, user);
+        StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RecruitHomeApp(),
+            ));
+      }else{
+        showToast(reponse["msg"]);
+      }
+    });
   }
 
   @override

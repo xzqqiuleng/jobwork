@@ -14,6 +14,37 @@ class CompanyInfo extends StatefulWidget {
 class _CompanyInfoState extends State<CompanyInfo> {
   List<CompanyAttr> _attrList = CompanyAttrList.loadAttrs();
 
+
+ String c_desc="";
+ String c_fl="";
+ String c_img="";
+
+//  _pubCompany(){
+//    Map infor = Map();
+//    infor["公司描述"] = "这是一个大公司";
+//    String inforJson = json.encode(infor);
+//    List<String> imags = List();
+//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
+//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
+//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
+//    String imagsJson = json.encode(imags);
+//    Map dMap = Map();
+//    dMap["工作详情"] = work_deteail;
+//    String dJson  = json.encode(dMap);
+//    Map data = Map();
+//
+//    data["mook_img"] ="";
+//    MiviceRepository().pubJob(data).then((value) {
+//      var reponse = json.decode(value.toString());
+//      if(reponse["status"] == "success"){
+//        showToast("职位已更新");
+//      }else{
+//        showToast("简历更新失败");
+//      }
+//    });
+//
+//  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

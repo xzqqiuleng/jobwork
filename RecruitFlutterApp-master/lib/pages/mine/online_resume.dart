@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_intent_list.dart';
 import 'package:recruit_app/model/mine_edu_list.dart';
 import 'package:recruit_app/model/mine_project_list.dart';
 import 'package:recruit_app/model/mine_work_list.dart';
+import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/mine/edu_item.dart';
 import 'package:recruit_app/pages/mine/job_intent_item.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
@@ -13,6 +17,8 @@ import 'package:recruit_app/pages/mine/me_qw.dart';
 import 'package:recruit_app/pages/mine/mine_infor.dart';
 import 'package:recruit_app/pages/mine/project_item.dart';
 import 'package:recruit_app/pages/mine/work_item.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 
 import 'me_edu.dart';
 
@@ -30,6 +36,69 @@ class _OnlineResumeState extends State<OnlineResume> {
   List<MineProjectData> _projectList = MineProjectList.loadProjectList();
   List<MineEduData> _eduList = MineEduList.loadEduList();
 
+  String name ="哈哈哈";
+  String desc ="我是一个自我介绍";
+  String work ="哈哈哈";
+  String money ="7000以上";
+  String city ="武汉";
+  String work_company ="找铁网";
+  String work_pos ="Android开发";
+  String work_infro = "开发App";
+  String start_time = "2019-02-20";
+  String stop_time = "2020-02-20";
+  String school = "武汉大学";
+  String  zy= "自动化";
+  String xl = "本科";
+  String  by_time = "2020-01-20";
+  String  jl = "我是一名大神";
+
+
+  _pubResume(){
+
+    Map infors = Map();
+    infors["姓名"]=  ShareHelper.getUser().userName;
+    infors["年龄"]=  "";
+    infors["性别"]=  ShareHelper.getUser().userSex;
+    infors["民族"]=  "";
+    infors["婚姻状况"]=  "";
+    infors["希望月薪"]=  money;
+    infors["政治面貌"]=  "";
+    infors["教育经历"]=  xl;
+    infors["求职地区"]= city;
+    infors["求职意向"]=  work;
+    infors["求职行业"]=  desc;
+    infors["目前状态"]=  ShareHelper.getUser().resumeStatus;
+    infors["户籍所在地"]=  city;
+    infors["目前所在地"]=  city;
+
+    infors["工作公司"]=work_company;
+    infors["工作职位"]=work_pos;
+    infors["工作内容"]=work_infro;
+    infors["入职时间"]=start_time;
+    infors["离职时间"]=stop_time;
+    infors["学校"]=school;
+    infors["专业"]=zy;
+    infors["毕业时间"]=by_time;
+    infors["在校经历"]=jl;
+  String inforJson = json.encode(infors);
+  Map data = Map();
+  data["province"]=city;
+  data["type"]=work;
+  data["education"]=xl;
+  data["info"]=inforJson;
+  data["head_img"]=ShareHelper.getUser().headImg;
+  data["user_mail"]=ShareHelper.getUser().userMail;
+
+    MiviceRepository().pubResumen(data).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        showToast("简历更新成功");
+      }else{
+        showToast("简历更新失败");
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +132,8 @@ class _OnlineResumeState extends State<OnlineResume> {
       ),
       body: SafeArea(
         top: false,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Stack(
+
           children: <Widget>[
             Expanded(
               child: SingleChildScrollView(
@@ -161,6 +229,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.black87,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
                       SizedBox(height: 16),
@@ -178,7 +247,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Expanded(
-                                child:   Text('五年产品运营经验，时刻关注行业新动态，有项目管理经验，产品设计经验。',
+                                child:   Text(desc,
                                     style: TextStyle(
                                         wordSpacing: 1,
                                         letterSpacing: 1,
@@ -216,8 +285,9 @@ class _OnlineResumeState extends State<OnlineResume> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
                           ),
@@ -283,28 +353,29 @@ class _OnlineResumeState extends State<OnlineResume> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 14,
-                                color: Colours.app_main,
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
                           ),
                           SizedBox(width: 8,),
-                          GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MeGzjl(),
-                                    ));
-                              },
-                              child: Text(
-                                "添加",
-                                style: TextStyle(
-                                    color: Colours.app_main,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              )
-                          )
+//                          GestureDetector(
+//                              onTap: (){
+//                                Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                      builder: (context) => MeGzjl(),
+//                                    ));
+//                              },
+//                              child: Text(
+//                                "添加",
+//                                style: TextStyle(
+//                                    color: Colours.app_main,
+//                                    fontWeight: FontWeight.bold
+//                                ),
+//                              )
+//                          )
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -397,28 +468,29 @@ class _OnlineResumeState extends State<OnlineResume> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                fontSize: 14,
-                                color: Colours.app_main,
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold
                               ),
                             ),
                           ),
                           SizedBox(width: 8,),
-                          GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MeEdu(),
-                                    ));
-                              },
-                              child: Text(
-                                "添加",
-                                style: TextStyle(
-                                    color: Colours.app_main,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              )
-                          )
+//                          GestureDetector(
+//                              onTap: (){
+//                                Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                      builder: (context) => MeEdu(),
+//                                    ));
+//                              },
+////                              child: Text(
+////                                "添加",
+////                                style: TextStyle(
+////                                    color: Colours.app_main,
+////                                    fontWeight: FontWeight.bold
+////                                ),
+////                              )
+//                          )
                         ],
                       ),
                       SizedBox(height: 8,),
@@ -452,34 +524,50 @@ class _OnlineResumeState extends State<OnlineResume> {
                         height: 1,
                       ),
 
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '* 资格证书',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colours.app_main,
-                              ),
-                            ),
-                          ),
-
-                        ],
-                      ),
+//                      Row(
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Text(
+//                              '* 资格证书',
+//                              maxLines: 1,
+//                              overflow: TextOverflow.ellipsis,
+//                              style: const TextStyle(
+//                                fontSize: 14,
+//                                color: Colours.app_main,
+//                              ),
+//                            ),
+//                          ),
+//
+//                        ],
+//                      ),
                       Container(
                         margin: EdgeInsets.only(top: 15,bottom: 50),
                         color: Color.fromRGBO(242, 243, 244, 1),
                         height: 1,
                       ),
+                        SizedBox(
+                          height: 40,
+                        )
                     ],
                   ),
                 ),
               ),
             ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: CustomBtnWidget(
+                margin: 20,
+                btnColor: Colours.app_main,
+                text: "发布简历",
+                onPressed: (){
+                  _pubResume();
+                },
+              ),
+            )
           ],
         ),
       ),

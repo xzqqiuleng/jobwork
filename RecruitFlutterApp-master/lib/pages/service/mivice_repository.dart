@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+//  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-//  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
+  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
   static String socketUrl = 'ws://192.168.1.14:8080/ws/msg?';      //开发
 
   static Dio dio;
@@ -78,6 +78,8 @@ class MiviceRepository{
     return response;
   }
 
+
+  // 0老板
   Future registerPd(String phone,String pwd,int type) async {
     var response = await dio.post<Map>('/user/register',data: {
 
@@ -87,6 +89,8 @@ class MiviceRepository{
     });
     return response;
   }
+
+  // 0老板
   Future loginPd(String phone,String pwd,int type) async {
     var response = await dio.post<Map>('/user/login',data: {
 
@@ -130,6 +134,26 @@ class MiviceRepository{
       'userId': 10,
       'type': json,
     });
+    return response;
+  }
+
+  Future pubResumen(Map map) async {
+    var response = await dio.post<Map>('/resume/modify', data: {
+      "province": map["province"],
+      "type": map["type"],
+      "education": map["education"],
+      "info": map["info"],
+      "head_img": map["head_img"],
+      "user_mail": map["user_mail"]
+    });
+    return response;
+  }
+  Future pubCompany(Map map) async {
+    var response = await dio.post<Map>('/company/modify', data: map);
+    return response;
+  }
+  Future pubJob(Map map) async {
+    var response = await dio.post<Map>('/job/modify', data: map);
     return response;
   }
 }

@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 
 import 'constant.dart';
@@ -117,9 +118,9 @@ class ShareHelper{
 
 
  }
-// static User getUser(){
-//   var userMap = StorageManager.localStorage.getItem(UserModel.kUser);
-//   User _user = userMap != null ? User.fromJson(userMap) : null;
-//   return _user;
-//}
+ static User getUser(){
+   var userMap = StorageManager.localStorage.getItem(kUser);
+   User _user = userMap != null ? User.fromJson(userMap) : null;
+   return _user;
+}
 }

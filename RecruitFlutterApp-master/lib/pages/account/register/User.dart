@@ -8,6 +8,8 @@ class User {
   String birth;
   String type;
   String wxId;
+  String title ;
+  String resumeStatus ;
   int status;
 
   User(
@@ -33,6 +35,8 @@ class User {
     type = json['type'].toString();
     wxId = json['wx_id'];
     status = json['status'];
+    title = json['title'];
+    resumeStatus = json['resume_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +51,8 @@ class User {
     data['type'] = this.type;
     data['wx_id'] = this.wxId;
     data['status'] = this.status;
+    data['title'] = this.title;
+    data['resume_status'] = this.resumeStatus;
     return data;
   }
 }

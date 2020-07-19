@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/work_page.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
@@ -13,14 +19,44 @@ class WorkPost extends StatefulWidget {
 
 class _WorkPostState extends State<WorkPost> {
   TextEditingController _ConfirmPdController = TextEditingController();
-  String type="";
-  String workStr="";
-  String xl="";
-  String work_time="";
-  String salary="";
-  String work_deteail ="";
-  String address ="";
+  String type="销售代表";
+  String workStr="高薪聘请销售代表";
+  String xl="本科";
+  String work_time="3-4年经验";
+  String salary="4-6千/月";
+  String work_deteail ="专门跑客户销售，推销东西";
+  String address ="武汉";
 
+  _pubResume(){
+
+    Map dMap = Map();
+    dMap["工作详情"] = work_deteail;
+     String dJson  = json.encode(dMap);
+
+
+     String tip = "五险一金 绩效奖金 弹性工作 通讯补贴";
+
+
+    Map data = Map();
+    data["address"] = address;
+    data["salary"] = salary;
+    data["user_mail"] = ShareHelper.getUser().userMail;
+    data["company"] ="找铁网";
+    data["title"] =workStr;
+    data["label"] ="${type}|${xl}|${work_time}";
+    data["tip"] =tip;
+    data["summary"] =dJson;
+    data["mook_img"] ="";
+    MiviceRepository().pubJob(data).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        showToast("职位已更新");
+      }else{
+        showToast("简历更新失败");
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,336 +88,357 @@ class _WorkPostState extends State<WorkPost> {
       ),
       body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15, top: 18, bottom: 18),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  '* 职位类型',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WorkPage(),
-                        ));
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(type,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                Text(
-                  '* 招聘职位',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MeDesc(0),
-                        ));
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(workStr,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                Text(
-                  '* 学历要求',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                   _showSexPop(context,0);
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(xl,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                Text(
-                  '* 工作年限',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    _showSexPop(context,1);
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(work_time,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),     Text(
-                  '* 薪资要求',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    _showSexPop(context,2);
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(salary,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                Text(
-                  '* 职位详情',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MeDesc(0),
-                        ));
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(work_deteail,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,height: 40,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                Text(
-                  '* 工作地点',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MeDesc(0),
-                        ));
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child:   Text(address,
-                            style: TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 14,
-                                color: Color.fromRGBO(136, 138, 138, 1))),
-                      ),
-                      SizedBox(width: 8,),
-                      Image.asset(
-                        'images/arrow_right.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
-                  color: Color.fromRGBO(242, 243, 244, 1),
-                  height: 1,
-                ),
-                LogRegTextField(
+        child:Stack(
 
-                  label: "请输入具体的地址",
-                  controller:  _ConfirmPdController,
-                  textInputAction: TextInputAction.next,
-                  textInputType: TextInputType.text,
-                  obscureText: true,
+          children: [
+            SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15, top: 18, bottom: 18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Text(
+                      '* 职位类型',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WorkPage(),
+                            ));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(type,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    Text(
+                      '* 招聘职位',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MeDesc(0),
+                            ));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(workStr,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    Text(
+                      '* 学历要求',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        _showSexPop(context,0);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(xl,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    Text(
+                      '* 工作年限',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        _showSexPop(context,1);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(work_time,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),     Text(
+                      '* 薪资要求',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        _showSexPop(context,2);
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(salary,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    Text(
+                      '* 职位详情',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MeDesc(0),
+                            ));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(work_deteail,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,height: 40,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    Text(
+                      '* 工作地点',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MeDesc(0),
+                            ));
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child:   Text(address,
+                                style: TextStyle(
+                                    wordSpacing: 1,
+                                    letterSpacing: 1,
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          ),
+                          SizedBox(width: 8,),
+                          Image.asset(
+                            'images/arrow_right.png',
+                            width: 18,
+                            height: 18,
+                            fit: BoxFit.cover,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 15),
+                      color: Color.fromRGBO(242, 243, 244, 1),
+                      height: 1,
+                    ),
+                    LogRegTextField(
 
+                      label: "请输入具体的地址",
+                      controller:  _ConfirmPdController,
+                      textInputAction: TextInputAction.next,
+                      textInputType: TextInputType.text,
+                      obscureText: true,
+
+                    ),
+                    SizedBox(
+                      height: 60,
+                    )
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: CustomBtnWidget(
+                margin: 20,
+                btnColor: Colours.app_main,
+                text: "发布职位",
+                onPressed: (){
+                  _pubResume();
+                },
+              ),
+            )
+          ],
+        )
       ),
     );
   }

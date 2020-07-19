@@ -48,7 +48,7 @@ class _ForgetState extends State<RegPage>{
        showToast("两次密码输入不一致");
     }else {
 
-      MiviceRepository().registerPd(_phoneController.text, _newPdController.text, 0).then((value) {
+      MiviceRepository().registerPd(_phoneController.text, _newPdController.text, 1).then((value) {
         var reponse = json.decode(value.toString());
 
         //"result": {
