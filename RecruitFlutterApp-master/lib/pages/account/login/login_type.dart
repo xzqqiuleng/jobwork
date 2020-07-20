@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/pages/account/login/login_in.dart';
 import 'package:recruit_app/pages/account/register/login_pd_page.dart';
 import 'package:recruit_app/pages/msg/agreement_detail.dart';
+import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 
@@ -162,7 +163,7 @@ class LoginType extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPdPage(0)),
+                      MaterialPageRoute(builder: (context) => PermissionWeb()),
                     );
                   },
                   textColor: Color.fromRGBO(159, 199, 235, 1),

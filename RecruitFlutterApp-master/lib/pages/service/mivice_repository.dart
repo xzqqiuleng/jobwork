@@ -83,7 +83,7 @@ class MiviceRepository{
   Future registerPd(String phone,String pwd,int type) async {
     var response = await dio.post<Map>('/user/register',data: {
 
-      'phone': phone,
+      'user_mail': phone,
       'password': pwd,
       'type': type,
     });
@@ -131,7 +131,7 @@ class MiviceRepository{
   Future getMessageList(String userId,int type) async {
     var response = await dio.post<Map>('/user/getMsgList', data: {
 
-      'userId': 10,
+      'userId': userId,
       'type': type,
     });
     return response;
@@ -159,7 +159,7 @@ class MiviceRepository{
   }
 
   Future getRusumen(String userMail) async {
-    var response = await dio.get<Map>('/resume/modify', queryParameters: {
+    var response = await dio.get<Map>('/resume/getResume', queryParameters: {
     "userMail":userMail
     });
     return response;
@@ -195,6 +195,19 @@ class MiviceRepository{
       "file": image
     });
     var response = await Dio().post('http://62.60.174.78:8088/upload', data: formData);
+    return response;
+  }
+
+  Future getToken() async {
+    var response = await dio.get('/user/getToken');
+    return response;
+  }
+
+  Future getAllMessage(String userId,String replyId) async {
+    var response = await dio.post<Map>('/user/getMsgs', data: {
+      "userId":userId,
+      "replyId":replyId,
+    });
     return response;
   }
 }

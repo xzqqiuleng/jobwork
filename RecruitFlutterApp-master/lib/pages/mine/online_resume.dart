@@ -58,7 +58,13 @@ class _OnlineResumeState extends State<OnlineResume> {
   Map eduMap;
   Map workMap;
   _pubResume(){
+    if(money.length<1||xl.length<1||city.length<1||work.length<1||desc.length<1||work_company.length<1||work_pos.length<1
+    ||work_infro.length<1||start_time.length<1||stop_time.length<1||school.length<1||zy.length<1||by_time.length<1||jl.length<1
 
+    ){
+      showToast("请填写完整信息");
+      return;
+    }
     Map infors = Map();
     infors["姓名"]=  ShareHelper.getUser().userName;
     infors["年龄"]=  "";
@@ -98,15 +104,25 @@ class _OnlineResumeState extends State<OnlineResume> {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         showToast("简历更新成功");
-        if(jlState == "0"){
-          User user = ShareHelper.getUser();
-          user.jlStatus ="1";
-          StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecruitHomeApp(),
-              ));
+        if(jlState != "1"){
+
+          Map userMap = Map();
+          userMap["jl_status"] ="1";
+          userMap["user_id"] =ShareHelper.getUser().userId;
+          MiviceRepository().updateUser(userMap).then((value){
+            User user = ShareHelper.getUser();
+            user.jlStatus ="1";
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecruitHomeApp(),
+                ));
+
+          });
+
+
+
         }
 
       }else{
@@ -118,12 +134,13 @@ class _OnlineResumeState extends State<OnlineResume> {
  _getRumen(){
    MiviceRepository().getRusumen(ShareHelper.getUser().userMail).then((value) {
      var response = json.decode(value.toString());
+     print(response);
      if(response["status"] == "success"){
        Map data = response["result"];
        city = data["province"];
        work = data["type"];
        xl = data["education"];
-       job_id = data["job_id"];
+       job_id = data["job_id"].toString();
       String   inforJson = data["info"];
        var infors = json.decode(inforJson);
 
@@ -228,7 +245,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                   SizedBox(
                     height: 8,
                   ),
-                  Text(  ShareHelper.getUser().resumeStatus,
+                  Text(  ShareHelper.getUser().resumeStatus == null?"正在求职中": ShareHelper.getUser().resumeStatus,
                       style: const TextStyle(
                         wordSpacing: 1,
                         letterSpacing: 1,
@@ -322,7 +339,7 @@ class _OnlineResumeState extends State<OnlineResume> {
                      var  mdesc = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MeDesc(0),
+                                builder: (context) => MeDesc(3),
                               ));
                      if(mdesc != null){
                        setState(() {
@@ -414,6 +431,9 @@ class _OnlineResumeState extends State<OnlineResume> {
                            money=  qwMap["money"] ;
                            city=  qwMap["city"] ;
                          }
+                         setState(() {
+
+                         });
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -740,11 +760,7 @@ class _OnlineResumeState extends State<OnlineResume> {
 //
 //                        ],
 //                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15,bottom: 50),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
+
                         SizedBox(
                           height: 40,
                         )

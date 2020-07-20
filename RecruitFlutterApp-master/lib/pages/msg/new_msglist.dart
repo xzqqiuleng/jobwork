@@ -11,6 +11,7 @@ import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/msg/msg_job.dart';
 import 'package:recruit_app/pages/msg/notice_list.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 import 'package:recruit_app/widgets/slide_button.dart';
 
@@ -170,11 +171,11 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   int type = 0;
 
   _OnRefresh(){
-    sortId=null;
-
-    new MiviceRepository().getMessageList("",type).then((value) {
+     //id，分为boss，用户
+    new MiviceRepository().getMessageList("14243b0f437841629f840b65ffb3fbce",1).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
+        print(reponse);
         data.clear();
 
         setState(() {
@@ -186,10 +187,7 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
     });
   }
   _loadMore(){
-    new MiviceRepository().getCompanyList(sortId).then((value) {
-        _refreshController.loadComplete();
-
-    });
+    _refreshController.loadComplete();
   }
   @override
   Widget build(BuildContext context) {
@@ -222,24 +220,21 @@ child: _buildMiddelBar(topicTabMenus,context),
             onLoading: _loadMore,
             enablePullUp: true,
             child: ListView.builder(itemBuilder: (context, index) {
-//          if (data.length >0 && index < data.length) {
-//            return  GestureDetector(
-//              behavior: HitTestBehavior.opaque,
-//              child: MsgChatItem(btnKey: key),
-//            );
-//          }
-              var key = GlobalKey<SlideButtonState>();
-              return GestureDetector(
-                 onTap: (){
-                   Navigator.push(context,
-                       MaterialPageRoute(builder: (context) => ChatRoom()));
-                 },
-                behavior: HitTestBehavior.opaque,
-                child:MsgChatItem(btnKey: key) ,
-              ) ;
+          if (data.length >0 ) {
+            var key = GlobalKey<SlideButtonState>();
+            return GestureDetector(
+              onTap: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"],head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],)));
+              },
+              behavior: HitTestBehavior.opaque,
+              child:MsgChatItem(btnKey: key,mapData: data[index],) ,
+            ) ;
+          }
+
             },
 
-              itemCount: 10,
+              itemCount: data.length,
             )
         )
       )

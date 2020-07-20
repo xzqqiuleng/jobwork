@@ -4,8 +4,8 @@ import 'package:recruit_app/widgets/slide_button.dart';
 
 class MsgChatItem extends StatefulWidget {
   final GlobalKey<SlideButtonState> btnKey;
-
-  const MsgChatItem({Key key, @required this.btnKey}) : super(key: key);
+  final  Map mapData;
+  const MsgChatItem({Key key, @required this.btnKey,this.mapData}) : super(key: key);
 
   @override
   _MsgChatItemState createState() => _MsgChatItemState();
@@ -35,7 +35,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                 ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular(ScreenUtil().setWidth(44))),
-                  child: Image.asset('images/ic_ask_resume_action.png',
+                  child: Image.network(widget.mapData["comInfo"]["company_img"],
                       width: ScreenUtil().setWidth(88),
                       height: ScreenUtil().setWidth(88),
                       fit: BoxFit.cover),
@@ -53,7 +53,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                             children: <Widget>[
                               Flexible(
                                 child: Text(
-                                  'Craft Time',
+                                  widget.mapData["comInfo"]["company_name"],
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -79,7 +79,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                           width: ScreenUtil().setWidth(16),
                         ),
                         Text(
-                          '11:14',
+                          widget.mapData["pub_time"],
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(24),
                             color: Color.fromRGBO(159, 199, 235, 1),
@@ -88,39 +88,9 @@ class _MsgChatItemState extends State<MsgChatItem> {
                       ],
                     ),
                     SizedBox(height: ScreenUtil().setWidth(12)),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: Text(
-                            '品牌策划师(9-10K)',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromRGBO(95, 94, 94, 1),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(16)),
-                          width: ScreenUtil().setWidth(1),
-                          height: ScreenUtil().setWidth(20),
-                          color: Color.fromRGBO(95, 94, 94, 1),
-                        ),
-                        Text(
-                          '福州·金山',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(28),
-                            color: Color.fromRGBO(95, 94, 94, 1),
-                          ),
-                        ),
-                      ],
-                    ),
                     SizedBox(height: ScreenUtil().setWidth(14)),
                     Text(
-                      'HR:你好,这是我们公司的资料，您方便可...',
+                      widget.mapData["msg"],
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

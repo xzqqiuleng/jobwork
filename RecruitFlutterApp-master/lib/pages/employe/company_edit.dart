@@ -6,6 +6,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -45,7 +46,7 @@ class _CompanyEditState extends State<CompanyEdit> {
 //    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
 //    String imagsJson = json.encode(imags);
 
-  if(_nameController.text.length <2||_addressController.text.length <2 ||_codeController.text.length<2){
+  if(_nameController.text.length <2||_addressController.text.length <2 ||_codeController.text.length<2||license_url.length<2||c_img.length<2){
     showToast("请填写完整信息");
     return;
   }
@@ -55,7 +56,7 @@ class _CompanyEditState extends State<CompanyEdit> {
     data["certificate"] = _codeController.text;
     data["address"] = _addressController.text;
     data["license_url"] = license_url;
-    data["user_mail"] =ShareHelper.getUser().userMail;
+    data["user_mail"] =ShareHelper.getBosss().userMail;
 //    data["company_info"] =inforJson;
     data["company_img"] =c_img;
 //    data["label"] ="{}";   //jsonmp，网上爬的
@@ -64,17 +65,23 @@ class _CompanyEditState extends State<CompanyEdit> {
     MiviceRepository().pubCompany(data).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
-        if(companyState == "0"){
+        if(companyState != "1"){
+          Map userMap = Map();
+          userMap["company_status"] ="1";
+          userMap["user_id"] =ShareHelper.getBosss().userId;
+          MiviceRepository().updateUser(userMap).then((value){
 
-          User user = ShareHelper.getBosss();
-          user.companyStatus ="1";
-          StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
+            User user = ShareHelper.getBosss();
+            user.companyStatus ="1";
+            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
 
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecruitHomeApp(),
-              ));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RecruitHomeApp(),
+                ));
+          });
+
         }
         showToast("公司已更新");
       }else{
@@ -85,16 +92,19 @@ class _CompanyEditState extends State<CompanyEdit> {
   }
 
  _getCompany(){
-   MiviceRepository().getCompany(ShareHelper.getUser().userMail).then((value) {
+   MiviceRepository().getCompany(ShareHelper.getBosss().userMail).then((value) {
      var reponse = json.decode(value.toString());
      if(reponse["status"] == "success"){
        Map data = reponse["result"];
        name=  data["name"];
        code = data["certificate"];
-       addess =data["address"] = addess;
+       addess =data["address"];
        license_url =  data["license_url"];
        c_img= data["company_img"];
-       id =data["id"];
+       id =data["id"].toString();
+       setState(() {
+
+       });
      }else{
        showToast(reponse["msg"]);
      }
@@ -104,7 +114,7 @@ class _CompanyEditState extends State<CompanyEdit> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    companyState = ShareHelper.getUser().companyStatus;
+    companyState = ShareHelper.getBosss().companyStatus;
     if(companyState == "1"){
       _getCompany();
     }
@@ -228,15 +238,24 @@ class _CompanyEditState extends State<CompanyEdit> {
                       padding: EdgeInsets.only(top: 10,bottom: 10),
                       child:   GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {
-
+                        onTap: () async {
+                          var    reslut = await  Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CityPage(),
+                              ));
+                          setState(() {
+                            if(reslut != null){
+                              city = reslut;
+                            }
+                          });
                         },
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Expanded(
-                              child:   Text("选择",
+                              child:   Text(city,
                                   style: TextStyle(
                                     wordSpacing: 1,
                                     letterSpacing: 1,
@@ -281,11 +300,7 @@ class _CompanyEditState extends State<CompanyEdit> {
             obscureText: false,
 
           ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
+
                     SizedBox(height: 10),
                     Text(
                       '* 统一信用代码',

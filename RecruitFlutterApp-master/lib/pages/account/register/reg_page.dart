@@ -20,7 +20,7 @@ import '../../storage_manager.dart';
 
 class RegPage extends StatefulWidget{
   int type;
-  RegPage(type);
+  RegPage(this.type);
   @override
   _ForgetState createState() {
     // TODO: implement createState
@@ -70,10 +70,10 @@ class _ForgetState extends State<RegPage>{
 
           User user = User.fromJson(data);
           if(widget.type == 0){
-            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
+            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
             StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
           }else{
-            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user);
             StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
           }
 
@@ -87,13 +87,13 @@ class _ForgetState extends State<RegPage>{
                   MaterialPageRoute(
                     builder: (context) => RecruitHomeApp(),
                   ));
-            }else if(user.infoStatus == "0"){
+            }else if(user.infoStatus != "1"){
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MineInfor(widget.type),
                   ));
-            }else if(user.companyStatus == "0"){
+            }else if(user.companyStatus != "1"){
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -107,13 +107,13 @@ class _ForgetState extends State<RegPage>{
                   MaterialPageRoute(
                     builder: (context) => RecruitHomeApp(),
                   ));
-            }else if(user.infoStatus == "0"){
+            }else if(user.infoStatus != "1"){
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => MineInfor(widget.type),
                   ));
-            }else if(user.companyStatus == "0"){
+            }else if(user.companyStatus != "1"){
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

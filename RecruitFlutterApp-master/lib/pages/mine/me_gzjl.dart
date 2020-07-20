@@ -168,11 +168,7 @@ class _MeGzjlState extends State<MeGzjl> {
                 MaterialPageRoute(
                   builder: (context) => MeDesc(5),
                 ));
-            setState(() {
-              if(reslut != null){
-                gs_name = reslut;
-              }
-            });
+
             setState(() {
               if(reslut != null){
                 gs_work = reslut;
@@ -231,12 +227,7 @@ class _MeGzjlState extends State<MeGzjl> {
                 ));
             setState(() {
               if(reslut != null){
-                gs_name = reslut;
-              }
-            });
-            setState(() {
-              if(reslut != null){
-                gs_work = reslut;
+                gs_desc = reslut;
               }
             });
           },
@@ -245,7 +236,7 @@ class _MeGzjlState extends State<MeGzjl> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child:   Text(gs_work,
+                child:   Text(gs_desc,
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,
@@ -332,7 +323,7 @@ class _MeGzjlState extends State<MeGzjl> {
         child:   GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            _showDatePop(context,0);
+            _showDatePop(context,1);
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

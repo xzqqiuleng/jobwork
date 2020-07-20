@@ -9,6 +9,7 @@ import 'package:recruit_app/model/chat_list.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
 import 'package:recruit_app/pages/jobs/chat_row_item.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -47,6 +48,19 @@ class _ChatRoomState extends State<ChatRoom> {
         _scrollController.animateTo(_scrollController.position.maxScrollExtent,
             duration: Duration(milliseconds: 500), curve: Curves.easeIn);
     });
+
+    MiviceRepository().getAllMessage("14243b0f437841629f840b65ffb3fbce",widget.reply_id).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        print(reponse);
+        _chatList.clear();
+
+        setState(() {
+        var  data = reponse["result"];
+        });
+
+      }
+    });
   }
 
   @override
@@ -64,7 +78,7 @@ class _ChatRoomState extends State<ChatRoom> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('胡京茹',
+              Text(widget.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -284,7 +298,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       onTap: () {
                         SystemChannels.textInput.invokeMethod("TextInput.hide");
                          Map map = Map();
-                         map["user_id"] ="14243b0f437841629f840b65ffb3fbce";
+                         map["user_id"] = ShareHelper.getUser().userId;
                          map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
                          map["message"] =editController.text;
                          channel.sink.add(json.encode(map));

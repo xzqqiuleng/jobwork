@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
+import 'package:recruit_app/pages/employe/company_edit.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -26,17 +27,22 @@ class MineInfor extends StatefulWidget {
 class _MineInforState extends State<MineInfor> {
 
   String name="";
-  String sex="";
+  String sex="男";
   String birthDay="";
   String wx="";
   String email="";
-  String headImaurl="";
+  String headImaurl="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3253926546,3995438373&fm=15&gp=0.jpg";
  String inforStatus= "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    inforStatus = ShareHelper.getUser().infoStatus;
+    if(widget.type == 0){
+      inforStatus = ShareHelper.getBosss().infoStatus;
+    }else{
+      inforStatus = ShareHelper.getUser().infoStatus;
+    }
+
     if(inforStatus == "1"){
            name = ShareHelper.getUser().userName;
            sex = ShareHelper.getUser().userSex;
@@ -48,7 +54,7 @@ class _MineInforState extends State<MineInfor> {
   }
   _saveInfor(){
 
-    if(name.length <2 ||sex.length<2||birthDay.length<2||wx.length<2||email.length<2||headImaurl.length<2){
+    if(name.length <2 ||sex.length<1||birthDay.length<2||wx.length<2||email.length<2||headImaurl.length<2){
       showToast("信息填写不符合规范，请检查！");
 
     }else{
@@ -59,7 +65,12 @@ class _MineInforState extends State<MineInfor> {
       map["wx_id"] = wx;
       map["mail"] = email;
       map["head_img"] = headImaurl;
-      map["user_id "] = ShareHelper.getUser().userId;
+      if(widget.type == 0){
+        map["user_id"] = ShareHelper.getBosss().userId;
+      }else{
+        map["user_id"] = ShareHelper.getUser().userId;
+      }
+
       MiviceRepository().updateUser(map).then((value){
         var reponse = json.decode(value.toString());
 
@@ -68,22 +79,55 @@ class _MineInforState extends State<MineInfor> {
         }else{
           showToast(reponse["msg"]);
         }
-        User user = ShareHelper.getUser();
-        user.userName = name;
-        user.userSex = sex;
-        user.birth = birthDay;
-        user.wxId = wx;
-        user.mail = email;
-        user.headImg = headImaurl;
-        user.infoStatus = "1";
-        StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
-    if(inforStatus== "0"){
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OnlineResume(),
-          ));
-    }
+
+        Map userMap = Map();
+        userMap["info_status"] ="1";
+        if(widget.type == 0){
+          userMap["user_id"] = ShareHelper.getBosss().userId;
+        }else{
+          userMap["user_id"] = ShareHelper.getUser().userId;
+        }
+
+        MiviceRepository().updateUser(userMap).then((value){
+          User user;
+          if(widget.type == 0){
+            user = ShareHelper.getBosss();
+          }else{
+            user = ShareHelper.getUser();
+          }
+
+          user.userName = name;
+          user.userSex = sex;
+          user.birth = birthDay;
+          user.wxId = wx;
+          user.mail = email;
+          user.headImg = headImaurl;
+          user.infoStatus = "1";
+          StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+
+
+          if(inforStatus!= "1"){
+
+            if(widget.type == 0){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyEdit(),
+                  ));
+            }else{
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OnlineResume(),
+                  ));
+            }
+
+          }
+
+        });
+
+
+
 
       });
 
@@ -102,8 +146,8 @@ class _MineInforState extends State<MineInfor> {
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
+              width: 18,
+              height: 18,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -111,7 +155,7 @@ class _MineInforState extends State<MineInfor> {
         automaticallyImplyLeading: false,
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
         centerTitle: true,
-        title: Text('个人中心',
+        title: Text('个人信息',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -144,6 +188,7 @@ class _MineInforState extends State<MineInfor> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
+                            flex: 0,
                             child:  ClipRRect(
                               borderRadius: BorderRadius.circular(30),
                               child: Image.network(
@@ -153,6 +198,11 @@ class _MineInforState extends State<MineInfor> {
                                 fit: BoxFit.cover,
                               ),
                             ),
+                          ),
+                          Expanded(
+                          child: Text(
+                            ""
+                          ),
                           ),
                           SizedBox(width: 8,),
                           Image.asset(
@@ -410,6 +460,9 @@ class _MineInforState extends State<MineInfor> {
                       color: Color.fromRGBO(242, 243, 244, 1),
                       height: 1,
                     ),
+                    SizedBox(
+                      height: 40,
+                    )
                   ],
                 ),
               ),
@@ -512,7 +565,7 @@ class _MineInforState extends State<MineInfor> {
   /*拍照*/
   _takePhoto() async {
 
-    var image = await _picker.getImage(source: ImageSource.camera);
+    var image = await _picker.getImage(source: ImageSource.camera,maxHeight: 60,maxWidth: 60);
     _cancle();
     if(image == null){
       return;
@@ -523,7 +576,7 @@ class _MineInforState extends State<MineInfor> {
   /*相册*/
   _openGallery() async {
 
-    var image = await _picker.getImage(source: ImageSource.gallery);
+    var image = await _picker.getImage(source: ImageSource.gallery,maxHeight: 60,maxWidth: 60);
     _cancle();
     if(image == null){
       return;

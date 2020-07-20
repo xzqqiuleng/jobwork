@@ -16,9 +16,9 @@ class MeEdu extends StatefulWidget {
 }
 
 class _MeEduState extends State<MeEdu> {
-  String _schoolname="学校";
-  String _schoolzy="专业";
-  String _schooljl="在校经历";
+  String _schoolname="";
+  String _schoolzy="";
+  String _schooljl="";
   @override
   void initState() {
     // TODO: implement initState

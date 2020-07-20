@@ -19,7 +19,7 @@ import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class LoginPdPage extends StatefulWidget{
   int type;
-  LoginPdPage(type);
+  LoginPdPage(this.type);
   @override
   _LoginPdState createState() {
     // TODO: implement createState
@@ -57,10 +57,10 @@ class _LoginPdState extends State<LoginPdPage>{
         User user = User.fromJson(data);
 
         if(widget.type == 0){
-          StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
+          StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
           StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
         }else{
-          StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+          StorageManager.localStorage.setItem(ShareHelper.kUser, user);
           StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
         }
 
@@ -74,13 +74,13 @@ class _LoginPdState extends State<LoginPdPage>{
                 MaterialPageRoute(
                   builder: (context) => RecruitHomeApp(),
                 ));
-          }else if(user.infoStatus == "0"){
+          }else if(user.infoStatus != "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MineInfor(widget.type),
                 ));
-          }else if(user.companyStatus == "0"){
+          }else if(user.companyStatus != "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -94,13 +94,13 @@ class _LoginPdState extends State<LoginPdPage>{
                 MaterialPageRoute(
                   builder: (context) => RecruitHomeApp(),
                 ));
-          }else if(user.infoStatus == "0"){
+          }else if(user.infoStatus != "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => MineInfor(widget.type),
                 ));
-          }else if(user.companyStatus == "0"){
+          }else if(user.companyStatus != "1"){
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
