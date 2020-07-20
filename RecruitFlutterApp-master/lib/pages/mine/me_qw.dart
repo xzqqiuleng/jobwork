@@ -1,24 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/work_page.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
+import '../btn_widget.dart';
 import 'me_desc.dart';
 
 class MeQW extends StatefulWidget {
+  Map qw;
+  MeQW({this.qw});
   @override
   _MeQWState createState() => _MeQWState();
 }
 
 class _MeQWState extends State<MeQW> {
   TextEditingController _phoneController = TextEditingController();
-  String _qxresult="选择职位";
-  String _city="选择城市";
+  String _qxresult="";
+  String _city="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.qw != null){
+      _qxresult = widget.qw["work_type"];
+      _city = widget.qw["city"];
+      _salary = widget.qw["money"];
+    }
   }
   @override
   void dispose() {
@@ -236,6 +246,22 @@ class _MeQWState extends State<MeQW> {
         color: Color.fromRGBO(242, 243, 244, 1),
         height: 1,
       ),
+      CustomBtnWidget(
+        margin: 20,
+        btnColor: Colours.app_main,
+        text: "完成",
+        onPressed: (){
+          if(_qxresult.length >1 && _city.length>1&&_salary.length>1 ){
+           Map qwMap = Map();
+            qwMap["work_type"] = _qxresult;
+            qwMap["money"] = _salary;
+            qwMap["city"] = _city;
+            Navigator.of(context).pop(qwMap);
+          }else{
+            showToast("请完整填写信息");
+          }
+        },
+      )
     ],
 
 

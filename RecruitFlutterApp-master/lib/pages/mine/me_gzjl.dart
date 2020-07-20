@@ -1,27 +1,39 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/work_page.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
+import '../../colours.dart';
+import '../btn_widget.dart';
 import 'me_desc.dart';
 
 class MeGzjl extends StatefulWidget {
-
+  Map gz;
+  MeGzjl({this.gz});
   @override
   _MeGzjlState createState() => _MeGzjlState();
 }
 
 class _MeGzjlState extends State<MeGzjl> {
   TextEditingController _phoneController = TextEditingController();
-  String gs_name="公司名称";
-  String gs_work="工作职位";
-  String gs_desc="工作内容";
+  String gs_name="";
+  String gs_work="";
+  String gs_desc="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.gz != null){
+      gs_name = widget.gz["work_company"];
+      gs_work = widget.gz["work_pos"];
+      gs_desc = widget.gz["work_infro"];
+      startDate = widget.gz["start_time"];
+      stopDate = widget.gz["stop_time"];
+
+    }
   }
   @override
   void dispose() {
@@ -97,7 +109,7 @@ class _MeGzjlState extends State<MeGzjl> {
         var   reslut = await    Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => MeDesc(1),
+                builder: (context) => MeDesc(4),
             ));
             setState(() {
            if(reslut != null){
@@ -154,7 +166,7 @@ class _MeGzjlState extends State<MeGzjl> {
             var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeDesc(2),
+                  builder: (context) => MeDesc(5),
                 ));
             setState(() {
               if(reslut != null){
@@ -215,7 +227,7 @@ class _MeGzjlState extends State<MeGzjl> {
             var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeDesc(3),
+                  builder: (context) => MeDesc(6),
                 ));
             setState(() {
               if(reslut != null){
@@ -352,6 +364,24 @@ class _MeGzjlState extends State<MeGzjl> {
         color: Color.fromRGBO(242, 243, 244, 1),
         height: 1,
       ),
+      CustomBtnWidget(
+        margin: 20,
+        btnColor: Colours.app_main,
+        text: "完成",
+        onPressed: (){
+          if(gs_name.length >1 && gs_desc.length>1&&gs_work.length>1 &&stopDate.length>1&&startDate.length>1){
+           Map  workMap = Map();
+            workMap["work_company"] = gs_name;
+            workMap["work_pos"] = gs_work;
+            workMap["work_infro"] = gs_desc;
+            workMap["start_time"] = startDate;
+            workMap["stop_time"] = stopDate;
+           Navigator.of(context).pop(workMap);
+          }else{
+            showToast("请完整填写信息");
+          }
+        },
+      )
     ],
 
 
@@ -364,7 +394,7 @@ class _MeGzjlState extends State<MeGzjl> {
   }
 
   DateTime _initDate = DateTime.now();
-  String _salary="选择薪资";
+
  String startDate="";
  String stopDate="";
 

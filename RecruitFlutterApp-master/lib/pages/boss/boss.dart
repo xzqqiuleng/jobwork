@@ -89,7 +89,7 @@ class _BossMineState extends State<BossMine> {
                               ],
                             ),
                             onTap: (){
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(),),);
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(0),),);
                             },
                             behavior: HitTestBehavior.opaque,
                           ),

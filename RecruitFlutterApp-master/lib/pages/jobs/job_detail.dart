@@ -171,12 +171,113 @@ class _JobDetailState extends State<JobDetail> {
 
     }
   }
- @override
+  List _sexList=["违法违纪，敏感言论","色情，辱骂，粗俗","职位虚假，信息不真实","违法，欺诈，诱导欺骗","收取求职者费用","变相发布广告和招商","其他违规行为"];
+
+  void _showSexPop(BuildContext context){
+    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context){
+          return _buildBottonPicker(
+              CupertinoPicker(
+
+                magnification: 1,
+                itemExtent:58 ,
+                backgroundColor: Colors.white,
+                useMagnifier: true,
+                scrollController: scrollController,
+                onSelectedItemChanged: (int index){
+
+
+                },
+                children: List<Widget>.generate(_sexList.length, (index){
+                  return Center(
+                    child: Text(_sexList[index]),
+                  );
+                }),
+              )
+          );
+        });
+  }
+
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    setState(() {
+
+
+                    });
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
+    );
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _loadData();
   }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -196,6 +297,13 @@ class _JobDetailState extends State<JobDetail> {
           automaticallyImplyLeading: false,
           backgroundColor: Color.fromRGBO(255, 255, 255, 1),
           actions: <Widget>[
+            //            IconButton(
+//                icon: Image.asset(
+//                  'images/ic_action_share_black.png',
+//                  width: 24,
+//                  height: 24,
+//                ),
+//                onPressed: () {}),
             IconButton(
                 icon: Image.asset(
                   'images/ic_action_favor_off_black.png',
@@ -203,20 +311,16 @@ class _JobDetailState extends State<JobDetail> {
                   height: 24,
                 ),
                 onPressed: () {}),
-            IconButton(
-                icon: Image.asset(
-                  'images/ic_action_share_black.png',
-                  width: 24,
-                  height: 24,
-                ),
-                onPressed: () {}),
+
             IconButton(
                 icon: Image.asset(
                   'images/ic_action_report_black.png',
                   width: 24,
                   height: 24,
                 ),
-                onPressed: () {})
+                onPressed: () {
+                  _showSexPop(context);
+                })
           ],
         ),
         body: Column(

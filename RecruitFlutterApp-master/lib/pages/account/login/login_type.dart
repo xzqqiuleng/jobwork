@@ -162,7 +162,7 @@ class LoginType extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPdPage()),
+                      MaterialPageRoute(builder: (context) => LoginPdPage(0)),
                     );
                   },
                   textColor: Color.fromRGBO(159, 199, 235, 1),
@@ -192,7 +192,7 @@ class LoginType extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPdPage()),
+                      MaterialPageRoute(builder: (context) => LoginPdPage(1)),
                     );
                   },
                   textColor: Color.fromRGBO(159, 199, 235, 1),

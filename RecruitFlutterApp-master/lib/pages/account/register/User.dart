@@ -10,8 +10,10 @@ class User {
   String wxId;
   String title ;
   String resumeStatus ;
-  int status;
-
+  int  status;
+  String  infoStatus;
+  String  jlStatus;
+  String  companyStatus;
   User(
       {this.userSex,
         this.userMail,
@@ -37,6 +39,9 @@ class User {
     status = json['status'];
     title = json['title'];
     resumeStatus = json['resume_status'];
+    infoStatus = json['info_status'].toString();
+    jlStatus = json['jl_status'].toString();
+    companyStatus = json['company_status'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +58,9 @@ class User {
     data['status'] = this.status;
     data['title'] = this.title;
     data['resume_status'] = this.resumeStatus;
+    data['info_status'] = this.infoStatus;
+    data['jl_status'] = this.jlStatus;
+    data['company_status'] = this.companyStatus;
     return data;
   }
 }

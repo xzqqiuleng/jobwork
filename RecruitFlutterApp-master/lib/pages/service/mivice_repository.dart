@@ -89,7 +89,16 @@ class MiviceRepository{
     });
     return response;
   }
+  // 0老板
+  Future forgetPd(String phone,String pwd,int type) async {
+    var response = await dio.post<Map>('/user/forgetPassword',data: {
 
+      'user_mail': phone,
+      'password': pwd,
+      'type': type,
+    });
+    return response;
+  }
   // 0老板
   Future loginPd(String phone,String pwd,int type) async {
     var response = await dio.post<Map>('/user/login',data: {
@@ -148,12 +157,44 @@ class MiviceRepository{
     });
     return response;
   }
+
+  Future getRusumen(String userMail) async {
+    var response = await dio.get<Map>('/resume/modify', queryParameters: {
+    "userMail":userMail
+    });
+    return response;
+  }
+  Future getCompany(String userMail) async {
+    var response = await dio.get<Map>('/company/getCompany', queryParameters: {
+      "userMail":userMail
+    });
+    return response;
+  }
   Future pubCompany(Map map) async {
     var response = await dio.post<Map>('/company/modify', data: map);
     return response;
   }
   Future pubJob(Map map) async {
     var response = await dio.post<Map>('/job/modify', data: map);
+    return response;
+  }
+
+
+  Future updateUser(Map map) async {
+    var response = await dio.post<Map>('/user/modify', data: map);
+    return response;
+  }
+
+  static Future upLoadPicture(String path) async{
+    var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    var image = await MultipartFile.fromFile(
+      path,
+      filename: name,
+    );
+    FormData formData = FormData.fromMap({
+      "file": image
+    });
+    var response = await Dio().post('http://62.60.174.78:8088/upload', data: formData);
     return response;
   }
 }

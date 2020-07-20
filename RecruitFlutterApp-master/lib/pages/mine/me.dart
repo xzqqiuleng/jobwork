@@ -108,7 +108,7 @@ class _MineState extends State<Mine> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(),),);
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>MineInfor(1),),);
                     },
                     child:Row(
                       mainAxisAlignment: MainAxisAlignment.start,

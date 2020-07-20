@@ -13,7 +13,9 @@ class ShareHelper{
  static String search_history_jl = "search_history_jl";
  static String city = "city";
  static String is_Login = "is_Login";
+ static String is_BossLogin = "is_BOSSLogin";
  static String kUser = "kUser";
+ static String BOSSUser = "BosskUser";
  static bool isAgree(){
    if(StorageManager.sharedPreferences != null &&StorageManager.sharedPreferences.getBool("is_agree") !=null &&StorageManager.sharedPreferences.getBool("is_agree")){
      return true;
@@ -123,4 +125,9 @@ class ShareHelper{
    User _user = userMap != null ? User.fromJson(userMap) : null;
    return _user;
 }
+ static User getBosss(){
+   var userMap = StorageManager.localStorage.getItem(BOSSUser);
+   User _user = userMap != null ? User.fromJson(userMap) : null;
+   return _user;
+ }
 }

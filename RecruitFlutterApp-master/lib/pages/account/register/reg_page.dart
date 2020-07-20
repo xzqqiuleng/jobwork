@@ -6,7 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/account/register/code_send_btn.dart';
+import 'package:recruit_app/pages/account/register/login_pd_page.dart';
+import 'package:recruit_app/pages/employe/company_edit.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
+import 'package:recruit_app/pages/mine/mine_infor.dart';
+import 'package:recruit_app/pages/mine/online_resume.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
@@ -15,6 +19,8 @@ import '../../storage_manager.dart';
 
 
 class RegPage extends StatefulWidget{
+  int type;
+  RegPage(type);
   @override
   _ForgetState createState() {
     // TODO: implement createState
@@ -48,7 +54,7 @@ class _ForgetState extends State<RegPage>{
        showToast("两次密码输入不一致");
     }else {
 
-      MiviceRepository().registerPd(_phoneController.text, _newPdController.text, 1).then((value) {
+      MiviceRepository().registerPd(_phoneController.text, _newPdController.text, widget.type).then((value) {
         var reponse = json.decode(value.toString());
 
         //"result": {
@@ -62,14 +68,59 @@ class _ForgetState extends State<RegPage>{
           var data = reponse["result"];
 
 
-        User user = User.fromJson(data);
-          StorageManager.localStorage.setItem(ShareHelper.kUser, user);
-          StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecruitHomeApp(),
-              ));
+          User user = User.fromJson(data);
+          if(widget.type == 0){
+            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
+            StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
+          }else{
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+            StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
+          }
+
+
+
+
+          if(widget.type == 0){
+            if(user.infoStatus == "1" && user.companyStatus == "1"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecruitHomeApp(),
+                  ));
+            }else if(user.infoStatus == "0"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MineInfor(widget.type),
+                  ));
+            }else if(user.companyStatus == "0"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyEdit(),
+                  ));
+            }
+          }else{
+            if(user.infoStatus == "1" && user.jlStatus == "1"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecruitHomeApp(),
+                  ));
+            }else if(user.infoStatus == "0"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MineInfor(widget.type),
+                  ));
+            }else if(user.companyStatus == "0"){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OnlineResume(),
+                  ));
+            }
+          }
         }else{
           showToast(reponse["msg"]);
         }
@@ -86,9 +137,25 @@ class _ForgetState extends State<RegPage>{
 
         child: Stack(
                 children: <Widget>[
+                  Positioned(
+                    top: 20,
+                    left: 20,
+                    child:IconButton(
+                      icon:Icon(Icons.arrow_back,color: Colors.black,) ,
+                      iconSize: 30,
+                      onPressed: (){
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPdPage(widget.type),
+                            ));
+                      },
+                    ) ,
+
+                  ),
                   Card(
-                      margin: EdgeInsets.only(left: 16,right: 16,top:58),
-                      elevation: 1,
+                      margin: EdgeInsets.only(left: 16,right: 16,top:88),
+                      elevation: 0.4,
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4)
@@ -98,15 +165,11 @@ class _ForgetState extends State<RegPage>{
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Card(
-                              shadowColor: Color(0xdd242424),
-                              elevation: 1,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: Image(image: AssetImage("images/icon_hc.png"),
-                                height: 100,
-                                width: 100,
+                            Text(
+                              widget.type == 0?"注册为BOSS":"注册为人才",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20
                               ),
                             ),
                             SizedBox(height: 50,),
@@ -197,6 +260,9 @@ class _ForgetState extends State<RegPage>{
 
                                   ),
                                 )
+                            ),
+                            SizedBox(
+                              height: 20,
                             )
                           ],
                         ),

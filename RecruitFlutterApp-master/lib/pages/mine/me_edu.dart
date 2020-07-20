@@ -1,19 +1,21 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:recruit_app/pages/city_page.dart';
-import 'package:recruit_app/pages/work_page.dart';
-import 'package:recruit_app/widgets/log_reg_textfield.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/pages/btn_widget.dart';
+
 
 import 'me_desc.dart';
 
 class MeEdu extends StatefulWidget {
+  Map edu;
+  MeEdu({this.edu});
   @override
   _MeEduState createState() => _MeEduState();
 }
 
 class _MeEduState extends State<MeEdu> {
-  TextEditingController _phoneController = TextEditingController();
   String _schoolname="学校";
   String _schoolzy="专业";
   String _schooljl="在校经历";
@@ -26,7 +28,16 @@ class _MeEduState extends State<MeEdu> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _phoneController.dispose();
+
+
+    if(widget.edu != null){
+
+      _schoolname = widget.edu["school"];
+      _schoolzy = widget.edu["zy"];
+      datss = widget.edu["by_time"];
+      _schooljl = widget.edu["jl"];
+      _xl = widget.edu["xl"];
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -96,7 +107,7 @@ class _MeEduState extends State<MeEdu> {
         var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeDesc(2),
+                  builder: (context) => MeDesc(7),
                 ));
             setState(() {
            if(reslut != null){
@@ -153,7 +164,7 @@ class _MeEduState extends State<MeEdu> {
             var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeDesc(2),
+                  builder: (context) => MeDesc(8),
                 ));
             setState(() {
               if(reslut != null){
@@ -255,7 +266,7 @@ class _MeEduState extends State<MeEdu> {
         child:   GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            _showDatePop(context,0);
+            _showDatePop(context);
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -305,7 +316,7 @@ class _MeEduState extends State<MeEdu> {
             var    reslut = await  Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MeDesc(2),
+                  builder: (context) => MeDesc(8),
                 ));
             setState(() {
               if(reslut != null){
@@ -318,7 +329,7 @@ class _MeEduState extends State<MeEdu> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                child:   Text(_schoolname,
+                child:   Text(_schooljl,
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,
@@ -343,6 +354,24 @@ class _MeEduState extends State<MeEdu> {
         color: Color.fromRGBO(242, 243, 244, 1),
         height: 1,
       ),
+      CustomBtnWidget(
+        margin: 20,
+        btnColor: Colours.app_main,
+        text: "完成",
+        onPressed: (){
+          if(_schooljl.length >1 && _schoolname.length>1&&_schoolzy.length>1 &&datss.length>1&&_xl.length>1){
+           Map eduMap = Map();
+            eduMap["school"] = _schoolname;
+            eduMap["zy"] = _schoolzy;
+            eduMap["by_time"] = datss;
+            eduMap["jl"] = _schooljl;
+            eduMap["xl"] = _xl;
+           Navigator.of(context).pop(eduMap);
+          }else{
+            showToast("请完整填写信息");
+          }
+        },
+      )
     ],
 
 
@@ -390,7 +419,7 @@ class _MeEduState extends State<MeEdu> {
   }
   DateTime _initDate = DateTime.now();
   String  datss = "";
-  void _showDatePop(BuildContext context,int type){
+  void _showDatePop(BuildContext context){
 
     showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
 

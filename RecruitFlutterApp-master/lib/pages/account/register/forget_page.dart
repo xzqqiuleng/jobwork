@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,8 @@ import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class ForgetPage extends StatefulWidget{
+  int type;
+  ForgetPage(type);
   @override
   _ForgetState createState() {
     // TODO: implement createState
@@ -40,8 +44,13 @@ class _ForgetState extends State<ForgetPage>{
        showToast("两次密码输入不一致");
     }else {
 
-      MiviceRepository().registerPd(_phoneController.text, _newPdController.text,0).then((value) {
-
+      MiviceRepository().registerPd(_phoneController.text, _newPdController.text,widget.type).then((value) {
+        var reponse = json.decode(value.toString());
+        if(reponse["status"] == "success") {
+              Navigator.of(context).pop();
+        }else{
+          showToast(reponse["msg"]);
+        }
       });
     }
 
@@ -55,8 +64,20 @@ class _ForgetState extends State<ForgetPage>{
 
         child: Stack(
                 children: <Widget>[
+                  Positioned(
+                    top: 20,
+                    left: 20,
+                    child:IconButton(
+                      icon:Icon(Icons.arrow_back,color: Colors.black,) ,
+                      iconSize: 30,
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                    ) ,
+
+                  ),
                   Card(
-                      margin: EdgeInsets.only(left: 16,right: 16,top:58),
+                      margin: EdgeInsets.only(left: 16,right: 16,top:88),
                       elevation: 1,
                       color: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -67,18 +88,15 @@ class _ForgetState extends State<ForgetPage>{
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Card(
-                              shadowColor: Color(0xdd242424),
-                              elevation: 1,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)
-                              ),
-                              child: Image(image: AssetImage("images/icon_hc.png"),
-                                height: 100,
-                                width: 100,
+                            SizedBox(height: 20,),
+                            Text(
+                              "设置新密码",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20
                               ),
                             ),
-                            SizedBox(height: 50,),
+                            SizedBox(height: 20,),
                             LogRegTextField(
 
                               label: "手机号",
@@ -166,7 +184,8 @@ class _ForgetState extends State<ForgetPage>{
 
                                   ),
                                 )
-                            )
+                            ),
+                            SizedBox(height: 20,),
                           ],
                         ),
                       )
