@@ -62,7 +62,7 @@ class CodeSendBtnState extends State<CodeSendBtn>{
    void getSmsCode(String phone) async{
 
     print(phone);
-    Smssdk.getTextCode(phone,"86","3377269", (dynamic ret, Map err){
+    Smssdk.getTextCode(phone,"86","", (dynamic ret, Map err){
       if(err!=null){
         print(err);
       }

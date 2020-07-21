@@ -44,12 +44,22 @@ class _MineInforState extends State<MineInfor> {
     }
 
     if(inforStatus == "1"){
-           name = ShareHelper.getUser().userName;
-           sex = ShareHelper.getUser().userSex;
-           birthDay = ShareHelper.getUser().birth;
-           wx = ShareHelper.getUser().wxId;
-           email = ShareHelper.getUser().mail;
-           headImaurl = ShareHelper.getUser().headImg;
+      if(widget.type == 0){
+        name = ShareHelper.getBosss().userName;
+        sex = ShareHelper.getBosss().userSex;
+        birthDay = ShareHelper.getBosss().birth;
+        wx = ShareHelper.getBosss().wxId;
+        email = ShareHelper.getBosss().mail;
+        headImaurl = ShareHelper.getBosss().headImg;
+      }else{
+
+        name = ShareHelper.getUser().userName;
+        sex = ShareHelper.getUser().userSex;
+        birthDay = ShareHelper.getUser().birth;
+        wx = ShareHelper.getUser().wxId;
+        email = ShareHelper.getUser().mail;
+        headImaurl = ShareHelper.getUser().headImg;
+      }
     }
   }
   _saveInfor(){

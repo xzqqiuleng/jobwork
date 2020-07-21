@@ -94,6 +94,31 @@ class _MeDescState extends State<MeDesc> {
         hint = "优秀的在校经历，能为你的简历加分";
         line = 10;
         break;
+      case 10:
+        title = "职位描述";
+        hint = "简单描述你想招聘的职位";
+        line = 10;
+        break;
+      case 11:
+        title = "工作详情";
+        hint = "请详细的描述工作岗位所需要的条件";
+        line = 10;
+        break;
+      case 12:
+        title = "公司介绍";
+        hint = "请详细的描述公司概况";
+        line = 10;
+        break;
+      case 13:
+        title = "产品介绍";
+        hint = "请详细的描述产品概况";
+        line = 10;
+        break;
+      case 14:
+        title = "高管介绍";
+        hint = "请详细的描述高管组成";
+        line = 10;
+        break;
     }
   }
   @override
@@ -143,7 +168,7 @@ class _MeDescState extends State<MeDesc> {
       body:  Container(
         margin: EdgeInsets.all(20),
         child: LogRegTextField(
-
+          line: line,
           label:hint,
           controller:  _phoneController,
           textInputAction: TextInputAction.next,

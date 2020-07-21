@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
+import 'package:recruit_app/pages/account/register/login_pd_page.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/jz_no.dart';
 import 'package:recruit_app/pages/mine/comunicate.dart';
@@ -55,8 +56,10 @@ class _MineState extends State<Mine> {
     options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
 
     String jsonStr=    StorageManager.sharedPreferences.getString(ShareHelper.getUser().userId+"work");
+   if(jsonStr !=null &&jsonStr!="" ){
+     save =  json.decode(jsonStr);
+   }
 
-    save =  json.decode(jsonStr);
   }
 
 
@@ -70,15 +73,15 @@ class _MineState extends State<Mine> {
         automaticallyImplyLeading: false,
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-              icon: Image.asset(
-                'images/img_setting_white.png',
-                width: 24,
-                height: 24,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Setting(), ),);
-              }),
+//          IconButton(
+//              icon: Image.asset(
+//                'images/img_setting_white.png',
+//                width: 24,
+//                height: 24,
+//              ),
+//              onPressed: () {
+//                Navigator.push(context, MaterialPageRoute(builder: (context)=>Setting(), ),);
+//              }),
         ],
         backgroundColor: Colours.app_main,
       ),
@@ -541,6 +544,13 @@ class _MineState extends State<Mine> {
             );
           }, childCount: options.length)),
           SliverToBoxAdapter(
+            child: Container(
+              margin:
+              EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(48)),
+              height: ScreenUtil().setWidth(50),
+            ),
+          ),
+          SliverToBoxAdapter(
             child: Consumer<IdentityModel>(
     builder: (context, model, child) {
       return CustomBtnWidget(
@@ -566,6 +576,13 @@ class _MineState extends State<Mine> {
                   confirm: (){
                     Navigator.pop(context);
                     model.changeIdentity( Identity.boss);
+                    StorageManager.localStorage.deleteItem(ShareHelper.kUser);
+                    StorageManager.sharedPreferences.setBool(
+                        ShareHelper.is_Login, false);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LoginPdPage(0)));
                   },
                 );
               });

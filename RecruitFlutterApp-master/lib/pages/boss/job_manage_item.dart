@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/model/job_manage_list.dart';
 
 class JobManageItem extends StatelessWidget {
-  final JobManageData jobManageData;
+  final Map jobManageData;
   final int index;
 
   const JobManageItem({Key key, this.jobManageData, this.index})
@@ -35,7 +35,7 @@ class JobManageItem extends StatelessWidget {
                     children: <Widget>[
                       Flexible(
                         child: Text(
-                          '${jobManageData.jobName}',
+                          '${jobManageData["title"]}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -49,7 +49,7 @@ class JobManageItem extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        '${jobManageData.salary}',
+                        '${jobManageData["salary"]}',
                         style: const TextStyle(
                           wordSpacing: 1,
                           letterSpacing: 1,
@@ -61,7 +61,7 @@ class JobManageItem extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '${jobManageData.address}  ${jobManageData.degree}  ${jobManageData.exp}',
+                    jobManageData["label"],
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,

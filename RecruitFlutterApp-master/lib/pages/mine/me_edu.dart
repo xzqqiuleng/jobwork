@@ -68,13 +68,13 @@ class _MeEduState extends State<MeEdu> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         actions: <Widget>[
-          IconButton(
-              icon: Image.asset(
-                'images/complete.png',
-                width: 20,
-                height: 20,
-              ),
-              onPressed: () {}),
+//          IconButton(
+//              icon: Image.asset(
+//                'images/complete.png',
+//                width: 20,
+//                height: 20,
+//              ),
+//              onPressed: () {}),
         ],
       ),
       body:  SafeArea(

@@ -42,7 +42,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_geeks_unselect.png',
+          'images/b5.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -51,7 +51,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_geeks_select.png',
+          'images/b5on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -63,7 +63,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_msg_unselect.png',
+          'images/b3.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -72,7 +72,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_msg_select.png',
+          'images/b3on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -84,7 +84,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_my_unselect.png',
+          'images/b4.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -93,7 +93,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_my_select.png',
+          'images/b4on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -116,7 +116,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_jobs_unselect.png',
+          'images/b1.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -125,7 +125,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_jobs_select.png',
+          'images/b1on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -137,7 +137,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_coms_unselect.png',
+          'images/b2.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -146,7 +146,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_coms_select.png',
+          'images/b2on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -158,7 +158,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_msg_unselect.png',
+          'images/b3.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -167,7 +167,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_msg_select.png',
+          'images/b3on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -180,7 +180,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       icon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_my_unselect.png',
+          'images/b4.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,
@@ -189,7 +189,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
       activeIcon: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Image.asset(
-          'images/ic_nav_tab_my_select.png',
+          'images/b4on.png',
           width: 24,
           height: 24,
           fit: BoxFit.contain,

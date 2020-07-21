@@ -135,8 +135,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   fetchData()  {
 
       setState(() {
-          BannerModel bannerModel1 = BannerModel(imageUrl: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3778115985,3313781102&fm=26&gp=0.jpg",link: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3778115985,3313781102&fm=26&gp=0.jpg");
-          BannerModel bannerModel2 = BannerModel(imageUrl: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3842951066,2465592920&fm=26&gp=0.jpg");
+          BannerModel bannerModel1 = BannerModel(imageUrl: "images/banner1.jpg",link: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3778115985,3313781102&fm=26&gp=0.jpg");
+          BannerModel bannerModel2 = BannerModel(imageUrl: "images/banner2.jpg");
         this.topBannerDatas.add(bannerModel1);
         this.topBannerDatas.add(bannerModel2);
 
@@ -211,9 +211,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               backgroundColor: Colors.white.withOpacity(_navAplpha),
               elevation: _navAplpha == 1 ? 0.2: 0.0,
               leading: _mainScrollable ? null: new IconButton(
-                icon: Image.asset('images/arrow_down.png',
-                  width: 20,
-                  height: 20,
+                icon: Image.asset('images/top.png',
+                  width: 40,
+                  height: 40,
                 ),
                 onPressed: _leftTabItemPressed,
               ),

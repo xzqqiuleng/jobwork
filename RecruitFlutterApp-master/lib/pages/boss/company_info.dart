@@ -2,6 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recruit_app/model/company_attr.dart';
 import 'package:recruit_app/pages/boss/company_info_item.dart';
+import 'package:recruit_app/pages/mine/me_desc.dart';
+
+import '../../colours.dart';
+import '../btn_widget.dart';
 
 class CompanyInfo extends StatefulWidget {
   @override
@@ -55,8 +59,8 @@ class _CompanyInfoState extends State<CompanyInfo> {
         leading: IconButton(
             icon: Image.asset(
               'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
+              width: 18,
+              height: 18,
             ),
             onPressed: () {
               Navigator.pop(context);
@@ -121,9 +125,19 @@ class _CompanyInfoState extends State<CompanyInfo> {
                       ListView.builder(
                         itemBuilder: (context, index) {
                           if (index < _attrList.length) {
-                            return CompanyInfoItem(
-                              companyAttr: _attrList[index],
-                              index: index,
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MeDesc(index+12),
+                                    ));
+                              },
+                                behavior: HitTestBehavior.opaque,
+                              child: CompanyInfoItem(
+                                companyAttr: _attrList[index],
+                                index: index,
+                              )
                             );
                           }
                           return null;
@@ -133,8 +147,16 @@ class _CompanyInfoState extends State<CompanyInfo> {
                         physics: const NeverScrollableScrollPhysics(),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 30,
                       ),
+                      CustomBtnWidget(
+                        margin: 20,
+                        btnColor: Colours.app_main,
+                        text: "完成",
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                      )
                     ],
                   ),
                 ),

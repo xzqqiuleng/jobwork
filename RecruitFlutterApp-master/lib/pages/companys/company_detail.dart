@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_pic_list.dart';
 import 'package:recruit_app/model/company_welfare_list.dart';
@@ -153,10 +154,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
-                    setState(() {
-
-
-                    });
+                    showToast("举报已提交，我们会尽快审核信息");
                   },
                   child: Text("确定",
                     style: TextStyle(
@@ -360,27 +358,27 @@ class _CompanyDetailState extends State<CompanyDetail> {
                                     ),
                                   ],
                                 )),
-                              Positioned(
-                                right: 16,
-                                top: 16,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 26,
-                                  width: 66,
-                                  decoration: BoxDecoration(
-
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colours.app_main
-
-                                  ),
-                                  child: Text(
-                                    "＋ 关注",
-                                    style: TextStyle(
-                                      color: Colors.white
-                                    ),
-                                  ),
-                                ),
-                              ),
+//                              Positioned(
+//                                right: 16,
+//                                top: 16,
+//                                child: Container(
+//                                  alignment: Alignment.center,
+//                                  height: 26,
+//                                  width: 66,
+//                                  decoration: BoxDecoration(
+//
+//                                      borderRadius: BorderRadius.circular(20),
+//                                      color: Colours.app_main
+//
+//                                  ),
+//                                  child: Text(
+//                                    "＋ 关注",
+//                                    style: TextStyle(
+//                                      color: Colors.white
+//                                    ),
+//                                  ),
+//                                ),
+//                              ),
                               Positioned(
                                 bottom: 20,
                                 left:16,

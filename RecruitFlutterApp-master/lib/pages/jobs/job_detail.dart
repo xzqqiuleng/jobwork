@@ -639,7 +639,7 @@ class _JobDetailState extends State<JobDetail> {
                     color: Colours.app_main,
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: "",)));
+                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: "admin_boss",type: 1,user_id: ShareHelper.getUser().userId,)));
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),

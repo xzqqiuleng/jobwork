@@ -18,7 +18,9 @@ class ChatRoom extends StatefulWidget {
   String user_id;
   String title;
   String head_icon;
-  ChatRoom({this.reply_id,this.user_id,this.title,this.head_icon});
+  String  jsonStr;
+  int type;
+  ChatRoom({this.reply_id,this.user_id,this.title,this.head_icon,this.type,this.jsonStr});
   @override
   _ChatRoomState createState() {
     // TODO: implement createState
@@ -30,11 +32,22 @@ class _ChatRoomState extends State<ChatRoom> {
   List<Chat> _chatList = [];
   final ScrollController _scrollController = ScrollController();
   var channel;
+  String  jsonStr;
   @override
   void initState() {
     super.initState();
+      Map map = Map();
+    if(widget.type == 0){
+      map["user_name"] = widget.title;
+      map["head_img"] = widget.head_icon;
 
-     channel = IOWebSocketChannel.connect("${MiviceRepository.socketUrl}14243b0f437841629f840b65ffb3fbce");
+    }else{
+      map["company_name"] = widget.title;
+      map["company_img"] = widget.head_icon;
+      map["pub_name"] = widget.title;
+    }
+    jsonStr = json.encode(map);
+     channel = IOWebSocketChannel.connect("${MiviceRepository.socketUrl}${widget.user_id}");
 
     channel.stream.listen((message) {
       setState(() {
@@ -50,7 +63,7 @@ class _ChatRoomState extends State<ChatRoom> {
             duration: Duration(milliseconds: 500), curve: Curves.easeIn);
     });
 
-    MiviceRepository().getAllMessage("14243b0f437841629f840b65ffb3fbce",widget.reply_id).then((value) {
+    MiviceRepository().getAllMessage(widget.user_id,widget.reply_id).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         print(reponse);
@@ -59,10 +72,23 @@ class _ChatRoomState extends State<ChatRoom> {
         setState(() {
         var  data = reponse["result"];
       for(var item in data){
-        Chat chat = Chat(content: item["msg"],user_icon: ShareHelper.getUser().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
-            if(item["user_id"]== "14243b0f437841629f840b65ffb3fbce" ){
-              chat.isMine = true;
-            }
+        Chat chat;
+        if(widget.type == 0){
+           chat = Chat(content: item["msg"],user_icon: ShareHelper.getBosss().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
+          if(item["user_id"]== ShareHelper.getBosss().userId ){
+            chat.isMine = true;
+          }else{
+            chat.isMine = false;
+          }
+        }else{
+           chat = Chat(content: item["msg"],user_icon: ShareHelper.getUser().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
+          if(item["user_id"]== ShareHelper.getUser().userId ){
+            chat.isMine = true;
+          }else{
+            chat.isMine = false;
+          }
+        }
+
         _chatList.add(chat);
       }
         });
@@ -227,18 +253,36 @@ class _ChatRoomState extends State<ChatRoom> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: (){
-                        Map map = Map();
-                        map["user_id"] = ShareHelper.getUser().userId;
-                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
-                        map["message"] =ShareHelper.getUser().userMail;
-                        channel.sink.add(json.encode(map));
-                        setState(() {
-                          _chatList.add(Chat(
-                              isMine: true,
-                              user_icon: ShareHelper.getUser().headImg,
-                              content: ShareHelper.getUser().userMail));
-                          editController.text = "";
-                        });
+                        if(widget.type == 0){
+                          Map map = Map();
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["user_info"] =jsonStr;
+                          map["message"] =ShareHelper.getBosss().userMail;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getBosss().headImg,
+                                content: ShareHelper.getBosss().userMail));
+                            editController.text = "";
+                          });
+                        }else{
+                          Map map = Map();
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["com_info"] =jsonStr;
+                          map["message"] =ShareHelper.getUser().userMail;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getUser().headImg,
+                                content: ShareHelper.getUser().userMail));
+                            editController.text = "";
+                          });
+                        }
+
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,18 +307,38 @@ class _ChatRoomState extends State<ChatRoom> {
                     child:GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: (){
-                        Map map = Map();
-                        map["user_id"] = ShareHelper.getUser().userId;
-                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
-                        map["message"] =ShareHelper.getUser().wxId;
-                        channel.sink.add(json.encode(map));
-                        setState(() {
-                          _chatList.add(Chat(
-                              isMine: true,
-                              user_icon: ShareHelper.getUser().headImg,
-                              content: ShareHelper.getUser().wxId));
-                          editController.text = "";
-                        });
+                        if(widget.type == 0){
+                          Map map = Map();
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =ShareHelper.getBosss().wxId;
+                          map["user_info"] =jsonStr;
+
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getBosss().headImg,
+                                content: ShareHelper.getBosss().wxId));
+                            editController.text = "";
+                          });
+                        }else{
+                          Map map = Map();
+
+                          map["com_info"] =jsonStr;
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =ShareHelper.getUser().wxId;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getUser().headImg,
+                                content: ShareHelper.getUser().wxId));
+                            editController.text = "";
+                          });
+                        }
+
                       },
                     child:  Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -299,18 +363,36 @@ class _ChatRoomState extends State<ChatRoom> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: (){
-                        Map map = Map();
-                        map["user_id"] = ShareHelper.getUser().userId;
-                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
-                        map["message"] =ShareHelper.getUser().mail;
-                        channel.sink.add(json.encode(map));
-                        setState(() {
-                          _chatList.add(Chat(
-                              isMine: true,
-                              user_icon: ShareHelper.getUser().headImg,
-                              content: ShareHelper.getUser().mail));
-                          editController.text = "";
-                        });
+                        if(widget.type == 0){
+                          Map map = Map();
+                          map["user_info"] =jsonStr;
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] = widget.reply_id;
+                          map["message"] =ShareHelper.getBosss().mail;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getBosss().headImg,
+                                content: ShareHelper.getBosss().mail));
+                            editController.text = "";
+                          });
+                        }else{
+                          Map map = Map();
+                          map["com_info"] =jsonStr;
+                          map["user_id"] =widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =ShareHelper.getUser().mail;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getUser().headImg,
+                                content: ShareHelper.getUser().mail));
+                            editController.text = "";
+                          });
+                        }
+
                       },
                       child:Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -433,18 +515,38 @@ class _ChatRoomState extends State<ChatRoom> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         SystemChannels.textInput.invokeMethod("TextInput.hide");
-                         Map map = Map();
-                         map["user_id"] = ShareHelper.getUser().userId;
-                         map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
-                         map["message"] =editController.text;
-                         channel.sink.add(json.encode(map));
-                        setState(() {
-                          _chatList.add(Chat(
-                               isMine: true,
-                               user_icon: ShareHelper.getUser().headImg,
-                              content: editController.text));
-                          editController.text = "";
-                        });
+                        if(widget.type == 0){
+                          Map map = Map();
+                          map["user_info"] =jsonStr;
+
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =editController.text;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getBosss().headImg,
+                                content: editController.text));
+                            editController.text = "";
+                          });
+                        }else{
+                          Map map = Map();
+
+                          map["com_info"] =jsonStr;
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =editController.text;
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getUser().headImg,
+                                content: editController.text));
+                            editController.text = "";
+                          });
+                        }
+
 
 
                       },

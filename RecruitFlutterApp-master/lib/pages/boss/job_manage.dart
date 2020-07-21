@@ -19,7 +19,7 @@ class JobManage extends StatefulWidget {
 }
 
 class _JobManageState extends State<JobManage> {
-  List<JobManageData> _jobList = JobManageList.loadJobList();
+  List _jobList = List();
   
   
   @override
@@ -29,7 +29,10 @@ class _JobManageState extends State<JobManage> {
       var reponse = json.decode(value.toString());
       print(reponse);
       if(reponse["status"] == "success"){
+        _jobList = reponse["result"];
+        setState(() {
 
+        });
       }else{
 
       }
@@ -46,8 +49,8 @@ class _JobManageState extends State<JobManage> {
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',
-                width: 24,
-                height: 24,
+                width: 18,
+                height: 18,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -82,7 +85,7 @@ class _JobManageState extends State<JobManage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => JobManageDetail(),
+                                builder: (context) => JobManageDetail(_jobList[index]),
                               ));
                         });
                   }

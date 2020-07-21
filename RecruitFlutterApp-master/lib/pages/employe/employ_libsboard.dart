@@ -53,10 +53,12 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
+         if(mounted){
+           setState(() {
+             data = reponse["result"];
+           });
+         }
 
-        setState(() {
-          data = reponse["result"];
-        });
         print(data);
         page++;
         _refreshController.refreshCompleted();

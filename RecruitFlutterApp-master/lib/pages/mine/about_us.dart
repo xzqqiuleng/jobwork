@@ -21,17 +21,17 @@ class AboutUsPage extends StatelessWidget{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colours.app_main,
+          backgroundColor: Colors.white,
           title: Text("关于我们",
             style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: Colors.black26
+                color: Colors.black
             ),
           ),
           leading: Builder(builder: (context) {
             return IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black26), //自定义图标
+              icon: Icon(Icons.arrow_back, color: Colors.black), //自定义图标
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
@@ -107,7 +107,7 @@ class  _AboutUsWidgetState extends State<AboutUsWidget>{
               ),
             ),
             Gaps.vGap12,
-            Text("mivice connect",
+            Text("18聘聘",
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -195,7 +195,7 @@ class  _AboutUsWidgetState extends State<AboutUsWidget>{
                     children: <Widget>[
                       Positioned(
                         left: 0,
-                        child: Text("客户服务热线",
+                        child: Text("联系客服",
                           style: TextStyle(
 
                               fontSize: 16,

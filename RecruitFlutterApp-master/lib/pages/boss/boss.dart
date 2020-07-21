@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
+import 'package:recruit_app/pages/account/register/login_pd_page.dart';
 import 'package:recruit_app/pages/boss/company_info.dart';
 import 'package:recruit_app/pages/boss/job_manage.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
@@ -294,38 +295,38 @@ class _BossMineState extends State<BossMine> {
                                 },
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      '0',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '收藏',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Colors.white70, fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-
-                                },
-                              ),
-                            ),
+//                            Expanded(
+//                              flex: 1,
+//                              child: GestureDetector(
+//                                behavior: HitTestBehavior.opaque,
+//                                child: Column(
+//                                  mainAxisAlignment: MainAxisAlignment.start,
+//                                  crossAxisAlignment: CrossAxisAlignment.center,
+//                                  children: <Widget>[
+//                                    Text(
+//                                      '0',
+//                                      maxLines: 1,
+//                                      overflow: TextOverflow.ellipsis,
+//                                      style: TextStyle(
+//                                          color: Colors.white, fontSize: 18),
+//                                    ),
+//                                    SizedBox(
+//                                      height: 5,
+//                                    ),
+//                                    Text(
+//                                      '收藏',
+//                                      maxLines: 1,
+//                                      overflow: TextOverflow.ellipsis,
+//                                      style: TextStyle(
+//                                          color: Colors.white70, fontSize: 12),
+//                                    ),
+//                                  ],
+//                                ),
+//                                onTap: () {
+//
+//                                },
+//                              ),
+//                            ),
                           ],
                         )
                       ],
@@ -448,7 +449,7 @@ class _BossMineState extends State<BossMine> {
                                     height: 7,
                                   ),
                                   Text(
-                                    ShareHelper.getUser().resumeStatus==null?"未认证": ShareHelper.getUser().resumeStatus,style: TextStyle(
+                                    "未实名",style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w100
@@ -644,6 +645,13 @@ class _BossMineState extends State<BossMine> {
                               confirm: (){
                                 Navigator.pop(context);
                                 model.changeIdentity( Identity.employee);
+                                StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
+                                StorageManager.sharedPreferences.setBool(
+                                    ShareHelper.is_BossLogin, false);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPdPage(1)));
                               },
                             );
                           });

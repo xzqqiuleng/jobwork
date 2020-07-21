@@ -83,7 +83,7 @@ class _FeedBackState extends State<FeedBackWidget>{
                     ),
 
                   ),
-                  Text("标题",
+                  Text("遇到的问题",
                     style: TextStyle(
                         fontSize: 16,
                         color: Colours.black_212920,
@@ -91,21 +91,22 @@ class _FeedBackState extends State<FeedBackWidget>{
                     ),
 
                   ),
-                  Gaps.hGap20,
-                  Expanded(
-                    flex: 1,
-                    child: LogRegTextField(
-                      controller: _titleController,
-                      label: "请输入问题",
-                      textInputAction: TextInputAction.next,
-                      textInputType: TextInputType.text,
-                      obscureText: false,
 
-                    ),
-                  ),
-                  Gaps.hGap20,
+
                 ],
               ) ,
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 10, 16,10),
+
+                child:  LogRegTextField(
+                  controller: _titleController,
+                  label: "简单的概括",
+                  textInputAction: TextInputAction.next,
+                  textInputType: TextInputType.text,
+                  obscureText: false,
+
+                )
+              ),
 
               Stack(
                 children: <Widget>[
@@ -117,7 +118,7 @@ class _FeedBackState extends State<FeedBackWidget>{
                         height: 200,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
-                            color: Colours.green_d8e0d6
+                            color: Color(0xfff0f0f0),
                         ),
                         child: TextField(
                          controller: _contentController,
@@ -132,7 +133,7 @@ class _FeedBackState extends State<FeedBackWidget>{
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color:  Colors.transparent),
                             ),
-                            hintText: "请简要说明这个问题，我们会尽快解决。",
+                            hintText: "请详细描述你遇到的问题，最好请上传问题截图。",
                             hintStyle: TextStyle(
                                 fontSize: 12,
                                 color: Colours.gray_8A8F8A
@@ -161,7 +162,7 @@ class _FeedBackState extends State<FeedBackWidget>{
                                   borderRadius: BorderRadius.circular(4)
                               ),
                               child: Image(
-                                image: AssetImage("images/icon_carema.png"),
+                                image: AssetImage("images/feed_img.png"),
                                 width: 19,
                                 height: 16,
                               ),
@@ -198,7 +199,8 @@ class _FeedBackState extends State<FeedBackWidget>{
                 onPressed: () =>_putFeed(),
                 margin: 20,
                 height: 48,
-                text: "提交",
+                radius: 30,
+                text: "上传问题",
                 btnColor: Colours.app_main,
               )
             ],

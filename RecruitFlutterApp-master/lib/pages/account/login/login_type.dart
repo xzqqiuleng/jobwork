@@ -137,17 +137,21 @@ class LoginType extends StatelessWidget {
         children: <Widget>[
           Positioned(
             top: ScreenUtil().setWidth(360),
-            child: Image.asset(
-              'images/img_splash_earth.png',
-              width: ScreenUtil().setWidth(360),
-              height: ScreenUtil().setWidth(360),
-              fit: BoxFit.contain,
-            ),
+            child:  CircleAvatar(
+              backgroundImage: AssetImage("images/icon_hc.png"),
+              radius: 60,
+            )
+//            child: Image.asset(
+//              'images/icon_hc.png',
+//              width: ScreenUtil().setWidth(180),
+//              height: ScreenUtil().setWidth(180),
+//              fit: BoxFit.contain,
+//            ),
           ),
           Positioned(
             bottom: ScreenUtil().setWidth(358),
             child: Text(
-              'SLOGAN',
+              '',
               style: TextStyle(
                 fontSize: ScreenUtil().setSp(44),
                 color: Color.fromRGBO(84, 128, 194, 1),
@@ -155,10 +159,10 @@ class LoginType extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: ScreenUtil().setWidth(126),
+            bottom: ScreenUtil().setWidth(226),
             child: Consumer<IdentityModel>(
             builder: (context, model, child) {
-              return Row(
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   MaterialButton(
@@ -167,12 +171,12 @@ class LoginType extends StatelessWidget {
                     onPressed: () {
                       model.changeIdentity(
                           Identity.employee);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPdPage(1)),
                       );
                     },
-                    textColor: Color.fromRGBO(159, 199, 235, 1),
+                    textColor: Colours.app_main,
                     child: Text(
                       "我是求职者",
                       style: TextStyle(
@@ -185,25 +189,25 @@ class LoginType extends StatelessWidget {
                     ),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: Color.fromRGBO(159, 199, 235, 1),
+                          color:  Colours.app_main,
                           width: ScreenUtil().setWidth(2),
                         ),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),
                   ),
                   SizedBox(
-                    width: ScreenUtil().setWidth(64),
+                    height: ScreenUtil().setWidth(64),
                   ),
                   MaterialButton(
                     elevation: 1,
                     color: Colors.white,
                     onPressed: () {
                       model.changeIdentity( Identity.boss);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPdPage(0)),
                       );
                     },
-                    textColor: Color.fromRGBO(159, 199, 235, 1),
+                    textColor:  Colours.app_main,
                     child: Text(
                       "我是BOSS",
                       style: TextStyle(
@@ -216,7 +220,7 @@ class LoginType extends StatelessWidget {
                     ),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: Color.fromRGBO(159, 199, 235, 1),
+                          color:  Colours.app_main,
                           width: ScreenUtil().setWidth(2),
                         ),
                         borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),

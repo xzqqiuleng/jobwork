@@ -15,6 +15,7 @@ class LogRegTextField extends StatefulWidget {
   final TextInputAction textInputAction;
   final ValueChanged<String> onFieldSubmitted;
   final TextInputType textInputType;
+  final int  line;
 
 
   LogRegTextField({
@@ -27,6 +28,7 @@ class LogRegTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.textInputType,
+    this.line,
 
 
   });
@@ -44,10 +46,17 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
 
   /// 默认遮挡密码
   ValueNotifier<bool> obscureNotifier;
+  int line;
   @override
   void initState() {
     controller = widget.controller ?? TextEditingController();
     obscureNotifier = ValueNotifier(widget.obscureText);
+
+    if(widget.line == null){
+      line =1;
+    }else{
+      line =widget.line;
+    }
     super.initState();
   }
   @override
@@ -72,7 +81,7 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
      textInputAction: widget.textInputAction,
        obscureText: widget.obscureText,
       cursorColor: Colours.app_main,
-      maxLines: 1,
+      maxLines: line,
       decoration: InputDecoration(
 
           enabledBorder: UnderlineInputBorder(

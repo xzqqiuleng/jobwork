@@ -172,7 +172,7 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
 
   _OnRefresh(){
      //id，分为boss，用户
-    new MiviceRepository().getMessageList("14243b0f437841629f840b65ffb3fbce",1).then((value) {
+    new MiviceRepository().getMessageList(ShareHelper.getUser().userId,1).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         print(reponse);
@@ -225,7 +225,7 @@ child: _buildMiddelBar(topicTabMenus,context),
             return GestureDetector(
               onTap: (){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"],head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],)));
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"],head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
               },
               behavior: HitTestBehavior.opaque,
               child:MsgChatItem(btnKey: key,mapData: data[index],) ,

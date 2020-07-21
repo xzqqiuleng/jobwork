@@ -148,16 +148,16 @@ class _CompanyEditState extends State<CompanyEdit> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         actions: <Widget>[
-          IconButton(
-              icon: Image.asset(
-                'images/complete.png',
-                width: 20,
-                height: 20,
-              ),
-              onPressed: () {
-
-
-              }),
+//          IconButton(
+//              icon: Image.asset(
+//                'images/complete.png',
+//                width: 20,
+//                height: 20,
+//              ),
+//              onPressed: () {
+//
+//
+//              }),
         ],
       ),
       body:SafeArea(
@@ -173,7 +173,7 @@ class _CompanyEditState extends State<CompanyEdit> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    SizedBox(height: 30),
+                    SizedBox(height: 12),
                     Row(
                       children: <Widget>[
                         GestureDetector(
@@ -183,7 +183,8 @@ class _CompanyEditState extends State<CompanyEdit> {
                            decoration: BoxDecoration(
                                borderRadius: BorderRadius.circular(4),
                                image: DecorationImage(
-                                   image: NetworkImage(c_img)
+                                   image: NetworkImage(c_img),
+                                   fit: BoxFit.cover
                                )
                            ),
                          ),
@@ -374,7 +375,7 @@ class _CompanyEditState extends State<CompanyEdit> {
   /*拍照*/
   _takePhoto() async {
 
-    var image = await _picker.getImage(source: ImageSource.camera);
+    var image = await _picker.getImage(source: ImageSource.camera,imageQuality: 30);
     _cancle();
     if(image == null){
       return;
@@ -385,7 +386,7 @@ class _CompanyEditState extends State<CompanyEdit> {
   /*相册*/
   _openGallery() async {
 
-    var image = await _picker.getImage(source: ImageSource.gallery);
+    var image = await _picker.getImage(source: ImageSource.gallery,imageQuality: 30);
     _cancle();
     if(image == null){
       return;

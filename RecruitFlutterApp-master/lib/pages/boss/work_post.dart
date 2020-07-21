@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -13,6 +14,8 @@ import 'package:recruit_app/pages/work_page.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class WorkPost extends StatefulWidget {
+ Map data;
+  WorkPost({this.data});
   @override
   _WorkPostState createState() => _WorkPostState();
 }
@@ -26,7 +29,29 @@ class _WorkPostState extends State<WorkPost> {
   String salary="";
   String work_deteail ="";
   String address ="";
+  String job_id="";
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.data != null){
+      workStr = widget.data["title"];
+      address = widget.data["address"];
+      salary = widget.data["salary"];
+      workStr = widget.data["title"];
+      job_id = widget.data["job_id"].toString();
+
+      if(widget.data["summary"] != null && widget.data["summary"] != "" ){
+        Map map  = json.decode(widget.data["summary"]);
+        work_deteail = map["工作详情"];
+      }
+      type = widget.data["label"].toString().split("|")[0];
+      xl = widget.data["label"].toString().split("|")[1];
+      work_time = widget.data["label"].toString().split("|")[2];
+    }
+  }
   _pubResume(){
 
     Map dMap = Map();
@@ -40,13 +65,14 @@ class _WorkPostState extends State<WorkPost> {
     Map data = Map();
     data["address"] = address;
     data["salary"] = salary;
-    data["user_mail"] = ShareHelper.getUser().userMail;
+    data["user_mail"] = ShareHelper.getBosss().userMail;
     data["company"] ="找铁网";
     data["title"] =workStr;
     data["label"] ="${type}|${xl}|${work_time}";
     data["tip"] =tip;
     data["summary"] =dJson;
     data["mook_img"] ="";
+    data["job_id"] =job_id;
     MiviceRepository().pubJob(data).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
@@ -112,12 +138,17 @@ class _WorkPostState extends State<WorkPost> {
                     SizedBox(height: 8),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        Navigator.push(
+                      onTap: ()async{
+                      var mtype= await  Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => WorkPage(),
                             ));
+                      if(mtype != null){
+                        setState(() {
+                          type = mtype;
+                        });
+                      }
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,12 +189,17 @@ class _WorkPostState extends State<WorkPost> {
                     SizedBox(height: 8),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        Navigator.push(
+                      onTap: () async{
+                      var ss = await  Navigator.push (
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MeDesc(0),
+                              builder: (context) => MeDesc(10),
                             ));
+                      if(ss != null){
+                        setState(() {
+                          workStr = ss;
+                        });
+                      }
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -328,12 +364,17 @@ class _WorkPostState extends State<WorkPost> {
                     SizedBox(height: 8),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        Navigator.push(
+                      onTap: ()async{
+                     var aa=  await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MeDesc(0),
+                              builder: (context) => MeDesc(11),
                             ));
+                     if(aa != null){
+                       setState(() {
+                         work_deteail = aa;
+                       });
+                     }
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -341,6 +382,8 @@ class _WorkPostState extends State<WorkPost> {
                         children: <Widget>[
                           Expanded(
                             child:   Text(work_deteail,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     wordSpacing: 1,
                                     letterSpacing: 1,
@@ -374,12 +417,17 @@ class _WorkPostState extends State<WorkPost> {
                     SizedBox(height: 8),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        Navigator.push(
+                      onTap: ()async{
+                     var  cc=await   Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MeDesc(0),
+                              builder: (context) => CityPage(),
                             ));
+                     if(cc != null){
+                       setState(() {
+                         address = cc;
+                       });
+                     }
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
