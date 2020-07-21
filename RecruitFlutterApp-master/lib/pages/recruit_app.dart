@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/screenutil.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/share_helper.dart';
+import 'package:recruit_app/pages/splash.dart';
 import 'account/login/login_type.dart';
 
 class RecruitApp extends StatelessWidget {
@@ -16,8 +18,8 @@ class RecruitApp extends StatelessWidget {
         primaryColor: new Color.fromARGB(255, 15, 185, 125),
         accentColor: Color.fromARGB(255, 15, 185, 125),
       ),
-      home: ShareHelper.isLogin() ? RecruitHomeApp() :LoginType(),
-//    home: PermissionWeb(),
+//      home: ShareHelper.isLogin() ? RecruitHomeApp() :LoginType(),
+    home: Splash(),
       locale: Locale('zh'),
     );
   }

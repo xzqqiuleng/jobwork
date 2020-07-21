@@ -19,7 +19,7 @@ class ChatRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (index % 2 == 0) {
+    if (chat.isMine) {
       return Padding(
         padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(136),
@@ -70,8 +70,8 @@ class ChatRowItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 ScreenUtil().setWidth(44),
               ),
-              child: Image.asset(
-                chat.sender,
+              child: Image.network(
+                chat.user_icon,
                 width: ScreenUtil().setWidth(88),
                 height: ScreenUtil().setWidth(88),
                 fit: BoxFit.cover,
@@ -94,8 +94,8 @@ class ChatRowItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 ScreenUtil().setWidth(44),
               ),
-              child: Image.asset(
-                chat.sender,
+              child: Image.network(
+                chat.head_icon,
                 width: ScreenUtil().setWidth(88),
                 height: ScreenUtil().setWidth(88),
                 fit: BoxFit.cover,

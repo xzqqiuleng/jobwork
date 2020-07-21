@@ -5,7 +5,7 @@ import 'package:recruit_app/pages/mine/push_item.dart';
 import 'package:recruit_app/pages/utils/gaps.dart';
 
 
-class PushSetPage extends StatefulWidget{
+class YsSetPage extends StatefulWidget{
 
   @override
   _PushState createState() {
@@ -14,7 +14,7 @@ class PushSetPage extends StatefulWidget{
   }
   
 }
-class _PushState extends State<PushSetPage>{
+class _PushState extends State<YsSetPage>{
   List<PushItem> _itmes=List();
 
   @override
@@ -22,10 +22,12 @@ class _PushState extends State<PushSetPage>{
     // TODO: implement initState
     super.initState();
     PushItem pushItem1 = PushItem(false);
-    PushItem pushItem2 = PushItem(true);
+    PushItem pushItem2 = PushItem(false);
     PushItem pushItem3 = PushItem(true);
+    PushItem pushItem4 = PushItem(false);
     _itmes.add(pushItem1);
     _itmes.add(pushItem2);
+    _itmes.add(pushItem3);
     _itmes.add(pushItem3);
      _addDatas();
   }
@@ -35,14 +37,15 @@ class _PushState extends State<PushSetPage>{
   @override
   Widget build(BuildContext context) {
 
-    _itmes[0].txt = "声音与震动";
-    _itmes[1].txt =  "短信通知";
-    _itmes[2].txt =  "夜间免打扰";
+    _itmes[0].txt = "公司推新";
+    _itmes[1].txt =  "隐藏简历";
+    _itmes[2].txt =  "隐藏私人号码";
+    _itmes[3].txt =  "对HR隐藏";
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colours.bg_color,
-        title: Text("通知与提醒",
+        title: Text("隐私设置",
           style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,

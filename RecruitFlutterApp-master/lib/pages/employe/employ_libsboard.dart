@@ -119,7 +119,7 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => JLDetail(),
+                          builder: (context) => JLDetail(data[index]["job_id"].toString()),
                         ));
                   });
             }

@@ -51,7 +51,7 @@ class JobRowItem extends StatelessWidget {
       color: Colors.white,
       elevation: 0.1,
       margin: EdgeInsets.only(
-          left: ScreenUtil().setWidth(30),
+          left: ScreenUtil(). setWidth(30),
           right: ScreenUtil().setWidth(30),
           top: ScreenUtil().setWidth(22),
           bottom: 0),

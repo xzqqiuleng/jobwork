@@ -113,7 +113,7 @@ class RemindDialog extends Dialog {
                               ),
                             ),
                           ),
-                          onTap: confirm,
+                          onTap: cancel,
                         ),
                       ),
                       Container(

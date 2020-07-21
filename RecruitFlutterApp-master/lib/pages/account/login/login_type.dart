@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/account/login/login_in.dart';
 import 'package:recruit_app/pages/account/register/login_pd_page.dart';
 import 'package:recruit_app/pages/msg/agreement_detail.dart';
@@ -126,7 +128,7 @@ class LoginType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, width: 750, height: 1334);
+//    ScreenUtil.init(context, width: 750, height: 1334);
     initListen(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(232, 255, 254, 1),
@@ -154,67 +156,74 @@ class LoginType extends StatelessWidget {
           ),
           Positioned(
             bottom: ScreenUtil().setWidth(126),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                MaterialButton(
-                  elevation: 1,
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PermissionWeb()),
-                    );
-                  },
-                  textColor: Color.fromRGBO(159, 199, 235, 1),
-                  child: Text(
-                    "我要招聘",
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(44),
-                    ),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(70),
-                    vertical: ScreenUtil().setWidth(14),
-                  ),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color.fromRGBO(159, 199, 235, 1),
-                        width: ScreenUtil().setWidth(2),
+            child: Consumer<IdentityModel>(
+            builder: (context, model, child) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  MaterialButton(
+                    elevation: 1,
+                    color: Colors.white,
+                    onPressed: () {
+                      model.changeIdentity(
+                          Identity.employee);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPdPage(1)),
+                      );
+                    },
+                    textColor: Color.fromRGBO(159, 199, 235, 1),
+                    child: Text(
+                      "我是求职者",
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(44),
                       ),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),
-                ),
-                SizedBox(
-                  width: ScreenUtil().setWidth(64),
-                ),
-                MaterialButton(
-                  elevation: 1,
-                  color: Colors.white,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPdPage(1)),
-                    );
-                  },
-                  textColor: Color.fromRGBO(159, 199, 235, 1),
-                  child: Text(
-                    "我要求职",
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(44),
                     ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(70),
+                      vertical: ScreenUtil().setWidth(14),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Color.fromRGBO(159, 199, 235, 1),
+                          width: ScreenUtil().setWidth(2),
+                        ),
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),
                   ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(70),
-                    vertical: ScreenUtil().setWidth(14),
+                  SizedBox(
+                    width: ScreenUtil().setWidth(64),
                   ),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Color.fromRGBO(159, 199, 235, 1),
-                        width: ScreenUtil().setWidth(2),
+                  MaterialButton(
+                    elevation: 1,
+                    color: Colors.white,
+                    onPressed: () {
+                      model.changeIdentity( Identity.boss);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPdPage(0)),
+                      );
+                    },
+                    textColor: Color.fromRGBO(159, 199, 235, 1),
+                    child: Text(
+                      "我是BOSS",
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(44),
                       ),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),
-                ),
-              ],
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(70),
+                      vertical: ScreenUtil().setWidth(14),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Color.fromRGBO(159, 199, 235, 1),
+                          width: ScreenUtil().setWidth(2),
+                        ),
+                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(1000))),
+                  ),
+                ],
+              );
+                }
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/chat_list.dart';
 import 'package:recruit_app/pages/employe/boss_chat_room_intro.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
@@ -40,11 +41,12 @@ class NotifyItem extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        '邀请通知',
+                        '系统通知',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Color.fromRGBO(20, 20, 20, 1),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
                           fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
@@ -54,15 +56,15 @@ class NotifyItem extends StatelessWidget {
                     ),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>NotifyDetail()));
-                      },
+//                      onTap: () {
+//                        Navigator.push(context, MaterialPageRoute(builder: (context)=>NotifyDetail()));
+//                      },
                       child: Row(
                         children: <Widget>[
                           Text(
                             '查看详情',
                             style: TextStyle(
-                              color: Color.fromRGBO(159, 199, 235, 1),
+                              color: Colours.app_main,
                               fontSize: ScreenUtil().setSp(24),
                             ),
                           ),
@@ -73,6 +75,7 @@ class NotifyItem extends StatelessWidget {
                             'images/img_arrow_right_blue.png',
                             width: ScreenUtil().setWidth(10),
                             height: ScreenUtil().setWidth(20),
+                            color: Colours.app_main,
                             fit: BoxFit.cover,
                           ),
                         ],
@@ -87,7 +90,7 @@ class NotifyItem extends StatelessWidget {
                   height: ScreenUtil().setWidth(20),
                 ),
                 Container(
-                  color: Color.fromRGBO(159, 199, 235, 1),
+                  color: Colors.grey,
                   height: ScreenUtil().setWidth(1),
                 ),
                 Container(
@@ -98,7 +101,7 @@ class NotifyItem extends StatelessWidget {
                     bottom: ScreenUtil().setWidth(50),
                   ),
                   child: Text(
-                    '您于2月2号成功邀请哈哈哈哈登参加公司平面设计岗位面试。',
+                    '欢迎注册本APP，海量求职信息每日更新，并且官方将根据你的简历，进行私人定制，为你推荐最符合你的职位。',
                     style: TextStyle(
                       height: 1.5,
                       color: Color.fromRGBO(95, 94, 94, 1),
@@ -118,7 +121,7 @@ class NotifyItem extends StatelessWidget {
           height: ScreenUtil().setWidth(15),
         ),
         Text(
-          '2月2号11:30',
+          '2020年7月27号 11:30',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(22),
             color: Color.fromRGBO(176, 181, 180, 1),

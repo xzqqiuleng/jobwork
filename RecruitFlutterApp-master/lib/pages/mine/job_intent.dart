@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_intent_list.dart';
+import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/mine/job_intent_item.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
 
 class JobIntent extends StatefulWidget {
   @override
@@ -17,6 +22,12 @@ class _JobIntentState extends State<JobIntent> {
 
   @override
   Widget build(BuildContext context) {
+
+
+   if(ShareHelper.getUser().resumeStatus!=null) {
+     _xl = ShareHelper.getUser().resumeStatus;
+   }
+
     // TODO: implement build
     return Scaffold(
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
@@ -26,7 +37,7 @@ class _JobIntentState extends State<JobIntent> {
               icon: Image.asset(
                 'images/ic_back_arrow.png',
                 width: 18,
-                height: 24,
+                height: 18,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -153,7 +164,16 @@ class _JobIntentState extends State<JobIntent> {
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
-//
+                Map userMap = Map();
+          userMap["resume_status"] =_xl;
+          userMap["user_id"] =ShareHelper.getUser().userId;
+          MiviceRepository().updateUser(userMap).then((value){
+
+            User user = ShareHelper.getUser();
+            user.resumeStatus =_xl;
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+           showToast("职位状态已更新");
+          });
 
                     },
                     textColor: Colors.white,

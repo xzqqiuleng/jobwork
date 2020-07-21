@@ -10,7 +10,7 @@ import 'package:recruit_app/pages/storage_manager.dart';
 
 //void main() => runApp(ChangeNotifierProvider<IdentityModel>(create: (context)=>IdentityModel(),child: RecruitApp(),));
 void main() async {
-  runApp(MyApp());
+
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await StorageManager.init();
@@ -18,6 +18,7 @@ void main() async {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

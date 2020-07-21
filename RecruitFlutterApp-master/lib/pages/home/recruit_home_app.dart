@@ -13,6 +13,7 @@ import 'package:recruit_app/pages/home/home_page.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/mine/me.dart';
 import 'package:recruit_app/pages/msg/agreement_detail.dart';
+import 'package:recruit_app/pages/msg/boss_msglist.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
 import 'package:recruit_app/pages/msg/new_msglist.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
@@ -30,7 +31,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _bossWidget = <Widget>[
     EmployeeList(),
-    MsgList(),
+    BossMessageList(),
     BossMine(),
   ];
 

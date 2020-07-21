@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-//  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
+//  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
   static String socketUrl = 'ws://192.168.1.14:8080/ws/msg?';      //开发
 
   static Dio dio;
@@ -207,6 +207,20 @@ class MiviceRepository{
     var response = await dio.post<Map>('/user/getMsgs', data: {
       "userId":userId,
       "replyId":replyId,
+    });
+    return response;
+  }
+
+  Future getResumeInfo(String jobId) async {
+    var response = await dio.get<Map>('/resume/info', queryParameters: {
+      "jobId":jobId
+    });
+    return response;
+  }
+
+  Future getResumeList(String userMail) async {
+    var response = await dio.post<Map>('/job/myPubList', data: {
+      "userMail":userMail
     });
     return response;
   }

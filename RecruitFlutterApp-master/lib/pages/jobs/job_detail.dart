@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_tag_layout/flutter_tag_layout.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/companys/company_detail.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 import 'job_row_item.dart';
 
@@ -34,6 +36,7 @@ class _JobDetailState extends State<JobDetail> {
   Map com_label;
   String address = "暂无地址";
   String compay_desc = "暂无公司信息";
+  bool isSvae = false;
   _loadData(){
 
  if(widget.id == null){
@@ -47,6 +50,7 @@ class _JobDetailState extends State<JobDetail> {
         print(data);
         setState(() {
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
+
           datalist = data["jobs"];
            summary = json.decode(infors["summary"].toString());
 
@@ -231,10 +235,7 @@ class _JobDetailState extends State<JobDetail> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
-                    setState(() {
-
-
-                    });
+                   showToast("举报已发送，我们会尽快审核信息");
                   },
                   child: Text("确定",
                     style: TextStyle(
@@ -275,6 +276,11 @@ class _JobDetailState extends State<JobDetail> {
     // TODO: implement initState
     super.initState();
     _loadData();
+
+      isSvae = ShareHelper.isHaveData(widget.id.toString(),"work");
+
+
+
   }
 
 
@@ -306,11 +312,24 @@ class _JobDetailState extends State<JobDetail> {
 //                onPressed: () {}),
             IconButton(
                 icon: Image.asset(
-                  'images/ic_action_favor_off_black.png',
+                  isSvae ?'images/save_yes.png':'images/save_no.png',
                   width: 24,
                   height: 24,
                 ),
-                onPressed: () {}),
+                onPressed: () {
+                  if(isSvae){
+                    ShareHelper.deletData(widget.id.toString(),"work");
+                  }else{
+                    Map saveDatas = infors;
+                    saveDatas["id"]=widget.id.toString();
+                    ShareHelper.saveData(saveDatas,"work");
+
+                  }
+                  setState(() {
+                    isSvae = !isSvae;
+                  });
+
+                }),
 
             IconButton(
                 icon: Image.asset(

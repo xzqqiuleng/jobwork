@@ -25,6 +25,7 @@ class _EmployeeListState extends State<EmployeeList> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(248, 248, 248, 1),
       appBar: AppBar (
+        automaticallyImplyLeading:false,
          elevation: 0,
         title: Text("人才库",style: TextStyle(
           color: Colors.white

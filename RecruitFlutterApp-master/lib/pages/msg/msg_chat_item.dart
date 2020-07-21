@@ -66,7 +66,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                                 width: ScreenUtil().setWidth(16),
                               ),
                               Text(
-                                '在线',
+                                '离线',
                                 style: TextStyle(
                                   fontSize: ScreenUtil().setSp(24),
                                   color: Color.fromRGBO(176, 181, 180, 1),
@@ -82,7 +82,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                           widget.mapData["pub_time"],
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(24),
-                            color: Color.fromRGBO(159, 199, 235, 1),
+                            color: Colors.grey,
                           ),
                         ),
                       ],
@@ -95,7 +95,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(26),
-                        color: Color.fromRGBO(176, 181, 180, 1),
+                        color: Colors.black87,
                       ),
                     ),
                   ],
@@ -111,7 +111,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
         ),
         Container(
             color: Color.fromRGBO(245, 245, 245, 1),
-            height: ScreenUtil().setWidth(6)),
+            height: ScreenUtil().setWidth(4)),
       ],
     );
   }

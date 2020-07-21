@@ -284,7 +284,7 @@ class _XTListState extends State<XTList> with AutomaticKeepAliveClientMixin{
               btnKey: key,
               title: index % 2 == 0 ? '通知' : '我的客服',
               content: index % 2 == 0
-                  ? '明天您将参加一场面试，请您注意安排好行程做好 准备，祝您面试顺利。'
+                  ? '欢迎注册本APP，海量求职信息每日更新，并且官方将根据你的简历，进行私人定制，为你推荐最符合你的职位。'
                   : '您好，请问有什么可以为您服务的吗？',
               imgPath: index % 2 == 0
                   ? 'images/notice_m.png'
@@ -300,7 +300,7 @@ class _XTListState extends State<XTList> with AutomaticKeepAliveClientMixin{
           );
         },
 
-          itemCount: 2,
+          itemCount: 1,
         )
     );
 

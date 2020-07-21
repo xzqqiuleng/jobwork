@@ -34,8 +34,8 @@ class _NotifyDetailState extends State<NotifyDetail> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Color.fromRGBO(159, 199, 235, 1),
-                  width: ScreenUtil().setWidth(2),
+                  color: Colors.grey,
+                  width: ScreenUtil().setWidth(1),
                 ),
               ),
             ),
@@ -43,7 +43,7 @@ class _NotifyDetailState extends State<NotifyDetail> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '邀请通知',
+                    '系统通知',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -57,7 +57,7 @@ class _NotifyDetailState extends State<NotifyDetail> {
                   width: ScreenUtil().setWidth(20),
                 ),
                 Text(
-                  '2月2号11:30',
+                  '2020年7月27号 11:30',
                   style: TextStyle(
                     fontSize: ScreenUtil().setSp(22),
                     color: Color.fromRGBO(176, 181, 180, 1),
@@ -74,7 +74,7 @@ class _NotifyDetailState extends State<NotifyDetail> {
               ),
               physics: BouncingScrollPhysics(),
               child: Text(
-                '系统将于2月5号进行优化，最新功能如下：\n1：优化招聘列表；\n2：优化地图；\n3：优化招聘者页面\n4：优化招聘列表；\n5：优化地图；\n6：优化招聘者页面',
+                '欢迎注册本APP，海量求职信息每日更新，并且官方将根据你的简历，进行私人定制，为你推荐最符合你的职位。',
                 style: TextStyle(
                   fontSize: ScreenUtil().setSp(28),
                   height: 1.4,

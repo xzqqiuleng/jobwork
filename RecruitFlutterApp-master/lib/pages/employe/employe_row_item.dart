@@ -69,7 +69,7 @@ class EmployeeRowItem extends StatelessWidget {
 
                         Text(
 
-                            dataItem["目前状态"],
+                          dataItem["目前状态"]==null?"离职-找工作中": dataItem["目前状态"],
                             style: const TextStyle(
                               wordSpacing: 1,
                               letterSpacing: 1,
@@ -107,7 +107,7 @@ class EmployeeRowItem extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Expanded(
-                      child: Text(      dataItem["求职行业"],
+                      child: Text(      dataItem["求职行业"]==null?"暂无行业标签":dataItem["求职行业"],
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

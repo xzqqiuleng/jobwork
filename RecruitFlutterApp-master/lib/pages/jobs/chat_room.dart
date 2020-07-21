@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/chat_list.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
@@ -57,12 +58,113 @@ class _ChatRoomState extends State<ChatRoom> {
 
         setState(() {
         var  data = reponse["result"];
+      for(var item in data){
+        Chat chat = Chat(content: item["msg"],user_icon: ShareHelper.getUser().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
+            if(item["user_id"]== "14243b0f437841629f840b65ffb3fbce" ){
+              chat.isMine = true;
+            }
+        _chatList.add(chat);
+      }
         });
 
       }
     });
   }
+  List _sexList=["违法违纪，敏感言论","色情，辱骂，粗俗","职位虚假，信息不真实","违法，欺诈，诱导欺骗","收取求职者费用","变相发布广告和招商","其他违规行为"];
 
+  void _showSexPop(BuildContext context){
+    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context){
+          return _buildBottonPicker(
+              CupertinoPicker(
+
+                magnification: 1,
+                itemExtent:58 ,
+                backgroundColor: Colors.white,
+                useMagnifier: true,
+                scrollController: scrollController,
+                onSelectedItemChanged: (int index){
+
+
+                },
+                children: List<Widget>.generate(_sexList.length, (index){
+                  return Center(
+                    child: Text(_sexList[index]),
+                  );
+                }),
+              )
+          );
+        });
+  }
+
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    showToast("举报已发送，我们会尽快审核信息");
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final editController = TextEditingController();
@@ -104,11 +206,11 @@ class _ChatRoomState extends State<ChatRoom> {
           actions: <Widget>[
             IconButton(
                 icon: Image.asset(
-                  'images/jubao.png',
+                  'images/ic_action_report_black.png',
                   width: 20,
                   height: 20,
                 ),
-                onPressed: () {}),
+                onPressed: () {_showSexPop(context);}),
           ],
         ),
         body: Column(
@@ -122,80 +224,114 @@ class _ChatRoomState extends State<ChatRoom> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset('images/ic_phone.png',
-                            width: 25, height: 25, fit: BoxFit.cover),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text('电话号',
-                            style: const TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 12,
-                                color: Color.fromRGBO(115, 116, 117, 1)))
-                      ],
-                    ),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Map map = Map();
+                        map["user_id"] = ShareHelper.getUser().userId;
+                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
+                        map["message"] =ShareHelper.getUser().userMail;
+                        channel.sink.add(json.encode(map));
+                        setState(() {
+                          _chatList.add(Chat(
+                              isMine: true,
+                              user_icon: ShareHelper.getUser().headImg,
+                              content: ShareHelper.getUser().userMail));
+                          editController.text = "";
+                        });
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset('images/ic_phone.png',
+                              width: 25, height: 25, fit: BoxFit.cover),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text('电话号',
+                              style: const TextStyle(
+                                  wordSpacing: 1,
+                                  letterSpacing: 1,
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(115, 116, 117, 1)))
+                        ],
+                      ),
+                    )
                   ),
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset('images/ic_wechat.png',
-                            width: 25, height: 25, fit: BoxFit.cover),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text('微信号',
-                            style: const TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 12,
-                                color: Color.fromRGBO(115, 116, 117, 1)))
-                      ],
-                    ),
+                    child:GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Map map = Map();
+                        map["user_id"] = ShareHelper.getUser().userId;
+                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
+                        map["message"] =ShareHelper.getUser().wxId;
+                        channel.sink.add(json.encode(map));
+                        setState(() {
+                          _chatList.add(Chat(
+                              isMine: true,
+                              user_icon: ShareHelper.getUser().headImg,
+                              content: ShareHelper.getUser().wxId));
+                          editController.text = "";
+                        });
+                      },
+                    child:  Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset('images/ic_wechat.png',
+                              width: 25, height: 25, fit: BoxFit.cover),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text('微信号',
+                              style: const TextStyle(
+                                  wordSpacing: 1,
+                                  letterSpacing: 1,
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(115, 116, 117, 1)))
+                        ],
+                      ),
+                    )
                   ),
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset('images/email.png',
-                            width: 25, height: 25, fit: BoxFit.cover),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text('邮箱',
-                            style: const TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 12,
-                                color: Color.fromRGBO(115, 116, 117, 1)))
-                      ],
-                    ),
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        Map map = Map();
+                        map["user_id"] = ShareHelper.getUser().userId;
+                        map["reply_id"] ="851a9c1e8e5c426bb259f5d828e8e878";
+                        map["message"] =ShareHelper.getUser().mail;
+                        channel.sink.add(json.encode(map));
+                        setState(() {
+                          _chatList.add(Chat(
+                              isMine: true,
+                              user_icon: ShareHelper.getUser().headImg,
+                              content: ShareHelper.getUser().mail));
+                          editController.text = "";
+                        });
+                      },
+                      child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset('images/email.png',
+                              width: 25, height: 25, fit: BoxFit.cover),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Text('邮箱',
+                              style: const TextStyle(
+                                  wordSpacing: 1,
+                                  letterSpacing: 1,
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(115, 116, 117, 1)))
+                        ],
+                      ),
+                    )
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset('images/ic_red_cancel.png',
-                            width: 25, height: 25, fit: BoxFit.cover),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text('不感兴趣',
-                            style: const TextStyle(
-                                wordSpacing: 1,
-                                letterSpacing: 1,
-                                fontSize: 12,
-                                color: Color.fromRGBO(115, 116, 117, 1)))
-                      ],
-                    ),
-                  ),
+
+
                 ],
               ),
             ),
@@ -304,7 +440,8 @@ class _ChatRoomState extends State<ChatRoom> {
                          channel.sink.add(json.encode(map));
                         setState(() {
                           _chatList.add(Chat(
-                              sender: 'images/avatar_14.png',
+                               isMine: true,
+                               user_icon: ShareHelper.getUser().headImg,
                               content: editController.text));
                           editController.text = "";
                         });

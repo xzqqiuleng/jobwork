@@ -1,19 +1,35 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
+import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/jz_no.dart';
 import 'package:recruit_app/pages/mine/comunicate.dart';
 import 'package:recruit_app/pages/mine/focus_company_list.dart';
 import 'package:recruit_app/pages/mine/job_intent.dart';
 import 'package:recruit_app/pages/mine/mine_infor.dart';
 import 'package:recruit_app/pages/mine/online_resume.dart';
+import 'package:recruit_app/pages/mine/push_set.dart';
 import 'package:recruit_app/pages/mine/send_resume.dart';
+import 'package:recruit_app/pages/mine/ys_set.dart';
+import 'package:recruit_app/pages/msg/agreement.dart';
+import 'package:recruit_app/pages/save_job.dart';
+import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
 import 'package:recruit_app/pages/utils/cashfile_utils.dart';
 import 'package:recruit_app/widgets/progress_dialog.dart';
+import 'package:recruit_app/widgets/remind_dialog.dart';
+
+import '../permision_web.dart';
+import '../share_helper.dart';
+import 'feedback.dart';
 
 class Mine extends StatefulWidget {
   @override
@@ -24,50 +40,26 @@ class Mine extends StatefulWidget {
 }
 
 class _MineState extends State<Mine> {
-  List<Me> options = MeOptions.loadOptions();
+  List<Me> options=List();
 
+  List save;
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    options.add( Me(imgPath: 'images/me6.png', itemName: '隐私设置', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me1.png', itemName: '通知提醒', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me2.png', itemName: '意见反馈', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me3.png', itemName: '给个好评', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me4.png', itemName: '用户隐私协议', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
 
-  _clearCach(){
-    ProgressDialog.showProgress(context);
-    CashFileUtils.clearCache().then((value) {
-      ProgressDialog.dismiss(context);
-    });
+    String jsonStr=    StorageManager.sharedPreferences.getString(ShareHelper.getUser().userId+"work");
+
+    save =  json.decode(jsonStr);
   }
-  void _showDeleteDialog(BuildContext buildContext) async{
-    print("show");
-    await showDialog(context: buildContext,builder: (BuildContext context){
 
-      return CupertinoAlertDialog(
-        title: Text("账号注销后无法恢复，请谨慎操作",style: TextStyle(color: Colours.black_1e211c,fontSize: 17,fontWeight: FontWeight.bold),),
-        content:Text(""),
-        actions:<Widget>[
 
-          CupertinoDialogAction(
-            child: Text("取消",style: TextStyle(color: Colours.gray_C8C7CC,fontSize: 17,fontWeight: FontWeight.bold)),
-            onPressed: (){
-              Navigator.of(context).pop();
-
-            },
-          ),
-
-          CupertinoDialogAction(
-            child:  Text("删除",style: TextStyle(color: Colours.app_main,fontSize: 17,fontWeight: FontWeight.bold)),
-            onPressed: (){
-//              if(UserHelper.isLogin()){
-//                MiviceRepository().deleteAccount().then((value) {
-//                  UserModel usermodel = Provider.of<UserModel>(buildContext,listen: false);
-//                  usermodel.logout();
-//                  Navigator.of(context).pop();
-//                  eventBus.fire(HomeRefreshEvent(true));
-//                });
-//              }
-
-            },
-          ),
-        ],
-      );
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +110,8 @@ class _MineState extends State<Mine> {
                           borderRadius: BorderRadius.circular(
                             ScreenUtil().setWidth(70),
                           ),
-                          child: Image.asset(
-                            'images/img_icon_harden.png',
+                          child: Image.network(
+                            ShareHelper.getUser().headImg,
                             width: ScreenUtil().setWidth(140),
                             height: ScreenUtil().setWidth(140),
                             fit: BoxFit.cover,
@@ -133,7 +125,7 @@ class _MineState extends State<Mine> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:<Widget>[
                             Text(
-                              '哈哈哈哈哈登',
+                             ShareHelper.getUser().userName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -145,7 +137,7 @@ class _MineState extends State<Mine> {
                               height: ScreenUtil().setWidth(20),
                             ),
                             Text(
-                              '点击登录',
+                              ShareHelper.getUser().mail,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -173,7 +165,7 @@ class _MineState extends State<Mine> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                '18',
+                                '0',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -184,7 +176,7 @@ class _MineState extends State<Mine> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '已投递',
+                                '已面试',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -196,7 +188,7 @@ class _MineState extends State<Mine> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>SendResumeJob(),),);
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已面试"),),);
 
                           },
                         ),
@@ -217,7 +209,7 @@ class _MineState extends State<Mine> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                '18',
+                                '0',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -238,7 +230,7 @@ class _MineState extends State<Mine> {
                               ),
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () {    Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("待面试"),),);},
                         ),
                       ),
                       Container(
@@ -257,7 +249,7 @@ class _MineState extends State<Mine> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Text(
-                                '18',
+                                '0',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -268,7 +260,7 @@ class _MineState extends State<Mine> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '沟通过',
+                                '已投递',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -279,7 +271,7 @@ class _MineState extends State<Mine> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>ComunicateJob(),),);
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已投递"),),);
                           },
                         ),
                       ),
@@ -287,6 +279,161 @@ class _MineState extends State<Mine> {
                   )
                 ],
               ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child:Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                      onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>SaveJob(),),);
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: Card( 
+                        elevation: 2,
+                             shape:RoundedRectangleBorder(
+                               borderRadius:BorderRadius.circular(2)
+                             ),
+                             child: Row(
+                               children: <Widget>[
+                                 SizedBox(width: 8,),
+                                 Image.asset("images/mine1.png",height: 30,width: 30),
+                                 SizedBox(width: 4,),
+                                 Column(
+
+                                   mainAxisAlignment: MainAxisAlignment.center,
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: <Widget>[
+                                     SizedBox(height: 16),
+                                     Text(
+                                       "职位收藏",
+                                       style: TextStyle(
+
+
+                                       ),
+                                     ),
+                                     SizedBox(
+                                       height: 7,
+                                     ),
+                                     Text(
+                                       "${save==null?0:save.length}个",style: TextStyle(
+                                         color: Colors.grey,
+                                         fontSize: 10,
+                                         fontWeight: FontWeight.w100
+                                     ),
+                                     ),
+                                     SizedBox(height: 16),
+                                   ],
+                                 ),
+                               ],
+                             ),
+                             )
+                    )
+                ),    Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => JobIntent()));
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Card(
+                          elevation: 2,
+                          shape:RoundedRectangleBorder(
+                              borderRadius:BorderRadius.circular(2)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(width: 4,),
+                              Image.asset("images/mine2.png",height: 30,width: 30),
+                              SizedBox(width: 4,),
+                              Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "求职意向",
+                                    style: TextStyle(
+
+
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Text(
+                                   ShareHelper.getUser().resumeStatus==null?"离职-找工作": ShareHelper.getUser().resumeStatus,style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w100
+                                  ),
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),
+                Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OnlineResume()));
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Card(
+                          elevation: 2,
+                          shape:RoundedRectangleBorder(
+                              borderRadius:BorderRadius.circular(2)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(width: 4,),
+                              Image.asset("images/mine3.png",height: 30,width: 30),
+                              SizedBox(width: 4,),
+                              Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "在线简历",
+                                    style: TextStyle(
+
+
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Text(
+                                    "已编辑",style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w100
+                                  ),
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),
+              ],
             ),
           ),
           SliverList(
@@ -352,40 +499,80 @@ class _MineState extends State<Mine> {
                         ),
                       ),
                       onTap: () {
-                        if (index == 2) {
+                        if (index == 0) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => FocusCompanyList()));
-                        } else if (index == 1) {
+                                  builder: (context) => YsSetPage()));
+                        }
+                        else if (index == 1) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => JobIntent()));
-                        } else if (index == 4) {
-                          model.changeIdentity(
-                              model.identity == Identity.employee
-                                  ? Identity.boss
-                                  : Identity.employee);
-                        }else if(index == 0){
+                                  builder: (context) => PushSetPage()));
+                        } else if (index == 2) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OnlineResume()));
+                                  builder: (context) => FeedbackPage()));
+                        } else if (index == 3) {
+                          LaunchReview.launch(androidAppId: "com.shuibian.jobwork");
+                        }else if(index == 4){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AgreementPage()));
+                        }else if(index == 5){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewSetting()));
                         }
                       },
                     );
                   },
                 ),
                 Container(
-                  color: Color.fromRGBO(159, 199, 235, 1),
-                  height: (index == 3 || index == options.length - 1)
-                      ? ScreenUtil().setWidth(1)
-                      : 0,
+                  color: Colors.grey,
+                  height:  ScreenUtil().setWidth(0.2)
+
                 )
               ],
             );
           }, childCount: options.length)),
+          SliverToBoxAdapter(
+            child: Consumer<IdentityModel>(
+    builder: (context, model, child) {
+      return CustomBtnWidget(
+        btnColor: Colours.app_main,
+        text: "切换至BOSS身份",
+        margin: 16,
+        onPressed: (){
+          showDialog(
+              context: context,
+              builder: (context) {
+                return RemindDialog(
+                  title: '您将切换至BOSS身份',
+                  titleColor: Color.fromRGBO(57, 57, 57, 1),
+                  content: '系统将为您切换对应功能',
+                  contentColor: Color.fromRGBO(57, 57, 57, 1),
+                  cancelText: '取消',
+                  cancelColor: Color.fromRGBO(142, 190, 245, 1),
+                  confirmText: '确定',
+                  confirmColor: Color.fromRGBO(142, 190, 245, 1),
+                  cancel: (){
+                    Navigator.pop(context);
+                  },
+                  confirm: (){
+                    Navigator.pop(context);
+                    model.changeIdentity( Identity.boss);
+                  },
+                );
+              });
+        },
+      );
+    }) ,
+          ),
           SliverToBoxAdapter(
             child: Container(
               margin:

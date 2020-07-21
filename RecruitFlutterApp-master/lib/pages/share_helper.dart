@@ -30,6 +30,13 @@ class ShareHelper{
      return false;
    }
  }
+ static bool isBossLogin(){
+   if(StorageManager.sharedPreferences != null &&StorageManager.sharedPreferences.getBool(is_BossLogin) !=null &&StorageManager.sharedPreferences.getBool(is_BossLogin) ){
+     return true;
+   }else{
+     return false;
+   }
+ }
  static bool isFistLogin(){
    if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getBool(is_fist) !=null &&StorageManager.sharedPreferences.getBool(is_fist)){
      return true;
@@ -129,5 +136,50 @@ class ShareHelper{
    var userMap = StorageManager.localStorage.getItem(BOSSUser);
    User _user = userMap != null ? User.fromJson(userMap) : null;
    return _user;
+ }
+
+ static bool isHaveData(String id,String type){
+   String key = getUser().userId+type;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(key) !=null&&StorageManager.sharedPreferences.getString(key) !=""){
+     List <dynamic> searchLists= json.decode(StorageManager.sharedPreferences.getString(key));
+     for(var ite in searchLists ){
+       if(ite["id"] == id){
+         return true;
+       }
+     }
+
+     return false;
+   }else{
+     return false;
+   }
+ }
+ static void saveData(Map job,String type){
+   String key = getUser().userId+type;
+   List <dynamic> searchLists;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(key) !=null&&StorageManager.sharedPreferences.getString(key) !=""){
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(key));
+     searchLists.insert(0,job);
+   }else{
+     searchLists= new List();
+     searchLists.add(job);
+   }
+
+   StorageManager.sharedPreferences.setString(key, json.encode(searchLists));
+
+
+ }
+ static void deletData(String id,String type){
+   String key = getUser().userId+type;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(key) !=null&&StorageManager.sharedPreferences.getString(key) !=""){
+     List <dynamic> searchLists= json.decode(StorageManager.sharedPreferences.getString(key));
+     for(var ite in searchLists ){
+       if(ite["id"] == id){
+         searchLists.remove(ite);
+         StorageManager.sharedPreferences.setString(key, json.encode(searchLists));
+
+         break;
+       }
+     }
+   }
  }
 }

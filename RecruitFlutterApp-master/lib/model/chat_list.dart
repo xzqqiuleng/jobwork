@@ -1,17 +1,17 @@
 class ChatData {
   static const _allChats = <Chat>[
-    Chat(
-        sender: 'images/avatar_2.png',
-        content: '您好，我想了解下贵公司产品经理这个岗位。'),
-    Chat(
-        sender: 'images/avatar_1.png',
-        content: '您好，您可以先查看我们这个招聘要求。'),
-    Chat(
-        sender: 'images/avatar_2.png',
-        content: '好的，我看了要求，想发个简历，请您过目。'),
-    Chat(
-        sender: 'images/avatar_1.png',
-        content: '好的'),
+//    Chat(
+//        sender: 'images/avatar_2.png',
+//        content: '您好，我想了解下贵公司产品经理这个岗位。'),
+//    Chat(
+//        sender: 'images/avatar_1.png',
+//        content: '您好，您可以先查看我们这个招聘要求。'),
+//    Chat(
+//        sender: 'images/avatar_2.png',
+//        content: '好的，我看了要求，想发个简历，请您过目。'),
+//    Chat(
+//        sender: 'images/avatar_1.png',
+//        content: '好的'),
   ];
 
   static List<Chat> loadChats() {
@@ -19,12 +19,12 @@ class ChatData {
   }
 
   static const _allBossChats = <Chat>[
-    Chat(
-        sender: 'images/avatar_2.png',
-        content: '您好，请问有考虑新的工作机会吗？'),
-    Chat(
-        sender: 'images/avatar_14.png',
-        content: '嗯嗯。'),
+//    Chat(
+//        sender: 'images/avatar_2.png',
+//        content: '您好，请问有考虑新的工作机会吗？'),
+//    Chat(
+//        sender: 'images/avatar_14.png',
+//        content: '嗯嗯。'),
   ];
   static List<Chat> loadBossChats() {
     return _allBossChats;
@@ -32,10 +32,13 @@ class ChatData {
 }
 
 class Chat {
-  final String content;
-  final String sender;
+   String content;
+   String sender;
+   bool isMine;
+   String head_icon;
+   String user_icon;
 
-  const Chat(
+   Chat(
       {this.content,
-      this.sender});
+      this.sender,this.isMine,this.head_icon,this.user_icon});
 }

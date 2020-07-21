@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
@@ -5,6 +7,8 @@ import 'package:recruit_app/model/job_manage_list.dart';
 import 'package:recruit_app/pages/boss/job_manage_detail.dart';
 import 'package:recruit_app/pages/boss/job_manage_item.dart';
 import 'package:recruit_app/pages/boss/work_post.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 
 class JobManage extends StatefulWidget {
   @override
@@ -16,7 +20,22 @@ class JobManage extends StatefulWidget {
 
 class _JobManageState extends State<JobManage> {
   List<JobManageData> _jobList = JobManageList.loadJobList();
+  
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    MiviceRepository().getResumeList(ShareHelper.getBosss().userMail).then((value) {
+      var reponse = json.decode(value.toString());
+      print(reponse);
+      if(reponse["status"] == "success"){
 
+      }else{
+
+      }
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

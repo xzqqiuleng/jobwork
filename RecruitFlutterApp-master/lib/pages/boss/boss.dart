@@ -1,15 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/model/me_list.dart';
-import 'package:recruit_app/pages/boss/boss_collection.dart';
-import 'package:recruit_app/pages/boss/boss_comunicate.dart';
 import 'package:recruit_app/pages/boss/company_info.dart';
 import 'package:recruit_app/pages/boss/job_manage.dart';
+import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/employe/company_edit.dart';
+import 'package:recruit_app/pages/jz_no.dart';
+import 'package:recruit_app/pages/mine/feedback.dart';
 import 'package:recruit_app/pages/mine/mine_infor.dart';
+import 'package:recruit_app/pages/mine/push_set.dart';
+import 'package:recruit_app/pages/mine/ys_set.dart';
+import 'package:recruit_app/pages/msg/agreement.dart';
+import 'package:recruit_app/pages/permision_web.dart';
+import 'package:recruit_app/pages/setting/new_setting.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
+import 'package:recruit_app/widgets/remind_dialog.dart';
+
+import '../share_helper.dart';
 
 class BossMine extends StatefulWidget {
   @override
@@ -20,8 +31,76 @@ class BossMine extends StatefulWidget {
 }
 
 class _BossMineState extends State<BossMine> {
-  List<Me> options = MeOptions.loadBossOptions();
 
+  List<Me> options=List();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    options.add( Me(imgPath: 'images/me6.png', itemName: '隐私设置', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me1.png', itemName: '通知提醒', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me2.png', itemName: '意见反馈', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me3.png', itemName: '给个好评', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me4.png', itemName: '用户隐私协议', itemStatus: ''));
+    options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
+
+
+  }
+
+  Widget getSmrz(){
+    return  GestureDetector(
+
+      onTap: (){
+
+        Navigator.push(context,MaterialPageRoute(builder: (context)=>PermissionWeb(),),);
+
+      },
+      child:Card(
+        elevation: 2,
+        color: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)
+        ),
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+                child:  Text(
+                  "请先进行实名认证",
+                  style: TextStyle(
+                      letterSpacing: 2,
+                      wordSpacing: 2,
+                      fontWeight: FontWeight.w100,
+                    color: Colors.white
+                  ),
+                )
+            ),
+            Container(
+              height: 30,
+              width: 70,
+              alignment: Alignment.center,
+              margin: EdgeInsets.fromLTRB(16,6,14,6),
+              decoration: BoxDecoration(
+
+                  borderRadius: BorderRadius.circular(4),
+                  border: new Border.all(color: Colors.white, width: 0.5),
+              ),
+              child: Text(
+                "前去认证",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -50,8 +129,8 @@ class _BossMineState extends State<BossMine> {
                               children: <Widget>[
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(30),
-                                  child: Image.asset(
-                                    'images/avatar_2.png',
+                                  child: Image.network(
+                                    ShareHelper.getBosss().headImg,
                                     width: 60,
                                     height: 60,
                                     fit: BoxFit.cover,
@@ -66,7 +145,7 @@ class _BossMineState extends State<BossMine> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          '黄小姐',
+                                          ShareHelper.getBosss().userName,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -78,7 +157,7 @@ class _BossMineState extends State<BossMine> {
                                           height: 10,
                                         ),
                                         Text(
-                                          '零一跳动•招聘者',
+                                          ShareHelper.getBosss().mail,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -113,7 +192,7 @@ class _BossMineState extends State<BossMine> {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
-                                        '8',
+                                        '0',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -123,7 +202,7 @@ class _BossMineState extends State<BossMine> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '沟通过',
+                                        '已邀请',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -138,35 +217,46 @@ class _BossMineState extends State<BossMine> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              BossCommunicateJob()));
+                                              JZNo("已邀请")));
                                 },
                               ),
                             ),
                             Expanded(
                               flex: 1,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    '0',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '面试',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 12),
-                                  ),
-                                ],
-                              ),
+
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              JZNo("已面试")));
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '0',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 18),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '已面试',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.white70, fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ),
                             Expanded(
                               flex: 1,
@@ -177,7 +267,7 @@ class _BossMineState extends State<BossMine> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '8',
+                                      '0',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -187,7 +277,7 @@ class _BossMineState extends State<BossMine> {
                                       height: 5,
                                     ),
                                     Text(
-                                      '收藏',
+                                      '已拒绝',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -200,7 +290,7 @@ class _BossMineState extends State<BossMine> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              BossCollectionJob()));
+                                              JZNo("已拒绝")));
                                 },
                               ),
                             ),
@@ -223,7 +313,7 @@ class _BossMineState extends State<BossMine> {
                                       height: 5,
                                     ),
                                     Text(
-                                      '影响力',
+                                      '收藏',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -268,6 +358,165 @@ class _BossMineState extends State<BossMine> {
 //              elevation: 2.0,
 //              forceElevated: true,
 //            ),
+        SliverToBoxAdapter(
+          child: getSmrz(),
+        ),
+          SliverToBoxAdapter(
+            child:Row(
+              children: <Widget>[
+                Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>JobManage(),),);
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Card(
+                          elevation: 2,
+                          shape:RoundedRectangleBorder(
+                              borderRadius:BorderRadius.circular(2)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(width: 8,),
+                              Image.asset("images/boss1.png",height: 30,width: 30),
+                              SizedBox(width: 4,),
+                              Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "职位管理",
+                                    style: TextStyle(
+
+
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Text(
+                                    "发布即上推荐",style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w100
+                                  ),
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),    Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  CompanyEdit()));
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Card(
+                          elevation: 2,
+                          shape:RoundedRectangleBorder(
+                              borderRadius:BorderRadius.circular(2)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(width: 4,),
+                              Image.asset("images/boss2.png",height: 30,width: 30),
+                              SizedBox(width: 4,),
+                              Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "企业管理",
+                                    style: TextStyle(
+
+
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Text(
+                                    ShareHelper.getUser().resumeStatus==null?"未认证": ShareHelper.getUser().resumeStatus,style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w100
+                                  ),
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),
+                Expanded(
+                    flex: 1,
+                    child:GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+
+                                  builder: (context) => CompanyInfo()));
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Card(
+                          elevation: 2,
+                          shape:RoundedRectangleBorder(
+                              borderRadius:BorderRadius.circular(2)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(width: 4,),
+                              Image.asset("images/boss3.png",height: 30,width: 30),
+                              SizedBox(width: 4,),
+                              Column(
+
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "公司信息",
+                                    style: TextStyle(
+
+
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  Text(
+                                    "未完善",style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w100
+                                  ),
+                                  ),
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                    )
+                ),
+              ],
+            ),
+          ),
           SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
             return Column(
@@ -327,26 +576,34 @@ class _BossMineState extends State<BossMine> {
                         ),
                       ),
                       onTap: () {
-                        if (index == 2) {
+                        if (index == 0) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CompanyInfo()));
-                        } else if (index == 0) {
+                                  builder: (context) => YsSetPage()));
+                        }
+                        else if (index == 1) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => JobManage()));
+                                  builder: (context) => PushSetPage()));
+                        } else if (index == 2) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FeedbackPage()));
                         } else if (index == 3) {
-                          model.changeIdentity(
-                              model.identity == Identity.employee
-                                  ? Identity.boss
-                                  : Identity.employee);
-                        }else if (index == 1) {
+                          LaunchReview.launch(androidAppId: "com.shuibian.jobwork");
+                        }else if(index == 4){
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CompanyEdit()));
+                                  builder: (context) => AgreementPage()));
+                        }else if(index == 5){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewSetting()));
                         }
                       },
                     );
@@ -354,16 +611,46 @@ class _BossMineState extends State<BossMine> {
                 ),
                 Container(
                   color: Color.fromRGBO(245, 246, 246, 1),
-                  height: (index == 1 ||
-                          index == 3 ||
-                          index == 4 ||
-                          index == options.length - 1)
-                      ? 1
-                      : 0,
+                  height: 0.4
                 )
               ],
             );
           }, childCount: options.length)),
+
+
+          SliverToBoxAdapter(
+            child: Consumer<IdentityModel>(
+                builder: (context, model, child) {
+                  return CustomBtnWidget(
+                    btnColor: Colours.app_main,
+                    text: "切换至求职者",
+                    margin: 16,
+                    onPressed: (){
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RemindDialog(
+                              title: '您将切换至求职者身份',
+                              titleColor: Color.fromRGBO(57, 57, 57, 1),
+                              content: '系统将为您切换对应功能',
+                              contentColor: Color.fromRGBO(57, 57, 57, 1),
+                              cancelText: '取消',
+                              cancelColor: Color.fromRGBO(142, 190, 245, 1),
+                              confirmText: '确定',
+                              confirmColor: Color.fromRGBO(142, 190, 245, 1),
+                              cancel: (){
+                                Navigator.pop(context);
+                              },
+                              confirm: (){
+                                Navigator.pop(context);
+                                model.changeIdentity( Identity.employee);
+                              },
+                            );
+                          });
+                    },
+                  );
+                }) ,
+          ),
           SliverToBoxAdapter(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

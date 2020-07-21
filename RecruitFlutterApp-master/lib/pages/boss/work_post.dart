@@ -19,13 +19,13 @@ class WorkPost extends StatefulWidget {
 
 class _WorkPostState extends State<WorkPost> {
   TextEditingController _ConfirmPdController = TextEditingController();
-  String type="销售代表";
-  String workStr="高薪聘请销售代表";
-  String xl="本科";
-  String work_time="3-4年经验";
-  String salary="4-6千/月";
-  String work_deteail ="专门跑客户销售，推销东西";
-  String address ="武汉";
+  String type="";
+  String workStr="";
+  String xl="";
+  String work_time="";
+  String salary="";
+  String work_deteail ="";
+  String address ="";
 
   _pubResume(){
 

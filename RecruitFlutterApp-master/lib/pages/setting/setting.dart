@@ -245,7 +245,7 @@ class _SettingState extends State<Setting> {
                         Navigator.pop(context);
                       },
                       confirm: (){
-                        Navigator.pop(context);
+
                       },
                     );
                   });
