@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mobsms/mobsms.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
@@ -53,78 +54,87 @@ class _ForgetState extends State<RegPage>{
     } else if(_newPdController.text != _ConfirmPdController.text){
        showToast("两次密码输入不一致");
     }else {
+      Smssdk.commitCode(_phoneController.text,"86",_codeController.text, (dynamic ret, Map err){
+        if(err!=null){
+          showToast("验证码验证失败");
+        }
+        else
+        {
+          MiviceRepository().registerPd(_phoneController.text, _newPdController.text, widget.type).then((value) {
+            var reponse = json.decode(value.toString());
 
-      MiviceRepository().registerPd(_phoneController.text, _newPdController.text, widget.type).then((value) {
-        var reponse = json.decode(value.toString());
-
-        //"result": {
-        //        "user_mail": "15671621652",
-        //        "type": "1",
-        //        "create_time": 1594561222638,
-        //        "user_id": "b0fdb885476d46dab13ccc1a82b98070",
-        //        "user_name": "15671621652"
-        //    },
-        if(reponse["status"] == "success") {
-          var data = reponse["result"];
-
-
-          User user = User.fromJson(data);
-          if(widget.type == 0){
-            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
-            StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
-          }else{
-            StorageManager.localStorage.setItem(ShareHelper.kUser, user);
-            StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
-          }
+            //"result": {
+            //        "user_mail": "15671621652",
+            //        "type": "1",
+            //        "create_time": 1594561222638,
+            //        "user_id": "b0fdb885476d46dab13ccc1a82b98070",
+            //        "user_name": "15671621652"
+            //    },
+            if(reponse["status"] == "success") {
+              var data = reponse["result"];
 
 
+              User user = User.fromJson(data);
+              if(widget.type == 0){
+                StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
+                StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
+              }else{
+                StorageManager.localStorage.setItem(ShareHelper.kUser, user);
+                StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
+              }
 
 
-          if(widget.type == 0){
-            if(user.infoStatus == "1" && user.companyStatus == "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecruitHomeApp(),
-                  ));
-            }else if(user.infoStatus != "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MineInfor(widget.type),
-                  ));
-            }else if(user.companyStatus != "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CompanyEdit(),
-                  ));
+
+
+              if(widget.type == 0){
+                if(user.infoStatus == "1" && user.companyStatus == "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecruitHomeApp(),
+                      ));
+                }else if(user.infoStatus != "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MineInfor(widget.type),
+                      ));
+                }else if(user.companyStatus != "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CompanyEdit(),
+                      ));
+                }
+              }else{
+                if(user.infoStatus == "1" && user.jlStatus == "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecruitHomeApp(),
+                      ));
+                }else if(user.infoStatus != "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MineInfor(widget.type),
+                      ));
+                }else if(user.companyStatus != "1"){
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OnlineResume(),
+                      ));
+                }
+              }
+            }else{
+              showToast(reponse["msg"]);
             }
-          }else{
-            if(user.infoStatus == "1" && user.jlStatus == "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecruitHomeApp(),
-                  ));
-            }else if(user.infoStatus != "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MineInfor(widget.type),
-                  ));
-            }else if(user.companyStatus != "1"){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OnlineResume(),
-                  ));
-            }
-          }
-        }else{
-          showToast(reponse["msg"]);
+          });
+
         }
       });
+
     }
 
   }

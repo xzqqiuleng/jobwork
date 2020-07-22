@@ -34,6 +34,7 @@ class _JLDetailState extends State<JLDetail> {
   List tags=[""];
   String headImag = "";
   Map infor;
+  String replayId="";
 _getDetail() {
   new MiviceRepository().getResumeInfo(widget.jobId).then((value) {
     var reponse = json.decode(value.toString());
@@ -41,7 +42,7 @@ _getDetail() {
     if (reponse["status"] == "success") {
       String inforJson = reponse["result"]["info"]['info'].toString();
       headImag= reponse["result"]["info"]['head_img'].toString();
-
+      replayId =  reponse["result"]["info"]['reply_id'].toString();
       infor = json.decode(inforJson);
       tags.clear();
       if (infor["性别"] != "") {
@@ -743,7 +744,7 @@ _getDetail() {
                     color: Colours.app_main,
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: headImag,title: infor["姓名"],reply_id: "admin_user",user_id: ShareHelper.getBosss().userId,type: 0,)));
+                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: headImag,title: infor["姓名"],reply_id:  replayId,user_id: ShareHelper.getBosss().userId,type: 0,)));
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),

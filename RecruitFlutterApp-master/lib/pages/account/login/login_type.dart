@@ -6,7 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/account/login/login_in.dart';
+import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/account/register/login_pd_page.dart';
+import 'package:recruit_app/pages/employe/company_edit.dart';
+import 'package:recruit_app/pages/home/recruit_home_app.dart';
+import 'package:recruit_app/pages/mine/mine_infor.dart';
+import 'package:recruit_app/pages/mine/online_resume.dart';
 import 'package:recruit_app/pages/msg/agreement_detail.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -171,10 +176,43 @@ class LoginType extends StatelessWidget {
                     onPressed: () {
                       model.changeIdentity(
                           Identity.employee);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPdPage(1)),
-                      );
+
+                      bool isBossLogin = ShareHelper.isBossLogin();
+                      bool isUserLogin = ShareHelper.isLogin();
+                      if(isUserLogin){
+                        User user = ShareHelper.getUser();
+                        if(user.infoStatus == "1" && user.jlStatus == "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecruitHomeApp(),
+                              ));
+                        }else if(user.infoStatus != "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MineInfor(1),
+                              ));
+                        }else if(user.companyStatus != "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OnlineResume(),
+                              ));
+                        }
+                      }else if(isBossLogin){
+                        StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
+                        StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, false);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPdPage(1)),
+                        );
+                      }else{
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPdPage(1)),
+                        );
+                      }
                     },
                     textColor: Colours.app_main,
                     child: Text(
@@ -202,10 +240,45 @@ class LoginType extends StatelessWidget {
                     color: Colors.white,
                     onPressed: () {
                       model.changeIdentity( Identity.boss);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPdPage(0)),
-                      );
+
+                      bool isBossLogin = ShareHelper.isBossLogin();
+                      bool isUserLogin = ShareHelper.isLogin();
+                      if(isBossLogin){
+                        User user = ShareHelper.getBosss();
+                        if(user.infoStatus == "1" && user.companyStatus == "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RecruitHomeApp(),
+                              ));
+                        }else if(user.infoStatus != "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MineInfor(0),
+                              ));
+                        }else if(user.companyStatus != "1"){
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompanyEdit(),
+                              ));
+                        }
+                      }else if(isUserLogin){
+                        StorageManager.localStorage.deleteItem(ShareHelper.kUser);
+                  StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, false);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPdPage(0)),
+                        );
+
+                      }else{
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPdPage(0)),
+                        );
+
+                      }
                     },
                     textColor:  Colours.app_main,
                     child: Text(

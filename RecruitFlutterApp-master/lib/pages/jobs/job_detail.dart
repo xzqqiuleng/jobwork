@@ -32,6 +32,7 @@ class _JobDetailState extends State<JobDetail> {
   List<Widget> contentWidget=[];
   String userImg="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2519824424,1132423651&fm=26&gp=0.jpg";
   String user="HR发布";
+  String replayId="";
   Map summary;
   Map com_label;
   String address = "暂无地址";
@@ -50,6 +51,7 @@ class _JobDetailState extends State<JobDetail> {
         print(data);
         setState(() {
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
+          replayId = infors["reply_id"];  //"com_id" -> 10057  "job_id" -> 120587312
 
           datalist = data["jobs"];
            summary = json.decode(infors["summary"].toString());
@@ -639,7 +641,7 @@ class _JobDetailState extends State<JobDetail> {
                     color: Colours.app_main,
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: "admin_boss",type: 1,user_id: ShareHelper.getUser().userId,)));
+                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: replayId,type: 1,user_id: ShareHelper.getUser().userId,)));
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),
