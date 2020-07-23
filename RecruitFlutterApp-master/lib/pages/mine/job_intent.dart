@@ -171,7 +171,7 @@ class _JobIntentState extends State<JobIntent> {
 
             User user = ShareHelper.getUser();
             user.resumeStatus =_xl;
-            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user);
            showToast("职位状态已更新");
           });
 

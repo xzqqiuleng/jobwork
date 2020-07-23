@@ -576,7 +576,7 @@ class _BossMineState extends State<BossMine> {
                           ],
                         ),
                       ),
-                      onTap: () {
+                      onTap: () async {
                         if (index == 0) {
                           Navigator.push(
                               context,
@@ -601,10 +601,20 @@ class _BossMineState extends State<BossMine> {
                               MaterialPageRoute(
                                   builder: (context) => AgreementPage()));
                         }else if(index == 5){
-                          Navigator.push(
+                        bool result =await   Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => NewSetting()));
+               if(result != null && result){
+                 model.changeIdentity( Identity.employee);
+                 StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
+                 StorageManager.sharedPreferences.setBool(
+                     ShareHelper.is_BossLogin, false);
+                 Navigator.pushReplacement(
+                     context,
+                     MaterialPageRoute(
+                         builder: (context) => LoginPdPage(1)));
+                 }
                         }
                       },
                     );
@@ -643,7 +653,6 @@ class _BossMineState extends State<BossMine> {
                                 Navigator.pop(context);
                               },
                               confirm: (){
-                                Navigator.pop(context);
                                 model.changeIdentity( Identity.employee);
                                 StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
                                 StorageManager.sharedPreferences.setBool(

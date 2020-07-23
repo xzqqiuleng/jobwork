@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -8,6 +7,7 @@ import 'package:recruit_app/model/job_intent_list.dart';
 import 'package:recruit_app/model/mine_edu_list.dart';
 import 'package:recruit_app/model/mine_project_list.dart';
 import 'package:recruit_app/model/mine_work_list.dart';
+import 'package:recruit_app/pages/account/login/login_type.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
@@ -22,7 +22,6 @@ import 'package:recruit_app/pages/mine/work_item.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
-
 import 'me_edu.dart';
 
 class OnlineResume extends StatefulWidget {
@@ -57,6 +56,19 @@ class _OnlineResumeState extends State<OnlineResume> {
   Map qwMap;
   Map eduMap;
   Map workMap;
+
+  _back(){
+    if(jlState != "1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginType(),
+          ));
+    }else{
+       Navigator.of(context).pop();
+    }
+  }
+
   _pubResume(){
     if(money.length<1||xl.length<1||city.length<1||work.length<1||desc.length<1||work_company.length<1||work_pos.length<1
     ||work_infro.length<1||start_time.length<1||stop_time.length<1||school.length<1||zy.length<1||by_time.length<1||jl.length<1
@@ -112,7 +124,7 @@ class _OnlineResumeState extends State<OnlineResume> {
           MiviceRepository().updateUser(userMap).then((value){
             User user = ShareHelper.getUser();
             user.jlStatus ="1";
-            StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -274,129 +286,134 @@ class _OnlineResumeState extends State<OnlineResume> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        _back();
+      },
 
-      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-            icon: Image.asset(
-              'images/ic_back_arrow.png',
-              width: 24,
-              height: 24,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        automaticallyImplyLeading: false,
+      child: Scaffold(
+
         backgroundColor: Color.fromRGBO(255, 255, 255, 1),
-        centerTitle: true,
-        title: Text('我的在线简历',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                wordSpacing: 1,
-                letterSpacing: 1,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(37, 38, 39, 1))),
-      ),
-      body: SafeArea(
-        top: false,
-        child: Stack(
+        appBar: AppBar(
+          elevation: 0,
+          leading: IconButton(
+              icon: Image.asset(
+                'images/ic_back_arrow.png',
+                width: 24,
+                height: 24,
+              ),
+              onPressed: () {
+                _back();
+              }),
+          automaticallyImplyLeading: false,
+          backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+          centerTitle: true,
+          title: Text('我的在线简历',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  wordSpacing: 1,
+                  letterSpacing: 1,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(37, 38, 39, 1))),
+        ),
+        body: SafeArea(
+          top: false,
+          child: Stack(
 
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15.0, right: 15, top: 18, bottom: 18),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                     getTop(),
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
-                      Text(
-                        '* 自我介绍',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15, top: 18, bottom: 18),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        getTop(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
                         ),
-                      ),
-                      SizedBox(height: 16),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async{
-                     var  mdesc = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MeDesc(3),
-                              ));
-                     if(mdesc != null){
-                       setState(() {
-                         desc = mdesc;
-                       });
-                     }
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
+                        Text(
+                          '* 自我介绍',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async{
+                            var  mdesc = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeDesc(3),
+                                ));
+                            if(mdesc != null){
+                              setState(() {
+                                desc = mdesc;
+                              });
+                            }
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
                                 child:   Text(desc,
                                     style: TextStyle(
                                         wordSpacing: 1,
                                         letterSpacing: 1,
                                         fontSize: 14,
                                         color: Color.fromRGBO(136, 138, 138, 1))),
-                            ),
-                            SizedBox(width: 8,),
-                            Image.asset(
-                              'images/arrow_right.png',
-                              width: 18,
-                              height: 18,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
 
 
 
 
 
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
 
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '* 工作期望',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                '* 工作期望',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 16,),
+                            SizedBox(width: 16,),
 //                       GestureDetector(
 //                         onTap: (){
 //                           Navigator.push(
@@ -414,85 +431,85 @@ class _OnlineResumeState extends State<OnlineResume> {
 //                         )
 //                       )
 //                         ,
-                        ],
-                      ),
-                      SizedBox(height: 16,),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async{
-                         Map rdat = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MeQW(qw:qwMap),
-                              ));
-                         if(rdat != null){
-                           qwMap = rdat;
-                           work= qwMap["work_type"] ;
-                           money=  qwMap["money"] ;
-                           city=  qwMap["city"] ;
-                         }
-                         setState(() {
-
-                         });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text('${work}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              wordSpacing: 1,
-                                              letterSpacing: 1,
-                                              fontSize: 14,
-                                              color: Color.fromRGBO(37, 38, 39, 1))),
-                                      SizedBox(height: 8),
-                                      Text('${city} ${money}',
-                                          style: TextStyle(
-                                              wordSpacing: 1,
-                                              letterSpacing: 1,
-                                              fontSize: 14,
-                                              color: Color.fromRGBO(136, 138, 138, 1))),
-                                    ],
-                                  )),
-                              SizedBox(width: 15),
-                              Image.asset('images/ic_arrow_gray.png',
-                                  width: 10, height: 10, fit: BoxFit.cover)
-                            ],
-                          ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
+                        SizedBox(height: 16,),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async{
+                            Map rdat = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeQW(qw:qwMap),
+                                ));
+                            if(rdat != null){
+                              qwMap = rdat;
+                              work= qwMap["work_type"] ;
+                              money=  qwMap["money"] ;
+                              city=  qwMap["city"] ;
+                            }
+                            setState(() {
 
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '* 工作经历',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold
-                              ),
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text('${work}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                wordSpacing: 1,
+                                                letterSpacing: 1,
+                                                fontSize: 14,
+                                                color: Color.fromRGBO(37, 38, 39, 1))),
+                                        SizedBox(height: 8),
+                                        Text('${city} ${money}',
+                                            style: TextStyle(
+                                                wordSpacing: 1,
+                                                letterSpacing: 1,
+                                                fontSize: 14,
+                                                color: Color.fromRGBO(136, 138, 138, 1))),
+                                      ],
+                                    )),
+                                SizedBox(width: 15),
+                                Image.asset('images/ic_arrow_gray.png',
+                                    width: 10, height: 10, fit: BoxFit.cover)
+                              ],
                             ),
                           ),
-                          SizedBox(width: 8,),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                '* 工作经历',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8,),
 //                          GestureDetector(
 //                              onTap: (){
 //                                Navigator.push(
@@ -509,16 +526,16 @@ class _OnlineResumeState extends State<OnlineResume> {
 //                                ),
 //                              )
 //                          )
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      GestureDetector(
-                          onTap: () async{
-                         Map m_wo = await   Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MeGzjl(),
-                                ));
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        GestureDetector(
+                            onTap: () async{
+                              Map m_wo = await   Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MeGzjl(),
+                                  ));
                               if(m_wo != null){
 
                                 workMap = m_wo;
@@ -533,65 +550,65 @@ class _OnlineResumeState extends State<OnlineResume> {
 
 
                               }
-                          },
-                          behavior: HitTestBehavior.opaque,
-                        child:  Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child:  Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Expanded(
-                                    child: Text(work_company,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                            wordSpacing: 1,
-                                            letterSpacing: 1,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromRGBO(37, 38, 39, 1))),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Text(work_company,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                wordSpacing: 1,
+                                                letterSpacing: 1,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromRGBO(37, 38, 39, 1))),
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text("${start_time}-${stop_time}",
+                                          style: TextStyle(
+                                              wordSpacing: 1,
+                                              letterSpacing: 1,
+                                              fontSize: 14,
+                                              color: Color.fromRGBO(159, 160, 161, 1))),
+                                      SizedBox(width: 15),
+                                      Image.asset('images/ic_arrow_gray.png',
+                                          width: 10, height: 10, fit: BoxFit.cover)
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text("${start_time}-${stop_time}",
+                                  SizedBox(height: 5),
+                                  Text('${work_pos}',
                                       style: TextStyle(
                                           wordSpacing: 1,
                                           letterSpacing: 1,
                                           fontSize: 14,
-                                          color: Color.fromRGBO(159, 160, 161, 1))),
-                                  SizedBox(width: 15),
-                                  Image.asset('images/ic_arrow_gray.png',
-                                      width: 10, height: 10, fit: BoxFit.cover)
+                                          color: Color.fromRGBO(136, 138, 138, 1))),
+                                  SizedBox(height: 8),
+                                  Text('${work_infro}',
+                                      style: TextStyle(
+                                          wordSpacing: 1,
+                                          letterSpacing: 1,
+                                          fontSize: 14,
+                                          color: Color.fromRGBO(136, 138, 138, 1))),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+
                                 ],
                               ),
-                              SizedBox(height: 5),
-                              Text('${work_pos}',
-                                  style: TextStyle(
-                                      wordSpacing: 1,
-                                      letterSpacing: 1,
-                                      fontSize: 14,
-                                      color: Color.fromRGBO(136, 138, 138, 1))),
-                              SizedBox(height: 8),
-                              Text('${work_infro}',
-                                  style: TextStyle(
-                                      wordSpacing: 1,
-                                      letterSpacing: 1,
-                                      fontSize: 14,
-                                      color: Color.fromRGBO(136, 138, 138, 1))),
-                              SizedBox(
-                                height: 8,
-                              ),
-
-                            ],
-                          ),
-                        )
-                      ),
+                            )
+                        ),
 
 
 //                      Container(
@@ -642,105 +659,105 @@ class _OnlineResumeState extends State<OnlineResume> {
 //                        physics: const NeverScrollableScrollPhysics(),
 //                      ),
 
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
 
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '* 教育经历',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                '* 教育经历',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 8,),
-                        ],
-                      ),
-                      SizedBox(height: 8,),
-                      GestureDetector(
-                        onTap: () async{
-                         Map ss =  await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MeEdu(),
-                              ));
-                         if(ss != null){
-                           eduMap = ss;
-                           setState(() {
+                            SizedBox(width: 8,),
+                          ],
+                        ),
+                        SizedBox(height: 8,),
+                        GestureDetector(
+                          onTap: () async{
+                            Map ss =  await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeEdu(),
+                                ));
+                            if(ss != null){
+                              eduMap = ss;
+                              setState(() {
 
-                             school =eduMap["school"];
-                             zy= eduMap["zy"];
-                             by_time= eduMap["by_time"];
-                             jl= eduMap["jl"] ;
-                             xl= eduMap["xl"] ;
-                           });
-                         }
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(school,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
+                                school =eduMap["school"];
+                                zy= eduMap["zy"];
+                                by_time= eduMap["by_time"];
+                                jl= eduMap["jl"] ;
+                                xl= eduMap["xl"] ;
+                              });
+                            }
+                          },
+                          behavior: HitTestBehavior.opaque,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Text(school,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              wordSpacing: 1,
+                                              letterSpacing: 1,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromRGBO(37, 38, 39, 1))),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(by_time,
+                                        style: TextStyle(
                                             wordSpacing: 1,
                                             letterSpacing: 1,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromRGBO(37, 38, 39, 1))),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(by_time,
-                                      style: TextStyle(
-                                          wordSpacing: 1,
-                                          letterSpacing: 1,
-                                          fontSize: 14,
-                                          color: Color.fromRGBO(159, 160, 161, 1))),
-                                  SizedBox(width: 15),
-                                  Image.asset('images/ic_arrow_gray.png',
-                                      width: 10, height: 10, fit: BoxFit.cover)
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              Text('${xl}•${zy}',
-                                  style: TextStyle(
-                                      wordSpacing: 1,
-                                      letterSpacing: 1,
-                                      fontSize: 14,
-                                      color: Color.fromRGBO(136, 138, 138, 1))),
-                            ],
+                                            fontSize: 14,
+                                            color: Color.fromRGBO(159, 160, 161, 1))),
+                                    SizedBox(width: 15),
+                                    Image.asset('images/ic_arrow_gray.png',
+                                        width: 10, height: 10, fit: BoxFit.cover)
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                Text('${xl}•${zy}',
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
 
 
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 15),
-                        color: Color.fromRGBO(242, 243, 244, 1),
-                        height: 1,
-                      ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
 
 //                      Row(
 //                        crossAxisAlignment: CrossAxisAlignment.center,
@@ -764,27 +781,28 @@ class _OnlineResumeState extends State<OnlineResume> {
                         SizedBox(
                           height: 40,
                         )
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: CustomBtnWidget(
-                margin: 20,
-                btnColor: Colours.app_main,
-                text: "发布简历",
-                onPressed: (){
-                  _pubResume();
-                },
-              ),
-            )
-          ],
+              Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: CustomBtnWidget(
+                  margin: 20,
+                  btnColor: Colours.app_main,
+                  text: "发布简历",
+                  onPressed: (){
+                    _pubResume();
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 }

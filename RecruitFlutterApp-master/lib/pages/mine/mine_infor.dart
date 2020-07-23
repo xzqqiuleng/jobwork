@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/pages/account/login/login_type.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/employe/company_edit.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
@@ -33,6 +34,19 @@ class _MineInforState extends State<MineInfor> {
   String email="";
   String headImaurl="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3253926546,3995438373&fm=15&gp=0.jpg";
  String inforStatus= "";
+
+
+  _back(){
+    if(inforStatus != "1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginType(),
+          ));
+    }else{
+      Navigator.of(context).pop();
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -113,7 +127,7 @@ class _MineInforState extends State<MineInfor> {
           user.mail = email;
           user.headImg = headImaurl;
           user.infoStatus = "1";
-          StorageManager.localStorage.setItem(ShareHelper.kUser, user.toJson());
+          StorageManager.localStorage.setItem(ShareHelper.kUser, user);
 
 
           if(inforStatus!= "1"){
@@ -149,351 +163,356 @@ class _MineInforState extends State<MineInfor> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: Colors.white,
-      appBar:  AppBar(
-        elevation: 0,
-        leading: IconButton(
-            icon: Image.asset(
-              'images/ic_back_arrow.png',
-              width: 18,
-              height: 18,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
-        centerTitle: true,
-        title: Text('个人信息',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                wordSpacing: 1,
-                letterSpacing: 1,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(37, 38, 39, 1))),
-      ),
-      body: SafeArea(
-        top: false,
-        child: Stack(
-          children: <Widget>[
-            SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15, top: 18, bottom: 18),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        _showSelectPhoto();
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 0,
-                            child:  ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                headImaurl,
-                                width: 60,
-                                height: 60,
+    return WillPopScope(
+        onWillPop: () {
+          _back();
+        },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar:  AppBar(
+          elevation: 0,
+          leading: IconButton(
+              icon: Image.asset(
+                'images/ic_back_arrow.png',
+                width: 18,
+                height: 18,
+              ),
+              onPressed: () {
+              _back();
+              }),
+          automaticallyImplyLeading: false,
+          backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+          centerTitle: true,
+          title: Text('个人信息',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  wordSpacing: 1,
+                  letterSpacing: 1,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(37, 38, 39, 1))),
+        ),
+        body: SafeArea(
+            top: false,
+            child: Stack(
+              children: <Widget>[
+                SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15.0, right: 15, top: 18, bottom: 18),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: (){
+                            _showSelectPhoto();
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 0,
+                                child:  ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: Image.network(
+                                    headImaurl,
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                    ""
+                                ),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
                                 fit: BoxFit.cover,
                               ),
-                            ),
+                            ],
                           ),
-                          Expanded(
-                          child: Text(
-                            ""
-                          ),
-                          ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    Text(
-                      '* 姓名',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () async{
-                        var mName = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MeDesc(0),
-                            ));
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        Text(
+                          '* 姓名',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async{
+                            var mName = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeDesc(0),
+                                ));
 
-                        if(mName != null){
-                          setState(() {
-                            name = mName;
-                          });
-                        }
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child:   Text(name,
-                                style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                            if(mName != null){
+                              setState(() {
+                                name = mName;
+                              });
+                            }
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child:   Text(name,
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        Text(
+                          '* 性别',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    Text(
-                      '* 性别',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        _showSexPop(context);
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child:   Text(sex,
-                                style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: (){
+                            _showSexPop(context);
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child:   Text(sex,
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        Text(
+                          '* 出生年月',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    Text(
-                      '* 出生年月',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: (){
-                        _showDatePop(context);
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child:   Text(birthDay,
-                                style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: (){
+                            _showDatePop(context);
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child:   Text(birthDay,
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        Text(
+                          '* 微信号',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    Text(
-                      '* 微信号',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: ()async{
-                        var mWx = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MeDesc(1),
-                            ));
-                        if(mWx != null){
-                          setState(() {
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: ()async{
+                            var mWx = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeDesc(1),
+                                ));
+                            if(mWx != null){
+                              setState(() {
 
-                            wx = mWx;
-                          });
-                        }
+                                wx = mWx;
+                              });
+                            }
 
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child:   Text(wx,
-                                style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child:   Text(wx,
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        Text(
+                          '* 邮箱',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    Text(
-                      '* 邮箱',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () async{
-                        var s_ema =await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MeDesc(2),
-                            ));
-                        if(s_ema != null){
-                          setState(() {
-                            email = s_ema;
-                          });
-                        }
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child:   Text(email,
-                                style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(136, 138, 138, 1))),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async{
+                            var s_ema =await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MeDesc(2),
+                                ));
+                            if(s_ema != null){
+                              setState(() {
+                                email = s_ema;
+                              });
+                            }
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child:   Text(email,
+                                    style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 14,
+                                        color: Color.fromRGBO(136, 138, 138, 1))),
+                              ),
+                              SizedBox(width: 8,),
+                              Image.asset(
+                                'images/arrow_right.png',
+                                width: 18,
+                                height: 18,
+                                fit: BoxFit.cover,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8,),
-                          Image.asset(
-                            'images/arrow_right.png',
-                            width: 18,
-                            height: 18,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+                        SizedBox(
+                          height: 40,
+                        )
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    SizedBox(
-                      height: 40,
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: CustomBtnWidget(
-                margin: 20,
-                btnColor: Colours.app_main,
-                text: inforStatus=="0"?"下一步":"更新信息",
-                onPressed: (){
-                  _saveInfor();
-                },
-              ),
+                Positioned(
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  child: CustomBtnWidget(
+                    margin: 20,
+                    btnColor: Colours.app_main,
+                    text: inforStatus=="0"?"下一步":"更新信息",
+                    onPressed: (){
+                      _saveInfor();
+                    },
+                  ),
+                )
+              ],
             )
-          ],
-        )
-      ),
-    );
+        ),
+      )
+    ) ;
   }
   List _sexList=["男","女"];
   void _showSexPop(BuildContext context){

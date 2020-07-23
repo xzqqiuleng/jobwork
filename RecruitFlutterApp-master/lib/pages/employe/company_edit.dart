@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/pages/account/login/login_type.dart';
 import 'package:recruit_app/pages/account/register/User.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/city_page.dart';
+import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -30,11 +32,25 @@ class _CompanyEditState extends State<CompanyEdit> {
   String code ;
   String addess ;
   String city="";
-  String c_img="";
+  String c_img="http://www.zaojiong.com/data/logo/20170418/14906489056.PNG";
   String license_url="";
  String companyState = "";
  String id = "";
  String img_state ="";
+
+
+  _back(){
+    if(companyState != "1"){
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginType(),
+          ));
+    }else{
+      Navigator.of(context).pop();
+    }
+  }
+
   _pubCompany(){
     
 //    Map infor = Map();
@@ -73,7 +89,7 @@ class _CompanyEditState extends State<CompanyEdit> {
 
             User user = ShareHelper.getBosss();
             user.companyStatus ="1";
-            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user.toJson());
+            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
 
             Navigator.pushReplacement(
                 context,
@@ -121,33 +137,38 @@ class _CompanyEditState extends State<CompanyEdit> {
   }
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor: Colors.white,
-    appBar:AppBar(
+    return  WillPopScope(
+      onWillPop: () {
+        _back();
+      },
 
-        elevation: 0,
-        centerTitle: true,
-        title: Text("公司信息",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                wordSpacing: 1,
-                letterSpacing: 1,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(37, 38, 39, 1))),
-        leading: IconButton(
-            icon: Image.asset(
-              'images/ic_back_arrow.png',
-              width: 16,
-              height: 16,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        actions: <Widget>[
+      child:Scaffold(
+          backgroundColor: Colors.white,
+          appBar:AppBar(
+
+            elevation: 0,
+            centerTitle: true,
+            title: Text("公司信息",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    wordSpacing: 1,
+                    letterSpacing: 1,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(37, 38, 39, 1))),
+            leading: IconButton(
+                icon: Image.asset(
+                  'images/ic_back_arrow.png',
+                  width: 16,
+                  height: 16,
+                ),
+                onPressed: () {
+                  _back();
+                }),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            actions: <Widget>[
 //          IconButton(
 //              icon: Image.asset(
 //                'images/complete.png',
@@ -158,214 +179,215 @@ class _CompanyEditState extends State<CompanyEdit> {
 //
 //
 //              }),
-        ],
-      ),
-      body:SafeArea(
-        top: false,
-
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15, top: 18, bottom: 18),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    SizedBox(height: 12),
-                    Row(
-                      children: <Widget>[
-                        GestureDetector(
-                         child: Container(
-                           width: 70,
-                           height: 70,
-                           decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(4),
-                               image: DecorationImage(
-                                   image: NetworkImage(c_img),
-                                   fit: BoxFit.cover
-                               )
-                           ),
-                         ),
-                          behavior: HitTestBehavior.opaque,
-                          onTap: (){
-                           img_state ="0";
-                           _showSelectPhoto();
-                          },
-                        ),
-
-                        SizedBox(width: 16),
-                        Text("请完成公司实名认证！",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold
-                          ),),
-                      ],
-                    ),
-
-                    SizedBox(height: 30),
-                    Text(
-                      '* 公司名称',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    LogRegTextField(
-
-                      label: name,
-                      controller:  _nameController,
-                      textInputAction: TextInputAction.next,
-                      textInputType: TextInputType.phone,
-                      obscureText: false,
-
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      '* 城市',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10,bottom: 10),
-                      child:   GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async {
-                          var    reslut = await  Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CityPage(),
-                              ));
-                          setState(() {
-                            if(reslut != null){
-                              city = reslut;
-                            }
-                          });
-                        },
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              child:   Text(city,
-                                  style: TextStyle(
-                                    wordSpacing: 1,
-                                    letterSpacing: 1,
-                                    fontSize: 16,
-                                    color:Colors.black87,
-                                  )),
-                            ),
-                            SizedBox(width: 8,),
-                            Image.asset(
-                              'images/arrow_right.png',
-                              width: 18,
-                              color: Colors.black87,
-                              height: 18,
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '* 公司地址',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-          LogRegTextField(
-
-            label: addess,
-            controller:  _addressController,
-            textInputAction: TextInputAction.next,
-            textInputType: TextInputType.phone,
-            obscureText: false,
-
+            ],
           ),
+          body:SafeArea(
+              top: false,
 
-                    SizedBox(height: 10),
-                    Text(
-                      '* 统一信用代码',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    LogRegTextField(
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 18, bottom: 18),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          SizedBox(height: 12),
+                          Row(
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      image: DecorationImage(
+                                          image: NetworkImage(c_img),
+                                          fit: BoxFit.cover
+                                      )
+                                  ),
+                                ),
+                                behavior: HitTestBehavior.opaque,
+                                onTap: (){
+                                  img_state ="0";
+                                  _showSelectPhoto();
+                                },
+                              ),
 
-                      label: code,
-                      controller:  _codeController,
-                      textInputAction: TextInputAction.next,
-                      textInputType: TextInputType.phone,
-                      obscureText: false,
+                              SizedBox(width: 16),
+                              Text("请完成公司实名认证！",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                            ],
+                          ),
 
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '* 营业执照',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: (){
-                        img_state ="1";
-                        _showSelectPhoto();
+                          SizedBox(height: 30),
+                          Text(
+                            '* 公司名称',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          LogRegTextField(
+
+                            label: name,
+                            controller:  _nameController,
+                            textInputAction: TextInputAction.next,
+                            textInputType: TextInputType.phone,
+                            obscureText: false,
+
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            '* 城市',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10,bottom: 10),
+                            child:   GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () async {
+                                var    reslut = await  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CityPage(),
+                                    ));
+                                setState(() {
+                                  if(reslut != null){
+                                    city = reslut;
+                                  }
+                                });
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child:   Text(city,
+                                        style: TextStyle(
+                                          wordSpacing: 1,
+                                          letterSpacing: 1,
+                                          fontSize: 16,
+                                          color:Colors.black87,
+                                        )),
+                                  ),
+                                  SizedBox(width: 8,),
+                                  Image.asset(
+                                    'images/arrow_right.png',
+                                    width: 18,
+                                    color: Colors.black87,
+                                    height: 18,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 15),
+                            color: Color.fromRGBO(242, 243, 244, 1),
+                            height: 1,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            '* 公司地址',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          LogRegTextField(
+
+                            label: addess,
+                            controller:  _addressController,
+                            textInputAction: TextInputAction.next,
+                            textInputType: TextInputType.phone,
+                            obscureText: false,
+
+                          ),
+
+                          SizedBox(height: 10),
+                          Text(
+                            '* 统一信用代码',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          LogRegTextField(
+
+                            label: code,
+                            controller:  _codeController,
+                            textInputAction: TextInputAction.next,
+                            textInputType: TextInputType.phone,
+                            obscureText: false,
+
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            '* 营业执照',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: (){
+                              img_state ="1";
+                              _showSelectPhoto();
+                            },
+                            child:  Image(
+                              image: license_url == ""?AssetImage("images/yy_add.png"):NetworkImage(license_url),
+                              width: 100,
+                              height: 160,
+                            ),
+                          ),
+
+                          SizedBox(height: 60),
+                        ],
+
+                      )
+
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: CustomBtnWidget(
+                      margin: 20,
+                      btnColor: Colours.app_main,
+                      text: "更新公司信息",
+                      onPressed: (){
+                        _pubCompany();
                       },
-                      child:  Image(
-                        image: license_url == ""?AssetImage("images/yy_add.png"):NetworkImage(license_url),
-                        width: 100,
-                        height: 160,
-                      ),
-                    ),
-
-                    SizedBox(height: 60),
-                  ],
-
-                )
-
-            ),
-        Positioned(
-          bottom: 20,
-          left: 0,
-          right: 0,
-          child: CustomBtnWidget(
-            margin: 20,
-            btnColor: Colours.app_main,
-            text: "更新公司信息",
-            onPressed: (){
-              _pubCompany();
-            },
-          ),)
-          ],
-        )
-    )
+                    ),)
+                ],
+              )
+          )
+      ) ,
     );
   }
 

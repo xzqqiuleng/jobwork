@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/screenutil.dart';
-import 'package:recruit_app/pages/home/recruit_home_app.dart';
-import 'package:recruit_app/pages/permision_web.dart';
-import 'package:recruit_app/pages/share_helper.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/pages/splash.dart';
-import 'account/login/login_type.dart';
 
 class RecruitApp extends StatelessWidget {
   @override
@@ -20,7 +17,30 @@ class RecruitApp extends StatelessWidget {
       ),
 //      home: ShareHelper.isLogin() ? RecruitHomeApp() :LoginType(),
     home: Splash(),
-      locale: Locale('zh'),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        RefreshLocalizations.delegate, //下拉刷新
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        FallbackCupertinoLocalisationsDelegate(),
+      ],
+      supportedLocales: [const Locale('zh', 'CH')],
     );
   }
+}
+class FallbackCupertinoLocalisationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
+  const FallbackCupertinoLocalisationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => true;
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) =>
+      DefaultCupertinoLocalizations.load(locale);
+
+  @override
+  bool shouldReload(FallbackCupertinoLocalisationsDelegate old) => false;
 }

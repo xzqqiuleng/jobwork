@@ -91,7 +91,7 @@ class _NewSettingState extends State<NewSetting> {
           return IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black87), //自定义图标
             onPressed: () {
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop();
             },
           );
         },
@@ -189,10 +189,17 @@ class _NewSettingState extends State<NewSetting> {
           CustomBtnWidget(
             btnColor: Colours.app_main,
             text:"退出登录" ,
+            margin: 20,
+            onPressed: (){
+              Navigator.pop(context,true);
+            },
           )
 
         ],
       ) ,
     );
   }
+
+
+
 }

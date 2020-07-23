@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -501,7 +502,7 @@ class _MineState extends State<Mine> {
                           ],
                         ),
                       ),
-                      onTap: () {
+                      onTap: () async{
                         if (index == 0) {
                           Navigator.push(
                               context,
@@ -526,10 +527,21 @@ class _MineState extends State<Mine> {
                               MaterialPageRoute(
                                   builder: (context) => AgreementPage()));
                         }else if(index == 5){
-                          Navigator.push(
+                       bool result =await   Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => NewSetting()));
+                       if(result != null && result){
+
+                         model.changeIdentity( Identity.boss);
+                         StorageManager.localStorage.deleteItem(ShareHelper.kUser);
+                         StorageManager.sharedPreferences.setBool(
+                             ShareHelper.is_Login, false);
+                         Navigator.pushReplacement(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) => LoginPdPage(0)));
+                       }
                         }
                       },
                     );
@@ -574,7 +586,6 @@ class _MineState extends State<Mine> {
                     Navigator.pop(context);
                   },
                   confirm: (){
-                    Navigator.pop(context);
                     model.changeIdentity( Identity.boss);
                     StorageManager.localStorage.deleteItem(ShareHelper.kUser);
                     StorageManager.sharedPreferences.setBool(
