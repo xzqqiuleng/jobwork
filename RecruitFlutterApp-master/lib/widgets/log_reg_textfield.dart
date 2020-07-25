@@ -47,6 +47,7 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
   /// 默认遮挡密码
   ValueNotifier<bool> obscureNotifier;
   int line;
+  TextInputType textInputType;
   @override
   void initState() {
     controller = widget.controller ?? TextEditingController();
@@ -56,6 +57,9 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
       line =1;
     }else{
       line =widget.line;
+    }
+    if(widget.textInputType == null){
+      textInputType=  TextInputType.text;
     }
     super.initState();
   }
@@ -74,7 +78,7 @@ class _LogRegTextFieldState extends State<LogRegTextField>{
   Widget build(BuildContext context) {
     // TODO: implement build
    return TextField(
-      keyboardType: widget.textInputType,
+      keyboardType: textInputType,
       autofocus: false,
       controller: controller,
      focusNode: widget.focusNode,

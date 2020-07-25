@@ -35,7 +35,7 @@ class _CompanyEditState extends State<CompanyEdit> {
   String c_img="http://www.zaojiong.com/data/logo/20170418/14906489056.PNG";
   String license_url="";
  String companyState = "";
- String id = "";
+ String id ;
  String img_state ="";
 
 

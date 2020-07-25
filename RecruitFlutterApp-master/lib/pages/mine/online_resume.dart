@@ -51,7 +51,7 @@ class _OnlineResumeState extends State<OnlineResume> {
   String  by_time = "";
   String  jl = "";
   String jlState="";
-  String job_id="";
+  String job_id;
 
   Map qwMap;
   Map eduMap;
@@ -152,6 +152,7 @@ class _OnlineResumeState extends State<OnlineResume> {
        city = data["province"];
        work = data["type"];
        xl = data["education"];
+
        job_id = data["job_id"].toString();
       String   inforJson = data["info"];
        var infors = json.decode(inforJson);
@@ -323,8 +324,8 @@ class _OnlineResumeState extends State<OnlineResume> {
           child: Stack(
 
             children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
+
+               SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -785,7 +786,6 @@ class _OnlineResumeState extends State<OnlineResume> {
                     ),
                   ),
                 ),
-              ),
               Positioned(
                 bottom: 20,
                 left: 0,

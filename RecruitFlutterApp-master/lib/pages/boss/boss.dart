@@ -60,9 +60,9 @@ class _BossMineState extends State<BossMine> {
       },
       child:Card(
         elevation: 2,
-        color: Colors.red,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)
-        ),
+        color: Colors.redAccent,
+//        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)
+//        ),
         child: Row(
           children: <Widget>[
             SizedBox(
@@ -74,7 +74,7 @@ class _BossMineState extends State<BossMine> {
                   style: TextStyle(
                       letterSpacing: 2,
                       wordSpacing: 2,
-                      fontWeight: FontWeight.w100,
+                      fontWeight: FontWeight.bold,
                     color: Colors.white
                   ),
                 )
@@ -628,7 +628,9 @@ class _BossMineState extends State<BossMine> {
             );
           }, childCount: options.length)),
 
-
+    SliverToBoxAdapter(
+    child: SizedBox(height: 20,),
+    ),
           SliverToBoxAdapter(
             child: Consumer<IdentityModel>(
                 builder: (context, model, child) {

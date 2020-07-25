@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mobsms/mobsms.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
@@ -43,13 +44,19 @@ class _ForgetState extends State<ForgetPage>{
     } else if(_newPdController.text != _ConfirmPdController.text){
        showToast("两次密码输入不一致");
     }else {
-
-      MiviceRepository().registerPd(_phoneController.text, _newPdController.text,widget.type).then((value) {
+      Smssdk.commitCode(_phoneController.text,"86",_codeController.text, (dynamic ret, Map err){
+        if(err!=null){
+          showToast("验证码验证失败");
+        }
+        else{
+      MiviceRepository().forgetPd(_phoneController.text, _newPdController.text,widget.type).then((value) {
         var reponse = json.decode(value.toString());
         if(reponse["status"] == "success") {
               Navigator.of(context).pop();
         }else{
           showToast(reponse["msg"]);
+        }
+      });
         }
       });
     }

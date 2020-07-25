@@ -62,6 +62,7 @@ class AgreementItemWidget  extends StatelessWidget{
                builder: (context) => AgreementDetailPage(index),
              ));
        },
+        behavior: HitTestBehavior.opaque,
       child: Container(
         margin: EdgeInsets.only(left: 20,right: 20),
           height: 54,

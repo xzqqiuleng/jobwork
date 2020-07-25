@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/mine/push_item.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/utils/gaps.dart';
 
 
@@ -28,7 +29,7 @@ class _PushState extends State<YsSetPage>{
     _itmes.add(pushItem1);
     _itmes.add(pushItem2);
     _itmes.add(pushItem3);
-    _itmes.add(pushItem3);
+    _itmes.add(pushItem4);
      _addDatas();
   }
   _addDatas(){
@@ -36,11 +37,18 @@ class _PushState extends State<YsSetPage>{
 }
   @override
   Widget build(BuildContext context) {
+ if(ShareHelper.isBossLogin()){
+   _itmes[0].txt = "简历推荐";
+   _itmes[1].txt =  "公司隐藏";
+   _itmes[2].txt =  "职位隐藏";
+   _itmes[3].txt =  "不允许搜索";
+ }else{
+   _itmes[0].txt = "公司推新";
+   _itmes[1].txt =  "隐藏简历";
+   _itmes[2].txt =  "隐藏私人号码";
+   _itmes[3].txt =  "对HR隐藏";
+ }
 
-    _itmes[0].txt = "公司推新";
-    _itmes[1].txt =  "隐藏简历";
-    _itmes[2].txt =  "隐藏私人号码";
-    _itmes[3].txt =  "对HR隐藏";
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
