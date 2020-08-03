@@ -3,7 +3,6 @@ import 'package:recruit_app/model/banner_model.dart';
 import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/home/search_bar.dart';
-import 'package:recruit_app/pages/jobs/city_filter.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 import 'home_headplan.dart';
 import 'home_joblist.dart';

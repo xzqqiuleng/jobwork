@@ -29,16 +29,23 @@ class _WorkPostState extends State<WorkPost> {
   String salary="";
   String work_deteail ="";
   String address ="";
-  String job_id="";
-
-
+  String job_id;
+ String city="";
+String company="";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getCompany();
     if(widget.data != null){
       workStr = widget.data["title"];
       address = widget.data["address"];
+
+      if(address.contains("·")){
+        city = address.split("·")[0];
+        _ConfirmPdController.text = address.split("·")[1];
+      }
+
       salary = widget.data["salary"];
       workStr = widget.data["title"];
       job_id = widget.data["job_id"].toString();
@@ -47,13 +54,16 @@ class _WorkPostState extends State<WorkPost> {
         Map map  = json.decode(widget.data["summary"]);
         work_deteail = map["工作详情"];
       }
-      type = widget.data["label"].toString().split("|")[0];
-      xl = widget.data["label"].toString().split("|")[1];
-      work_time = widget.data["label"].toString().split("|")[2];
+      type = widget.data["label"].toString().split("|")[1];
+      xl = widget.data["label"].toString().split("|")[2];
+      work_time = widget.data["label"].toString().split("|")[3];
     }
   }
   _pubResume(){
-
+if(shState == "0"){
+  showToast("对不起，你的公司信息审核不通过，暂时不能发布职位");
+  return;
+}
     Map dMap = Map();
     dMap["工作详情"] = work_deteail;
      String dJson  = json.encode(dMap);
@@ -61,18 +71,24 @@ class _WorkPostState extends State<WorkPost> {
 
      String tip = "五险一金 绩效奖金 弹性工作 通讯补贴";
 
-
+    if(city ==""||salary==""||workStr==""||type==""||xl==""||work_time==""||work_deteail==""||type=="" ||_ConfirmPdController.text.isEmpty){
+      showToast("请填写完整的招聘内容");
+          return;
+    }
     Map data = Map();
-    data["address"] = address;
+    address = city+"·"+_ConfirmPdController.text;
     data["salary"] = salary;
     data["user_mail"] = ShareHelper.getBosss().userMail;
-    data["company"] ="找铁网"; 
+    data["company"] =company;
     data["title"] =workStr;
-    data["label"] ="${type}|${xl}|${work_time}";
+    data["address"] =address;
+    data["label"] ="${address}|${type}|${xl}|${work_time}";
     data["tip"] =tip;
     data["summary"] =dJson;
     data["mook_img"] ="";
     data["job_id"] =job_id;
+
+
     MiviceRepository().pubJob(data).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
@@ -84,7 +100,20 @@ class _WorkPostState extends State<WorkPost> {
     });
 
   }
+  String shState ="1";
+  _getCompany(){
+    MiviceRepository().getCompany(ShareHelper.getBosss().userMail).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        Map data = reponse["result"];
+        company=  data["name"];
+        shState=  data["shState"];
 
+      }else{
+
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -426,7 +455,7 @@ class _WorkPostState extends State<WorkPost> {
                             ));
                      if(cc != null){
                        setState(() {
-                         address = cc;
+                         city = cc;
                        });
                      }
                       },
@@ -435,7 +464,7 @@ class _WorkPostState extends State<WorkPost> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
-                            child:   Text(address,
+                            child:   Text(city,
                                 style: TextStyle(
                                     wordSpacing: 1,
                                     letterSpacing: 1,
@@ -461,9 +490,7 @@ class _WorkPostState extends State<WorkPost> {
 
                       label: "请输入具体的地址",
                       controller:  _ConfirmPdController,
-                      textInputAction: TextInputAction.next,
                       textInputType: TextInputType.text,
-                      obscureText: true,
 
                     ),
                     SizedBox(

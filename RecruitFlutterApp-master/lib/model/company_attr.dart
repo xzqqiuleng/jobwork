@@ -1,18 +1,18 @@
 class CompanyAttrList {
-  static const _allAttr = <CompanyAttr>[
+  List<CompanyAttr>  _allAttr = <CompanyAttr>[
     CompanyAttr(attr: '公司介绍', status: '编辑'),
-    CompanyAttr(attr: '产品介绍', status: '编辑'),
-    CompanyAttr(attr: '高管介绍', status: '编辑'),
+    CompanyAttr(attr: '产品及领域', status: '编辑'),
+    CompanyAttr(attr: '投资及前景', status: '编辑'),
   ];
 
-  static List<CompanyAttr> loadAttrs() {
+   List<CompanyAttr> loadAttrs() {
     return _allAttr;
   }
 }
 
 class CompanyAttr {
-  final String attr;
-  final String status;
+   String attr;
+   String status;
 
-  const CompanyAttr({this.attr, this.status});
+   CompanyAttr({this.attr, this.status});
 }

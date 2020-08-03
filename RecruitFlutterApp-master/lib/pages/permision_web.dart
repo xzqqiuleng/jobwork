@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
 
+import 'account/register/User.dart';
 import 'share_helper.dart';
 
 
@@ -49,7 +51,11 @@ class _ComponentWebviewState extends State<PermissionWeb> {
               userMap["real_status"] ="1";
               userMap["user_id"] =ShareHelper.getBosss().userId;
               MiviceRepository().updateUser(userMap).then((value) {
-
+                 if(value){
+                   User user = ShareHelper.getBosss();
+                   user.realStatus="1";
+                   StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
+                 }
               });
 
             }else{

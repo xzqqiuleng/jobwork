@@ -444,7 +444,7 @@ class _BossMineState extends State<BossMine> {
                                 children: <Widget>[
                                   SizedBox(height: 16),
                                   Text(
-                                    "企业管理",
+                                    "企业认证",
                                     style: TextStyle(
 
 
@@ -454,7 +454,7 @@ class _BossMineState extends State<BossMine> {
                                     height: 7,
                                   ),
                                   Text(
-                                    "未实名",style: TextStyle(
+                                    "实名认证",style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w100
@@ -506,7 +506,7 @@ class _BossMineState extends State<BossMine> {
                                     height: 7,
                                   ),
                                   Text(
-                                    "未完善",style: TextStyle(
+                                    "完善信息",style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w100

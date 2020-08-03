@@ -19,12 +19,30 @@ class JobManageDetail extends StatefulWidget {
 
 class _JobManageDetailState extends State<JobManageDetail> {
   String detail="";
+  String mlabel="";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.data["summary"] != null && widget.data["summary"] != "" ){
+      Map map  = json.decode(widget.data["summary"]);
+      detail = map["工作详情"];
+    }
+    List<String> labels = widget.data["label"].toString().split("|");
+    labels.removeAt(0) ;
+
+    for(var item in labels){
+      if(mlabel == ""){
+        mlabel = item;
+      }else{
+        mlabel = mlabel +"|"+item;
+      }
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
-      if(widget.data["summary"] != null && widget.data["summary"] != "" ){
-        Map map  = json.decode(widget.data["summary"]);
-        detail = map["工作详情"];
-      }
+
 
     // TODO: implement build
     return Scaffold(
@@ -144,7 +162,7 @@ class _JobManageDetailState extends State<JobManageDetail> {
                         height: 8,
                       ),
                       Text(
-                          widget.data["label"],
+                          mlabel,
                           style: const TextStyle(
                               wordSpacing: 2,
                               letterSpacing: 1,
@@ -195,7 +213,7 @@ class _JobManageDetailState extends State<JobManageDetail> {
                         child: MaterialButton(
                           color: Colours.app_main,
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => WorkPost(data:widget.data)));

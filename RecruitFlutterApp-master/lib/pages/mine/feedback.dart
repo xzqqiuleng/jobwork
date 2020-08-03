@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 import 'package:recruit_app/widgets/photo_select.dart';
@@ -56,6 +58,7 @@ class FeedBackWidget extends StatefulWidget{
 
 }
 
+
 class _FeedBackState extends State<FeedBackWidget>{
 //  PickedFile _imageFile;
 
@@ -64,6 +67,8 @@ class _FeedBackState extends State<FeedBackWidget>{
   List<String> fileStrs = List();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -217,38 +222,15 @@ class _FeedBackState extends State<FeedBackWidget>{
       showToast("请填写内容");
       return;
     }
-    showToast("反馈已发送");
-            Navigator.of(context).pop();
-//    if(fileStrs != null && fileStrs.length >0){
-//      ProgressDialog.showProgress(context);
-//
-//      // Receive messages from platform
-//      _channel.setMessageHandler((String message) async {
-//        ProgressDialog.dismiss(context);
-//        if(message == "false"){
-//          showToast(S.of(context).upload_erro_img);
-//        }else{
-//          List imgUrls = json.decode(message);
-//          modle.putFeed(_titleController.text, _contentController.text,images: imgUrls).then((value) {
-//            showToast(S.of(context).feed_send);
-//            Navigator.of(context).pop();
-//          });
-//        }
-//
-//
-//        return 'Reply from Dart';
-//      });
-//      Map map = Map();
-//      map["type"] ="1";
-//      map["user_id"] =UserHelper.getUser().id;
-//      map["imgs"] =fileStrs;
-//      _channel.send(json.encode(map));
-//    }else{
-//      modle.putFeed(_titleController.text, _contentController.text).then((value) {
-//        showToast(S.of(context).feed_send);
-//        Navigator.of(context).pop();
-//      });
-//    }
+    Map map = Map();
+    map["title"] = _titleController.text;
+    map["content"] = _contentController.text;
+    map["user_id"] = ShareHelper.isLogin() ? ShareHelper.getUser().userId :ShareHelper.getBosss().userId;
+    MiviceRepository().putFeed(map).then((value){
+      showToast("反馈已发送");
+      Navigator.of(context).pop();
+
+    });
 
 
 

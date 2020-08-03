@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:recruit_app/model/company_attr.dart';
 
 class CompanyInfoItem extends StatelessWidget {
-  final CompanyAttr companyAttr;
-  final int index;
+   CompanyAttr companyAttr;
+   int index;
 
-  const CompanyInfoItem({Key key, this.companyAttr, this.index})
+   CompanyInfoItem({Key key, this.companyAttr, this.index})
       : super(key: key);
 
   @override
@@ -29,19 +29,18 @@ class CompanyInfoItem extends StatelessWidget {
                     wordSpacing: 1,
                     letterSpacing: 1,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(185, 187, 189, 1),
+                    color: Colors.black87,
                   ),
                 ),
               ),
               SizedBox(width: 15),
               Text(
                 '${companyAttr.status}',
-                style: const TextStyle(
+                style:  TextStyle(
                   wordSpacing: 1,
                   letterSpacing: 1,
                   fontSize: 16,
-                  color: Color.fromRGBO(215, 217, 218, 1),
+                  color: companyAttr.status == "已更改" ?Colors.redAccent:Color.fromRGBO(215, 217, 218, 1),
                 ),
               ),
               SizedBox(width: 15),

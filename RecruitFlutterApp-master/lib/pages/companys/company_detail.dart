@@ -38,6 +38,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
   List<Job> _jobList = JobData.loadJobs();
   Map com_label;
   Map compay_info;
+  String address="";
   List<GSInfo> gsInfos=List();
   @override
   void initState() {
@@ -57,9 +58,10 @@ class _CompanyDetailState extends State<CompanyDetail> {
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
 
-
+        print(data);
         setState(() {
           infors = data["com"];
+          address = infors["address"];
         List  jobList = data["jobs"];
         datalist.clear();
           datalist.addAll(jobList);
@@ -213,7 +215,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
           height: 8,
         ));
         contentWidget.add(Html(data: value.toString().replaceAll("微信分享", "").replaceAll("地图", "")));
-
+        contentWidget.add(SizedBox(height: 30));
     });
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -602,11 +604,49 @@ class _CompanyDetailState extends State<CompanyDetail> {
                       SizedBox(
                         height: 20,
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        child: Image.asset('images/map_icon.jpg',
-                            height: 100, fit: BoxFit.cover),
+                      Container(
+                        height: 80,
+                        child:  Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              child:  ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(2)),
+                                child: Image.asset('images/map_icon.jpg',
+                                    height: 100, fit: BoxFit.cover),
+                              ),
+                            ),
+
+                            Container(
+                              alignment: Alignment.center,
+                              color: Colors.white,
+                              height: 44,
+                              margin: EdgeInsets.only(left: 30,right: 30),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset('images/loc_address.png',
+                                      width: 16,
+                                      height: 16, fit: BoxFit.cover),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                      address
+                                  )
+                                ],
+
+                              ),
+                            )
+
+
+                          ],
+
+                        ),
                       ),
+
                       SizedBox(
                         height: 20,
                       ),
@@ -690,8 +730,9 @@ class _CompanyDetailState extends State<CompanyDetail> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black87)),
                       SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
+                     gsInfos.length == 0? Text("暂无信息"):
                      ListView.builder(itemBuilder: (BuildContext context,int index){
                        return GsItemwidget(gsInfos[index]);
                      },
@@ -700,7 +741,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
                          physics: const NeverScrollableScrollPhysics()
                      ),
                       SizedBox(
-                        height: 16,
+                        height: 30,
                       ),
                       Text('在招职位',
                           maxLines: 1,

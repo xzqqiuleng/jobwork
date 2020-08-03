@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
@@ -5,7 +6,8 @@ import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class MeDesc extends StatefulWidget {
   int type; //0,姓名 1，公司名称 2，工作职位 3.工作内容
-  MeDesc(this.type);
+  String mhint;
+  MeDesc(this.type,{this.mhint});
   @override
   _MeDescState createState() => _MeDescState();
 }
@@ -106,17 +108,30 @@ class _MeDescState extends State<MeDesc> {
         break;
       case 12:
         title = "公司介绍";
-        hint = "请详细的描述公司概况";
+        if(widget.mhint != null){
+          _phoneController.text = widget.mhint;
+        }else{
+          hint = "请详细的描述公司概况";
+        }
+
         line = 10;
         break;
       case 13:
-        title = "产品介绍";
-        hint = "请详细的描述产品概况";
+        title = "产品及领域";
+        if(widget.mhint != null){
+          _phoneController.text = widget.mhint;
+        }else{
+          hint = "请详细的描述产品概况，以及涉及的领域";
+        }
         line = 10;
         break;
       case 14:
-        title = "高管介绍";
-        hint = "请详细的描述高管组成";
+        title = "投资发展";
+        if(widget.mhint != null){
+          _phoneController.text = widget.mhint;
+        }else{
+          hint = "请详细的描述公司前景，投资概况";
+        }
         line = 10;
         break;
     }

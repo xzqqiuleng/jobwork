@@ -235,4 +235,17 @@ class MiviceRepository{
     });
     return response;
   }
+
+  Future putFeed(Map map) async {
+    var response = await dio.post<Map>('/user/feedback', data: {
+      "user_id":map["user_id"],
+      "title":map["title"],
+      "content":map["content"],
+    });
+    return response;
+  }
+  Future getHomeBaner() async {
+    var response = await dio.post<Map>('/banner/getBanners');
+    return response;
+  }
 }

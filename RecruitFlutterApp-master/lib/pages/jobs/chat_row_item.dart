@@ -91,13 +91,15 @@ class ChatRowItem extends StatelessWidget {
 
       }
         if(userId == id){
-            return Center(
+            return Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 16),
               child:Text("请求交换${typeTxt}已发出")
             );
         }else{
            if(state.toString() == "0"){
              return Container(
-               height:140,
+               height:110,
                margin: EdgeInsets.all(20),
                decoration: BoxDecoration(
                    borderRadius: BorderRadius.circular(4),
@@ -156,13 +158,16 @@ class ChatRowItem extends StatelessWidget {
                ),
              );
            }else if(state.toString() == "1"){
-             return Center(
+             return Container(
+                 alignment: Alignment.center,
+                 padding: EdgeInsets.symmetric(vertical: 16),
                  child:Text("已拒绝交换${typeTxt}的请求")
              );
            }else{
 
              return Container(
                  height:160,
+                 alignment: Alignment.center,
                  margin: EdgeInsets.all(20),
                  decoration: BoxDecoration(
                      borderRadius: BorderRadius.circular(4)

@@ -12,8 +12,14 @@ class MsgChatItem extends StatefulWidget {
 }
 
 class _MsgChatItemState extends State<MsgChatItem> {
+  String msg="";
   @override
   Widget build(BuildContext context) {
+    if( widget.mapData["msg"].contains("state")&& widget.mapData["msg"].contains("msg")&& widget.mapData["msg"].contains("type")&& widget.mapData["msg"].contains("userId")){
+      msg = "Boss，人才交换消息";
+    }else{
+      msg=widget.mapData["msg"];
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -79,7 +85,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                           width: ScreenUtil().setWidth(16),
                         ),
                         Text(
-                          widget.mapData["pub_time"],
+                          widget.mapData["pub_time"].toString().split(" ")[0],
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(24),
                             color: Colors.grey,
@@ -90,7 +96,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                     SizedBox(height: ScreenUtil().setWidth(12)),
                     SizedBox(height: ScreenUtil().setWidth(14)),
                     Text(
-                      widget.mapData["msg"],
+                      msg,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

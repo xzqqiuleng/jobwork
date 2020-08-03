@@ -30,8 +30,8 @@ class _CompanyEditState extends State<CompanyEdit> {
 
  String name;
   String code ;
-  String addess ;
   String city="";
+  String address="";
   String c_img="http://www.zaojiong.com/data/logo/20170418/14906489056.PNG";
   String license_url="";
  String companyState = "";
@@ -62,7 +62,7 @@ class _CompanyEditState extends State<CompanyEdit> {
 //    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
 //    String imagsJson = json.encode(imags);
 
-  if(_nameController.text.length <2||_addressController.text.length <2 ||_codeController.text.length<2||license_url.length<2||c_img.length<2){
+  if(_nameController.text.length <2||_addressController.text.length <2 ||_codeController.text.length<2||license_url.length<2||c_img.length<2 || city ==""){
     showToast("请填写完整信息");
     return;
   }
@@ -70,7 +70,7 @@ class _CompanyEditState extends State<CompanyEdit> {
     Map data = Map();
     data["name"] = _nameController.text;
     data["certificate"] = _codeController.text;
-    data["address"] = _addressController.text;
+    data["address"] = city+"·"+_addressController.text;
     data["license_url"] = license_url;
     data["user_mail"] =ShareHelper.getBosss().userMail;
 //    data["company_info"] =inforJson;
@@ -89,6 +89,8 @@ class _CompanyEditState extends State<CompanyEdit> {
 
             User user = ShareHelper.getBosss();
             user.companyStatus ="1";
+
+
             StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
 
             Navigator.pushReplacement(
@@ -114,9 +116,18 @@ class _CompanyEditState extends State<CompanyEdit> {
        Map data = reponse["result"];
        name=  data["name"];
        code = data["certificate"];
-       addess =data["address"];
+      String maddress =data["address"];
+
+_nameController.text=  data["name"];
+ _codeController.text= data["certificate"];
+       if(maddress.contains("·")){
+         city = maddress.split("·")[0];
+         address = maddress.split("·")[1];
+         _addressController.text = address;
+       }
        license_url =  data["license_url"];
        c_img= data["company_img"];
+       shState= data["sh_state"];
        id =data["id"].toString();
        setState(() {
 
@@ -135,6 +146,25 @@ class _CompanyEditState extends State<CompanyEdit> {
       _getCompany();
     }
   }
+  String shState ="1";
+ Widget  _getShWidget(){
+ if(shState =="0"){
+   return  Container(
+     alignment: Alignment.center,
+     color: Colors.redAccent,
+     padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+     child: Text(
+       "公司信息审核失败，请修改后重新提交审核！",
+       style: TextStyle(
+           color: Colors.white
+       ),
+     ),
+   );
+ }else{
+   return Text("");
+ }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  WillPopScope(
@@ -189,41 +219,62 @@ class _CompanyEditState extends State<CompanyEdit> {
                   SingleChildScrollView(
                       physics: BouncingScrollPhysics(),
                       padding: const EdgeInsets.only(
-                          left: 15.0, right: 15, top: 18, bottom: 18),
+                          left: 15.0, right: 15, top: 0, bottom: 18),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          SizedBox(height: 12),
-                          Row(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      image: DecorationImage(
-                                          image: NetworkImage(c_img),
-                                          fit: BoxFit.cover
-                                      )
-                                  ),
-                                ),
-                                behavior: HitTestBehavior.opaque,
-                                onTap: (){
-                                  img_state ="0";
-                                  _showSelectPhoto();
-                                },
-                              ),
-
-                              SizedBox(width: 16),
-                              Text("请完成公司实名认证！",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
-                                ),),
-                            ],
+                         _getShWidget(),
+                          SizedBox(height: 16),
+                          Text(
+                            '* 公司头像',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          SizedBox(height: 16),
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: (){
+                              img_state ="0";
+                              _showSelectPhoto();
+                            },
+                            child: Row(
+                              children: <Widget>[
+
+
+                                Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        image: DecorationImage(
+                                            image: NetworkImage(c_img),
+                                            fit: BoxFit.cover
+                                        )
+                                    ),
+                                  ),
+
+                                Expanded(
+                                    flex: 1,
+                                    child:Container(
+
+                                    )
+                                ),
+                                Image.asset(
+                                  'images/arrow_right.png',
+                                  width: 18,
+                                  color: Colors.black87,
+                                  height: 18,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+
 
                           SizedBox(height: 30),
                           Text(
@@ -315,7 +366,7 @@ class _CompanyEditState extends State<CompanyEdit> {
                           SizedBox(height: 16),
                           LogRegTextField(
 
-                            label: addess,
+                            label: address,
                             controller:  _addressController,
                             textInputAction: TextInputAction.next,
                             textInputType: TextInputType.phone,
@@ -323,7 +374,7 @@ class _CompanyEditState extends State<CompanyEdit> {
 
                           ),
 
-                          SizedBox(height: 10),
+                          SizedBox(height: 30),
                           Text(
                             '* 统一信用代码',
                             maxLines: 1,
@@ -343,7 +394,7 @@ class _CompanyEditState extends State<CompanyEdit> {
                             obscureText: false,
 
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 30),
                           Text(
                             '* 营业执照',
                             maxLines: 1,

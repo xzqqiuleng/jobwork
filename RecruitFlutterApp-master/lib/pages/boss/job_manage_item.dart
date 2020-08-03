@@ -10,6 +10,17 @@ class JobManageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String mlabel="";
+    List<String> labels = jobManageData["label"].toString().split("|");
+    labels.removeAt(0) ;
+
+    for(var item in labels){
+      if(mlabel == ""){
+        mlabel = item;
+      }else{
+        mlabel = mlabel +"|"+item;
+      }
+    }
     // TODO: implement build
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -61,7 +72,7 @@ class JobManageItem extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    jobManageData["label"],
+                    mlabel,
                     style: TextStyle(
                       wordSpacing: 1,
                       letterSpacing: 1,

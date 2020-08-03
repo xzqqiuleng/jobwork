@@ -57,6 +57,7 @@ class _ChatRoomState extends State<ChatRoom> {
           map["reply_id"] =widget.reply_id;
           map["message"] ="手机号:  ${ShareHelper.getUser().userMail}";
           channel.sink.add(json.encode(map));
+
         }
 
       }else if(event == "1"){
@@ -134,7 +135,7 @@ class _ChatRoomState extends State<ChatRoom> {
             isMine: false,
             content: message));
       });
-
+      _controllerjumpTo();
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -143,6 +144,12 @@ class _ChatRoomState extends State<ChatRoom> {
     });
   _initData();
     _eventSub();
+  }
+  _controllerjumpTo() {
+    Timer(Duration(milliseconds: 500), () {
+      //List滑动到底部
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
   _initData(){
     MiviceRepository().getAllMessage(widget.user_id,widget.reply_id).then((value) {
@@ -174,7 +181,7 @@ class _ChatRoomState extends State<ChatRoom> {
             _chatList.add(chat);
           }
         });
-
+        _controllerjumpTo();
       }
     });
   }
@@ -378,7 +385,7 @@ class _ChatRoomState extends State<ChatRoom> {
                             editController.text = "";
                           });
                         }
-
+                        _controllerjumpTo();
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -445,7 +452,7 @@ class _ChatRoomState extends State<ChatRoom> {
                             editController.text = "";
                           });
                         }
-
+                        _controllerjumpTo();
                       },
                     child:  Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -511,7 +518,7 @@ class _ChatRoomState extends State<ChatRoom> {
                             editController.text = "";
                           });
                         }
-
+                        _controllerjumpTo();
                       },
                       child:Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -667,7 +674,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         }
 
 
-
+                        _controllerjumpTo();
                       },
                       child: Container(
                         padding:

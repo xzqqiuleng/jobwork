@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/model/company_attr.dart';
 import 'package:recruit_app/pages/boss/company_info_item.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
-
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import '../../colours.dart';
 import '../btn_widget.dart';
+import '../share_helper.dart';
 
 class CompanyInfo extends StatefulWidget {
   @override
@@ -16,39 +19,102 @@ class CompanyInfo extends StatefulWidget {
 }
 
 class _CompanyInfoState extends State<CompanyInfo> {
-  List<CompanyAttr> _attrList = CompanyAttrList.loadAttrs();
+  List<CompanyAttr> _attrList = CompanyAttrList().loadAttrs();
 
 
  String c_desc="";
  String c_fl="";
  String c_img="";
 
-//  _pubCompany(){
-//    Map infor = Map();
-//    infor["公司描述"] = "这是一个大公司";
-//    String inforJson = json.encode(infor);
-//    List<String> imags = List();
-//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
-//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
-//    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
-//    String imagsJson = json.encode(imags);
-//    Map dMap = Map();
-//    dMap["工作详情"] = work_deteail;
-//    String dJson  = json.encode(dMap);
-//    Map data = Map();
-//
-//    data["mook_img"] ="";
-//    MiviceRepository().pubJob(data).then((value) {
-//      var reponse = json.decode(value.toString());
-//      if(reponse["status"] == "success"){
-//        showToast("职位已更新");
-//      }else{
-//        showToast("简历更新失败");
-//      }
-//    });
-//
-//  }
+  _pubCompany(){
 
+    if(m1 != null && m2 != null && m3 !=null){
+      bool isSave = false;
+      for(var item in _attrList){
+        if(item.status == "已更改"){
+          isSave = true;
+        }
+      }
+      if(isSave){
+        Map infor = Map();
+        infor["公司介绍"] = m1;
+        infor["产品及领域"] = m2;
+        infor["投资及前景"] = m3;
+        String inforJson = json.encode(infor);
+
+        Map data = Map();
+        data["company_info"] =inforJson;
+        data["id"] =id;
+        MiviceRepository().pubCompany(data).then((value) {
+          var reponse = json.decode(value.toString());
+          if(reponse["status"] == "success"){
+            showToast("公司信息已更新");
+            Navigator.of(context).pop();
+          }else{
+            showToast(reponse["msg"]);
+          }
+        });
+
+      }else{
+        showToast("公司信息未有修改");
+      }
+    }else{
+      showToast("公司信息未填写完成");
+    }
+
+  }
+  String id;
+  String inforJson;
+  int clickPos = -1;
+  String m1;
+  String m2;
+  String m3;
+  _getCompany(){
+    MiviceRepository().getCompany(ShareHelper.getBosss().userMail).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        Map data = reponse["result"];
+        inforJson=   data["company_info"];
+        id =data["id"].toString();
+        shState= data["sh_state"];
+         if(inforJson != null && inforJson != ""){
+           Map map = json.decode(inforJson);
+           m1 = map["公司介绍"];
+           m2 = map["产品及领域"];
+           m3 = map["投资及前景"];
+         }
+        setState(() {
+
+        });
+      }else{
+        showToast(reponse["msg"]);
+      }
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCompany();
+  }
+  String shState ="1";
+  Widget  _getShWidget(){
+    if(shState =="0"){
+      return  Container(
+        alignment: Alignment.center,
+        color: Colors.redAccent,
+        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+        child: Text(
+          "公司信息审核失败，请修改后重新提交审核！",
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      );
+    }else{
+      return Text("");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -89,11 +155,13 @@ class _CompanyInfoState extends State<CompanyInfo> {
                 physics: BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 15.0, right: 15, top: 18, bottom: 18),
+                      left: 15.0, right: 15, top: 0, bottom: 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
+                      _getShWidget(),
+                      SizedBox(height: 16,),
                       Text('完善公司信息',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -126,12 +194,33 @@ class _CompanyInfoState extends State<CompanyInfo> {
                         itemBuilder: (context, index) {
                           if (index < _attrList.length) {
                             return GestureDetector(
-                              onTap: (){
-                                Navigator.push(
+                              onTap: () async{
+                                clickPos = index;
+                                String mHint;
+                                if(clickPos == 0){
+                                  mHint = m1;
+                                }else  if(clickPos == 1){
+                                  mHint = m2;
+                                }else  if(clickPos == 2){
+                                  mHint = m3;
+                                }
+                            var mresult = await  Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => MeDesc(index+12),
+                                      builder: (context) => MeDesc(index+12,mhint: mHint),
                                     ));
+                               if(mresult !=null){
+                                 if(clickPos == 0){
+                                   m1 = mresult;
+                                 }else  if(clickPos == 1){
+                                   m2 = mresult;
+                                 }else  if(clickPos == 2){
+                                   m3 = mresult;
+                                 }
+                                 setState(() {
+                                   _attrList[clickPos].status ="已更改";
+                                 });
+                               }
                               },
                                 behavior: HitTestBehavior.opaque,
                               child: CompanyInfoItem(
@@ -152,9 +241,10 @@ class _CompanyInfoState extends State<CompanyInfo> {
                       CustomBtnWidget(
                         margin: 20,
                         btnColor: Colours.app_main,
-                        text: "完成",
+                        text: "更新信息",
                         onPressed: (){
-                          Navigator.of(context).pop();
+                          _pubCompany();
+
                         },
                       )
                     ],

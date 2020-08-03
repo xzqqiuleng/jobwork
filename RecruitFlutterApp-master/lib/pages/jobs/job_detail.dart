@@ -48,11 +48,11 @@ class _JobDetailState extends State<JobDetail> {
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
 
-        print(data);
+
         setState(() {
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
           replayId = infors["reply_id"];  //"com_id" -> 10057  "job_id" -> 120587312
-
+          print(infors);
           datalist = data["jobs"];
            summary = json.decode(infors["summary"].toString());
 
@@ -63,13 +63,20 @@ class _JobDetailState extends State<JobDetail> {
       print(infors["company_img"]);
 
           labels = infors["label"].toString().split("|");
-
+          address  = labels[0];
+          labels.removeAt(0);
           if(infors["pub_img"] == ""){
-            userImg = infors["mook_img"];
+            if( infors["mook_img"] != null){
+              userImg = infors["mook_img"];
+            }
+
           }else{
-            userImg = infors["pub_img"];
+            if( infors["pub_img"] != null){
+              userImg = infors["pub_img"];
+            }
+
           }
-          if(infors["pub_person"] != ""){
+          if(infors["pub_person"]!=null&&infors["pub_person"] != ""){
             user = infors["pub_person"];
           }
           _getLabel();
@@ -126,7 +133,9 @@ class _JobDetailState extends State<JobDetail> {
   );
   }
   Widget _getContent(){
-
+ if(summary == null||summary.isEmpty){
+   return Text("");
+ }
    summary.forEach((key, value) {
       if(key != "公司信息"){
         contentWidget.add( Text(key.toString(),
@@ -145,12 +154,13 @@ class _JobDetailState extends State<JobDetail> {
       }
 
    });
+
    if(com_label != null && com_label.length>0){
      compay_desc = "";
      com_label.forEach((key, value) {
-       if(key.toString().contains("地")){
-         address = com_label[key].toString();
-       }
+//       if(key.toString().contains("地")){
+//         address = com_label[key].toString();
+//       }
        compay_desc = compay_desc+ com_label[key]+"·";
      });
    }
@@ -373,7 +383,7 @@ class _JobDetailState extends State<JobDetail> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Expanded(
-                                    child: Text(infors == null? "":infors["title"],
+                                    child: Text(infors == null||infors["title"]==null? "":infors["title"],
 
                                         style: const TextStyle(
                                             wordSpacing: 1,
@@ -383,7 +393,7 @@ class _JobDetailState extends State<JobDetail> {
                                             color: Color.fromRGBO(37, 38, 39, 1))),
                                   ),
                                   SizedBox(width: 8),
-                                  Text(infors == null? "":infors["salary"],
+                                  Text(infors == null ||infors["salary"]==null? "":infors["salary"],
                                       style: const TextStyle(
                                           wordSpacing: 1,
                                           letterSpacing: 1,
@@ -509,7 +519,7 @@ class _JobDetailState extends State<JobDetail> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Text(infors == null?"":infors["company"],
+                                            Text(infors == null || infors["company"] == null?"":infors["company"],
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(

@@ -16,6 +16,13 @@ class ShareHelper{
  static String is_BossLogin = "is_BOSSLogin";
  static String kUser = "kUser";
  static String BOSSUser = "BosskUser";
+
+ static void saveBanner(List data,String key){
+
+   StorageManager.sharedPreferences.setString(key, json.encode(data));
+
+
+ }
  static bool isAgree(){
    if(StorageManager.sharedPreferences != null &&StorageManager.sharedPreferences.getBool("is_agree") !=null &&StorageManager.sharedPreferences.getBool("is_agree")){
      return true;

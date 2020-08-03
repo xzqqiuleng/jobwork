@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/account/login/login_type.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 
 import 'account/register/User.dart';
@@ -79,6 +82,37 @@ class _SplashState extends State<Splash> {
   IdentityModel _model;
   int indes = 3;
 
+   _getBanner(){
+    new MiviceRepository().getHomeBaner().then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success") {
+        List data = reponse["result"];
+        List bannStr1 = List();
+        List bannStr2 = List();
+        List bannStr3 = List();
+
+        for (var itme in data) {
+
+          if (itme["level"].toString() == "one") {  //启动页
+            bannStr1.add(itme);
+          } else if (itme["level"].toString() == "two") { // 悬浮baner
+            bannStr2.add(itme);
+          } else if (itme["level"].toString() == "three") {  //首页banner
+            bannStr3.add(itme);
+          }
+        }
+        if(bannStr1.length>0){
+
+        }
+        if(bannStr2.length>0){
+          ShareHelper.saveBanner(bannStr2, "two");
+        }
+        if(bannStr3.length>0){
+          ShareHelper.saveBanner(bannStr3, "three");
+        }
+      }
+    });
+  }
   delay(BuildContext context){
     Future.delayed(Duration(seconds: 1), (){
       if(indes == 0){
