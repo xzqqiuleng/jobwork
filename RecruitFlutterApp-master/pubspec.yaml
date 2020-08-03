@@ -62,7 +62,7 @@ dependencies:
   image_picker: ^0.6.7+2
   webview_flutter: ^0.3.19
   flutter_webview_plugin: ^0.3.10
-
+  event_bus: ^1.1.0
   mobsms:
 
 #  google_maps_flutter: ^0.5.24+1

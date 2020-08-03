@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-//  static String baseUrl = 'http://192.168.1.16/';      //开发
-
+//  static String baseUrl = 'http://192.168.1.5:8080/';      //开发
+//  static String socketUrl = 'ws://192.168.1.5:8080/ws/msg?';
   static String baseUrl = 'http://www.18hrzp.net/crawler/';      //开发
   static String socketUrl = 'ws://www.18hrzp.net/crawler/ws/msg?';      //开发
 
@@ -223,6 +223,15 @@ class MiviceRepository{
   Future getResumeList(String userMail) async {
     var response = await dio.post<Map>('/job/myPubList', data: {
       "userMail":userMail
+    });
+    return response;
+  }
+  Future agreeRe(Map map) async {
+    var response = await dio.post<Map>('/user/updateSMsg', data: {
+      "msg":map["msg"],
+      "user_id":map["user_id"],
+      "reply_id":map["reply_id"],
+      "uuid":map["uuid"],
     });
     return response;
   }

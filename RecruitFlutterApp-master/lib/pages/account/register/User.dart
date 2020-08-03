@@ -14,6 +14,7 @@ class User {
   String  infoStatus;
   String  jlStatus;
   String  companyStatus;
+  String  realStatus;
   User(
       {this.userSex,
         this.userMail,
@@ -42,6 +43,7 @@ class User {
     infoStatus = json['info_status'].toString();
     jlStatus = json['jl_status'].toString();
     companyStatus = json['company_status'].toString();
+    realStatus = json['real_status'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +63,7 @@ class User {
     data['info_status'] = this.infoStatus;
     data['jl_status'] = this.jlStatus;
     data['company_status'] = this.companyStatus;
+    data['real_status'] = this.realStatus;
     return data;
   }
 }

@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/chat_list.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
 import 'package:recruit_app/pages/jobs/chat_row_item.dart';
@@ -31,11 +33,85 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
   List<Chat> _chatList = [];
   final ScrollController _scrollController = ScrollController();
-  var channel;
+  IOWebSocketChannel channel;
   String  jsonStr;
+
+  StreamSubscription  _eventChangeSub;
+  void _eventSub(){
+    _eventChangeSub= eventBus.on<ChatReplayEvent>().listen((event) {
+      if(event == "0"){
+        if(widget.type == 0){
+          Map map = Map();
+          map["user_info"] =jsonStr;
+
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="手机号:  ${ShareHelper.getBosss().userMail}";
+          channel.sink.add(json.encode(map));
+
+        }else{
+          Map map = Map();
+
+          map["com_info"] =jsonStr;
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="手机号:  ${ShareHelper.getUser().userMail}";
+          channel.sink.add(json.encode(map));
+        }
+
+      }else if(event == "1"){
+        if(widget.type == 0){
+          Map map = Map();
+          map["user_info"] =jsonStr;
+
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="微信号:  ${ShareHelper.getBosss().wxId}";
+          channel.sink.add(json.encode(map));
+
+        }else{
+          Map map = Map();
+
+          map["com_info"] =jsonStr;
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="微信号:  ${ShareHelper.getUser().wxId}";
+          channel.sink.add(json.encode(map));
+        }
+      }else if(event == "2"){
+        if(widget.type == 0){
+          Map map = Map();
+          map["user_info"] =jsonStr;
+
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="邮箱:  ${ShareHelper.getBosss().mail}";
+          channel.sink.add(json.encode(map));
+
+        }else{
+          Map map = Map();
+
+          map["com_info"] =jsonStr;
+          map["user_id"] = widget.user_id;
+          map["reply_id"] =widget.reply_id;
+          map["message"] ="邮箱:  ${ShareHelper.getUser().mail}";
+          channel.sink.add(json.encode(map));
+        }
+      }
+      _initData();
+    });
+
+  }
+ @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _eventChangeSub.cancel();
+  }
   @override
   void initState() {
     super.initState();
+
       Map map = Map();
     if(widget.type == 0){
       map["user_name"] = widget.title;
@@ -52,7 +128,10 @@ class _ChatRoomState extends State<ChatRoom> {
     channel.stream.listen((message) {
       setState(() {
         _chatList.add(Chat(
-            sender: 'images/avatar_2.png',
+            replayId: widget.reply_id,
+            head_icon: widget.head_icon,
+            user_icon: widget.type == 0?  ShareHelper.getBosss().headImg: ShareHelper.getUser().headImg,
+            isMine: false,
             content: message));
       });
 
@@ -62,7 +141,10 @@ class _ChatRoomState extends State<ChatRoom> {
         _scrollController.animateTo(_scrollController.position.maxScrollExtent,
             duration: Duration(milliseconds: 500), curve: Curves.easeIn);
     });
-
+  _initData();
+    _eventSub();
+  }
+  _initData(){
     MiviceRepository().getAllMessage(widget.user_id,widget.reply_id).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
@@ -70,27 +152,27 @@ class _ChatRoomState extends State<ChatRoom> {
         _chatList.clear();
 
         setState(() {
-        var  data = reponse["result"];
-      for(var item in data){
-        Chat chat;
-        if(widget.type == 0){
-           chat = Chat(content: item["msg"],user_icon: ShareHelper.getBosss().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
-          if(item["user_id"]== ShareHelper.getBosss().userId ){
-            chat.isMine = true;
-          }else{
-            chat.isMine = false;
-          }
-        }else{
-           chat = Chat(content: item["msg"],user_icon: ShareHelper.getUser().headImg,head_icon:widget.head_icon,sender: item["pub_time"]);
-          if(item["user_id"]== ShareHelper.getUser().userId ){
-            chat.isMine = true;
-          }else{
-            chat.isMine = false;
-          }
-        }
+          var  data = reponse["result"];
+          for(var item in data){
+            Chat chat;
+            if(widget.type == 0){
+              chat = Chat(content: item["msg"],user_icon: ShareHelper.getBosss().headImg,head_icon:widget.head_icon,replayId: widget.reply_id);
+              if(item["user_id"]== ShareHelper.getBosss().userId ){
+                chat.isMine = true;
+              }else{
+                chat.isMine = false;
+              }
+            }else{
+              chat = Chat(content: item["msg"],user_icon: ShareHelper.getUser().headImg,head_icon:widget.head_icon,replayId: widget.reply_id);
+              if(item["user_id"]== ShareHelper.getUser().userId ){
+                chat.isMine = true;
+              }else{
+                chat.isMine = false;
+              }
+            }
 
-        _chatList.add(chat);
-      }
+            _chatList.add(chat);
+          }
         });
 
       }
@@ -258,13 +340,21 @@ class _ChatRoomState extends State<ChatRoom> {
                           map["user_id"] = widget.user_id;
                           map["reply_id"] =widget.reply_id;
                           map["user_info"] =jsonStr;
-                          map["message"] =ShareHelper.getBosss().userMail;
+
+
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getBosss().userMail;
+                          jsonMsg["type"] = "0";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getBosss().headImg,
-                                content: ShareHelper.getBosss().userMail));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }else{
@@ -272,13 +362,19 @@ class _ChatRoomState extends State<ChatRoom> {
                           map["user_id"] = widget.user_id;
                           map["reply_id"] =widget.reply_id;
                           map["com_info"] =jsonStr;
-                          map["message"] =ShareHelper.getUser().userMail;
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getUser().userMail;
+                          jsonMsg["type"] = "0";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getUser().headImg,
-                                content: ShareHelper.getUser().userMail));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }
@@ -292,7 +388,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           SizedBox(
                             height: 3,
                           ),
-                          Text('电话号',
+                          Text('手机号',
                               style: const TextStyle(
                                   wordSpacing: 1,
                                   letterSpacing: 1,
@@ -311,15 +407,20 @@ class _ChatRoomState extends State<ChatRoom> {
                           Map map = Map();
                           map["user_id"] = widget.user_id;
                           map["reply_id"] =widget.reply_id;
-                          map["message"] =ShareHelper.getBosss().wxId;
                           map["user_info"] =jsonStr;
-
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getBosss().wxId;
+                          jsonMsg["type"] = "1";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getBosss().headImg,
-                                content: ShareHelper.getBosss().wxId));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }else{
@@ -328,13 +429,19 @@ class _ChatRoomState extends State<ChatRoom> {
                           map["com_info"] =jsonStr;
                           map["user_id"] = widget.user_id;
                           map["reply_id"] =widget.reply_id;
-                          map["message"] =ShareHelper.getUser().wxId;
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getUser().wxId;
+                          jsonMsg["type"] = "1";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getUser().headImg,
-                                content: ShareHelper.getUser().wxId));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }
@@ -368,13 +475,19 @@ class _ChatRoomState extends State<ChatRoom> {
                           map["user_info"] =jsonStr;
                           map["user_id"] = widget.user_id;
                           map["reply_id"] = widget.reply_id;
-                          map["message"] =ShareHelper.getBosss().mail;
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getBosss().mail;
+                          jsonMsg["type"] = "2";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getBosss().headImg,
-                                content: ShareHelper.getBosss().mail));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }else{
@@ -382,13 +495,19 @@ class _ChatRoomState extends State<ChatRoom> {
                           map["com_info"] =jsonStr;
                           map["user_id"] =widget.user_id;
                           map["reply_id"] =widget.reply_id;
-                          map["message"] =ShareHelper.getUser().mail;
+                          Map jsonMsg = Map();
+                          jsonMsg["state"] = "0";
+                          jsonMsg["msg"] = ShareHelper.getUser().mail;
+                          jsonMsg["type"] = "2";
+                          jsonMsg["userId"] = widget.user_id;
+                          jsonMsg["uuid"] = "${widget.user_id}-${new DateTime.now().millisecondsSinceEpoch}";
+                          map["message"] =json.encode(jsonMsg);
                           channel.sink.add(json.encode(map));
                           setState(() {
                             _chatList.add(Chat(
                                 isMine: true,
                                 user_icon: ShareHelper.getUser().headImg,
-                                content: ShareHelper.getUser().mail));
+                                content: json.encode(jsonMsg)));
                             editController.text = "";
                           });
                         }

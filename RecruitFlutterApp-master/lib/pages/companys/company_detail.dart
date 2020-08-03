@@ -193,7 +193,35 @@ class _CompanyDetailState extends State<CompanyDetail> {
 
 
 
+  Widget _getInfor(){
+    List<Widget> contentWidget=[];
+    if(compay_info == null || compay_info == ""){
+      return Text("");
+    }
+    compay_info.forEach((key, value) {
 
+        contentWidget.add( Text(key.toString(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+                wordSpacing: 1,
+                letterSpacing: 1,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(37, 38, 39, 1))));
+        contentWidget.add(SizedBox(
+          height: 8,
+        ));
+        contentWidget.add(Html(data: value.toString().replaceAll("微信分享", "").replaceAll("地图", "")));
+
+    });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: contentWidget,
+    );
+
+  }
 
 
 
@@ -527,22 +555,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text('公司介绍',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              wordSpacing: 1,
-                              letterSpacing: 1,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87)),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    Html(data: compay_info== null?"":compay_info["公司信息"].replaceAll("微信分享", "").replaceAll("地图", "")),
-                      SizedBox(
-                        height: 20,
-                      ),
+
+                      _getInfor(),
 //                      Text('公司照片',
 //                          maxLines: 1,
 //                          overflow: TextOverflow.ellipsis,

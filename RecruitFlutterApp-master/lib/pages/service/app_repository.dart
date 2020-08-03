@@ -6,9 +6,9 @@ import 'package:recruit_app/pages/provider/update_info.dart';
 /// App相关接口
 class AppRepository {
   static Dio dio;
-  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
+//  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-//  static String baseUrl = 'http://192.168.1.14:8080/';      //开发
+  static String baseUrl = 'http://192.168.1.5/';      //开发
   AppRepository(){
 
 

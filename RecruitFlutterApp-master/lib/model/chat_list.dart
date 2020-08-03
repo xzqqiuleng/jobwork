@@ -33,12 +33,13 @@ class ChatData {
 
 class Chat {
    String content;
-   String sender;
+   String replayId;
    bool isMine;
    String head_icon;
    String user_icon;
 
+
    Chat(
       {this.content,
-      this.sender,this.isMine,this.head_icon,this.user_icon});
+      this.replayId,this.isMine,this.head_icon,this.user_icon});
 }

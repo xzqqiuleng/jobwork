@@ -10,6 +10,8 @@ import 'package:recruit_app/pages/boss/work_post.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 
+import '../permision_web.dart';
+
 class JobManage extends StatefulWidget {
   @override
   _JobManageState createState() {
@@ -103,10 +105,19 @@ class _JobManageState extends State<JobManage> {
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WorkPost()));
+                      if(ShareHelper.getBosss().realStatus == "1"){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WorkPost(),
+                            ));
+                      }else{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PermissionWeb(),
+                            ));
+                      }
                     },
                     textColor: Colors.white,
                     child: Text("发布新职位"),

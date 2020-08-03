@@ -534,10 +534,12 @@ class _JobDetailState extends State<JobDetail> {
                                   ],
                                 ),
                                 onTap: () {
+                                  print(infors);
+                                  print(infors["com_id"]);
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => CompanyDetail(infors["com_id"])));
+                                          builder: (context) => CompanyDetail(int.parse(infors["com_id"].toString().trim()))));
                                 },
                               ),
                               SizedBox(

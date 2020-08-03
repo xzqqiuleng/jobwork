@@ -590,6 +590,7 @@ class _MineState extends State<Mine> {
                     StorageManager.localStorage.deleteItem(ShareHelper.kUser);
                     StorageManager.sharedPreferences.setBool(
                         ShareHelper.is_Login, false);
+                    Navigator.pop(context);
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

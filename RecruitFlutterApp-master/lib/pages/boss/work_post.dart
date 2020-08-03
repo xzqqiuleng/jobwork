@@ -66,7 +66,7 @@ class _WorkPostState extends State<WorkPost> {
     data["address"] = address;
     data["salary"] = salary;
     data["user_mail"] = ShareHelper.getBosss().userMail;
-    data["company"] ="找铁网";
+    data["company"] ="找铁网"; 
     data["title"] =workStr;
     data["label"] ="${type}|${xl}|${work_time}";
     data["tip"] =tip;
@@ -77,6 +77,7 @@ class _WorkPostState extends State<WorkPost> {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         showToast("职位已更新");
+        Navigator.of(context).pop();
       }else{
         showToast("简历更新失败");
       }

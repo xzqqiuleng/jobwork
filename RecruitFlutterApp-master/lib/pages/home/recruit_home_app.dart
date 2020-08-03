@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/boss/boss.dart';
+import 'package:recruit_app/pages/boss/work_post.dart';
 import 'package:recruit_app/pages/companys/company_jobslist.dart';
 import 'package:recruit_app/pages/companys/company_list.dart';
 import 'package:recruit_app/pages/employe/employe_list.dart';
@@ -16,6 +17,8 @@ import 'package:recruit_app/pages/msg/agreement_detail.dart';
 import 'package:recruit_app/pages/msg/boss_msglist.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
 import 'package:recruit_app/pages/msg/new_msglist.dart';
+import 'package:recruit_app/pages/permision_web.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 
 class RecruitHomeApp extends StatefulWidget {
@@ -207,12 +210,27 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<IdentityModel>(builder: (context, model, child) {
-        return model.identity == Identity.boss
-            ? _bossWidget.elementAt(model.selectedIndex)
-            : _widgetOptions.elementAt(model.selectedIndex);
-      }),
+    return   Scaffold(
+      body: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Consumer<IdentityModel>(builder: (context, model, child) {
+              return model.identity == Identity.boss
+                  ? _bossWidget.elementAt(model.selectedIndex)
+                  : _widgetOptions.elementAt(model.selectedIndex);
+            }),
+          ),
+          Positioned(
+            bottom: 10,
+            left: 16,
+            child:Image.network("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2938408281,2455833970&fm=15&gp=0.jpg",width: 60,height: 60,) ,
+          )
+        ],
+      ),
       bottomNavigationBar: Consumer<IdentityModel>(
         builder: (context, model, child) {
           return BottomNavigationBar(
@@ -230,7 +248,35 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
             },
           );
         },
+
       ),
-    );
+ floatingActionButton:  Consumer<IdentityModel>(
+     builder: (context, model, child) {
+       return model.identity == Identity.boss ?new FloatingActionButton(
+    child: const Icon(Icons.add),
+    onPressed: (){
+       if(ShareHelper.getBosss().realStatus == "1"){
+         Navigator.push(
+             context,
+             MaterialPageRoute(
+               builder: (context) => WorkPost(),
+             ));
+       }else{
+         Navigator.push(
+             context,
+             MaterialPageRoute(
+               builder: (context) => WorkPost(),
+             ));
+       }
+    },
+    heroTag: null,
+    foregroundColor: Colors.white,
+    backgroundColor: Colours.app_main,
+    elevation: 7.0,
+    highlightElevation: 14.0,
+    ):Text("");
+    })
+
+       );
   }
 }

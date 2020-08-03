@@ -127,7 +127,13 @@ class _MineInforState extends State<MineInfor> {
           user.mail = email;
           user.headImg = headImaurl;
           user.infoStatus = "1";
-          StorageManager.localStorage.setItem(ShareHelper.kUser, user);
+
+          if(widget.type == 0){
+            StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
+          }else{
+            StorageManager.localStorage.setItem(ShareHelper.kUser, user);
+          }
+
 
 
           if(inforStatus!= "1"){

@@ -51,56 +51,61 @@ class _BossMineState extends State<BossMine> {
   }
 
   Widget getSmrz(){
-    return  GestureDetector(
+      if(ShareHelper.getBosss().realStatus == "1") {
+      return Container();
+    }else{
 
-      onTap: (){
+      return GestureDetector(
 
-        Navigator.push(context,MaterialPageRoute(builder: (context)=>PermissionWeb(),),);
+        onTap: (){
 
-      },
-      child:Card(
-        elevation: 2,
-        color: Colors.redAccent,
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>PermissionWeb(),),);
+
+        },
+        child:Card(
+          elevation: 2,
+          color: Colors.redAccent,
 //        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)
 //        ),
-        child: Row(
-          children: <Widget>[
-            SizedBox(
-              width: 16,
-            ),
-            Expanded(
-                child:  Text(
-                  "请先进行实名认证",
-                  style: TextStyle(
-                      letterSpacing: 2,
-                      wordSpacing: 2,
-                      fontWeight: FontWeight.bold,
-                    color: Colors.white
-                  ),
-                )
-            ),
-            Container(
-              height: 30,
-              width: 70,
-              alignment: Alignment.center,
-              margin: EdgeInsets.fromLTRB(16,6,14,6),
-              decoration: BoxDecoration(
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                  child:  Text(
+                    "请先进行实名认证",
+                    style: TextStyle(
+                        letterSpacing: 2,
+                        wordSpacing: 2,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
+                    ),
+                  )
+              ),
+              Container(
+                height: 30,
+                width: 70,
+                alignment: Alignment.center,
+                margin: EdgeInsets.fromLTRB(16,6,14,6),
+                decoration: BoxDecoration(
 
                   borderRadius: BorderRadius.circular(4),
                   border: new Border.all(color: Colors.white, width: 0.5),
-              ),
-              child: Text(
-                "前去认证",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12
                 ),
-              ),
-            )
-          ],
+                child: Text(
+                  "前去认证",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );}
+
   }
   @override
   Widget build(BuildContext context) {
@@ -659,6 +664,7 @@ class _BossMineState extends State<BossMine> {
                                 StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
                                 StorageManager.sharedPreferences.setBool(
                                     ShareHelper.is_BossLogin, false);
+                                Navigator.pop(context);
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
