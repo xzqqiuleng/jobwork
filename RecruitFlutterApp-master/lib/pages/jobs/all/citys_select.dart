@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
 import 'citys_model.dart';
@@ -23,7 +24,7 @@ class _CitysSelectState extends State<CitysSelect> {
  int currentSelect = 0;
  bool isTap = false;
  bool isHotCitys = false;
- String selectCityName; 
+ String selectCityName;
 
 
  Future<void> fetchData() async {
@@ -33,7 +34,7 @@ class _CitysSelectState extends State<CitysSelect> {
       var response = json.decode(responseStr);
       var responseJson = response["data"];
       List moduleData = responseJson['provinces'];
-      List hotData = responseJson['hotCitys'];
+      List hotData = ["广东"];
 
       List<String> hotCitys = [];
       if (hotData !=null && hotData.length > 0) {
@@ -43,9 +44,9 @@ class _CitysSelectState extends State<CitysSelect> {
       }
 
       List<String> historyCitys = [];
-      historyCitys.addAll(["广州","深圳","东莞"]);
+      historyCitys.addAll(["广东"]);
 
-      CitysModel hotModel = CitysModel(name: "常用",currentCity: "广州",citys: hotCitys,historyCitys: historyCitys);
+      CitysModel hotModel = CitysModel(name: "常用",currentCity: "",citys: hotCitys,historyCitys: historyCitys);
       models.add(hotModel);
 
       moduleData.forEach((data) {
@@ -63,7 +64,7 @@ class _CitysSelectState extends State<CitysSelect> {
   bool isSelect(int index) {
     return currentSelect == index ? true : false;
   }
-
+ String selectCity="";
   @override
   void initState() {
     // TODO: implement initState
@@ -79,6 +80,7 @@ class _CitysSelectState extends State<CitysSelect> {
         onTap: () {
           setState(() {
             currentSelect = index;
+            selectCity = model.name;
           });
         },
         child: new Row(
@@ -120,7 +122,14 @@ class _CitysSelectState extends State<CitysSelect> {
       children: citys.map((cityName) {
         return new InkWell(
           onTap: () {
-            widget.onValueChanged(cityName);
+
+            if(!selectCity.contains("常用")){
+              widget.onValueChanged(selectCity);
+            }else{
+              widget.onValueChanged("广东");
+              print(cityName);
+            }
+
             selectCityName = cityName;
             isHotCitys = isHot;
             setState(() {
@@ -158,36 +167,36 @@ class _CitysSelectState extends State<CitysSelect> {
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text("当前定位",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
-                new Container(
-                  margin: EdgeInsets.only(top: 15.0,bottom: 15.0),
-                  child: new Container(
-                    width: width,
-                    height: height - 15.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(3),
-                      border: Border.all(width: 1.0,color: new Color.fromARGB(255, 242, 242, 245))
-                    ),
-                    child: new Center(
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Container(
-                            child: new Image.asset(
-                              widget.locationIcon,
-                              width: 11.0,
-                              height: 13.0,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5.0),
-                            child: new Text(models[currentSelect].currentCity,style: TextStyle(color: widget.themeColor) , softWrap: false,overflow: TextOverflow.ellipsis,maxLines: 1,),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+//                new Text("当前定位",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
+//                new Container(
+//                  margin: EdgeInsets.only(top: 15.0,bottom: 15.0),
+//                  child: new Container(
+//                    width: width,
+//                    height: height - 15.0,
+//                    decoration: BoxDecoration(
+//                      borderRadius: BorderRadius.circular(3),
+//                      border: Border.all(width: 1.0,color: new Color.fromARGB(255, 242, 242, 245))
+//                    ),
+//                    child: new Center(
+//                      child: new Row(
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        children: <Widget>[
+//                          new Container(
+//                            child: new Image.asset(
+//                              widget.locationIcon,
+//                              width: 11.0,
+//                              height: 13.0,
+//                            ),
+//                          ),
+//                          Padding(
+//                            padding: EdgeInsets.only(left: 5.0),
+//                            child: new Text(models[currentSelect].currentCity,style: TextStyle(color: widget.themeColor) , softWrap: false,overflow: TextOverflow.ellipsis,maxLines: 1,),
+//                          )
+//                        ],
+//                      ),
+//                    ),
+//                  ),
+//                )
               ],
             ),
           ),

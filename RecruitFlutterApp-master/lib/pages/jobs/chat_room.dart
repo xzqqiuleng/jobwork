@@ -33,13 +33,14 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
   List<Chat> _chatList = [];
   final ScrollController _scrollController = ScrollController();
-  IOWebSocketChannel channel;
+  var channel;
   String  jsonStr;
 
   StreamSubscription  _eventChangeSub;
   void _eventSub(){
     _eventChangeSub= eventBus.on<ChatReplayEvent>().listen((event) {
-      if(event == "0"){
+      print(event);
+      if(event.type == "0"){
         if(widget.type == 0){
           Map map = Map();
           map["user_info"] =jsonStr;
@@ -60,7 +61,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
         }
 
-      }else if(event == "1"){
+      }else if(event.type == "1"){
         if(widget.type == 0){
           Map map = Map();
           map["user_info"] =jsonStr;
@@ -79,7 +80,7 @@ class _ChatRoomState extends State<ChatRoom> {
           map["message"] ="微信号:  ${ShareHelper.getUser().wxId}";
           channel.sink.add(json.encode(map));
         }
-      }else if(event == "2"){
+      }else if(event.type == "2"){
         if(widget.type == 0){
           Map map = Map();
           map["user_info"] =jsonStr;

@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-//  static String baseUrl = 'http://192.168.1.5:8080/';      //开发
-//  static String socketUrl = 'ws://192.168.1.5:8080/ws/msg?';
+//  static String baseUrl = 'http://192.168.1.9:8080/';      //开发
+//  static String socketUrl = 'ws://192.168.1.9:8080/ws/msg?';
   static String baseUrl = 'http://www.18hrzp.net/crawler/';      //开发
   static String socketUrl = 'ws://www.18hrzp.net/crawler/ws/msg?';      //开发
 
@@ -18,11 +18,12 @@ class MiviceRepository{
 
   }
 
-   Future getWorkList(int page,int searchType) async {
+   Future getWorkList(int page,int searchType,{String address}) async {
       var response = await dio.post<Map>('/job/list', data: {
 
       'pageSize': 10,
       'page': page,
+      'address': address,
       'searchType': searchType,
 
     });

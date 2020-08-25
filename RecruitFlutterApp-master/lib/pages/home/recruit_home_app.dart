@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +20,10 @@ import 'package:recruit_app/pages/msg/boss_msglist.dart';
 import 'package:recruit_app/pages/msg/msg_list.dart';
 import 'package:recruit_app/pages/msg/new_msglist.dart';
 import 'package:recruit_app/pages/permision_web.dart';
+import 'package:recruit_app/pages/provider/app_update.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
+import 'package:recruit_app/pages/web_page.dart';
 
 class RecruitHomeApp extends StatefulWidget {
   @override
@@ -209,7 +213,22 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
 //  }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkAppUpdate(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Map map;
+    if(StorageManager.sharedPreferences.getString("open_status")  == "1"){
+      if(StorageManager.sharedPreferences.getString("two").isNotEmpty){
+        map = json.decode(StorageManager.sharedPreferences.getString("two"))[0];
+      }
+    }
+
+
     return   Scaffold(
       body: Stack(
         children: [
@@ -227,7 +246,22 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
           Positioned(
             bottom: 10,
             left: 16,
-            child:Image.network("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2938408281,2455833970&fm=15&gp=0.jpg",width: 60,height: 60,) ,
+            child:GestureDetector(
+              onTap: (){
+                if(map == null){
+                  return;
+                }
+                if(map["go_type"] == "app"){
+                  downloadUrlApp(context,map["link_url"]);
+
+                }else{
+
+                  Navigator.push(context,MaterialPageRoute(builder: (context)=>WebPage(map["link_url"])));
+
+                }
+              },
+              child:map == null? Container():Image.network(map["img_url"],width: 60,height: 60,fit: BoxFit.cover,)
+            )
           )
         ],
       ),
@@ -265,7 +299,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
          Navigator.push(
              context,
              MaterialPageRoute(
-               builder: (context) => WorkPost(),
+               builder: (context) => PermissionWeb(),
              ));
        }
     },

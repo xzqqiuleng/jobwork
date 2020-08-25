@@ -9,7 +9,7 @@ class CashFileUtils{
     //删除缓存目录
     await delDir(tempDir);
     await loadCache();
-    showToast( 'success');
+    showToast( '手机缓存已清理');
   }
   ///递归方式删除目录
  static  Future<Null> delDir(FileSystemEntity file) async {

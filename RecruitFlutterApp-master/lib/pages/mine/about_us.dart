@@ -9,6 +9,7 @@ import 'package:recruit_app/pages/provider/provider_widget.dart';
 import 'package:recruit_app/pages/provider/update_info.dart';
 import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/pages/utils/platform_utils.dart';
+import 'package:recruit_app/widgets/kf_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -229,85 +230,10 @@ class  _AboutUsWidgetState extends State<AboutUsWidget>{
   }
 
   void _showCall(){
-    showModalBottomSheet(
-
-      backgroundColor: Colors.transparent,
+    showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 200,
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                height: 118,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12)
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Gaps.vGap20,
-                    Text("客服热线服务时间:9:00-21:00",
-                      style: TextStyle(
-                          fontSize: 13,
-                          color: Colours.gray_8A8F8A
-                      ),
-
-                    ),
-                    Gaps.vGap20,
-                    Gaps.line1,
-                    Gaps.vGap20,
-                    Text.rich(TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "客户服务热线：",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colours.black_212920
-                            ),
-                          ),
-                          TextSpan(
-                            recognizer: recognizer,
-                            text: Constant.kf_phone,
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colours.app_main
-                            ),
-                          ),
-                        ]
-                    ))
-                  ],
-                ),
-              ),
-             GestureDetector(
-               behavior: HitTestBehavior.opaque,
-               onTap: () =>Navigator.of(context).pop(),
-               child: Container(
-                   margin: EdgeInsets.all(10),
-                   height:54,
-                   alignment: Alignment.center,
-                   width: double.infinity,
-
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.circular(12)
-                   ),
-                   child: Text("取消",
-                     style: TextStyle(
-                         fontSize: 16,
-                         color: Colours.app_main,
-                         fontWeight: FontWeight.bold
-                     ),
-                   )
-               )
-             )
-            ],
-          ),
-        );
+      builder: (context) {
+        return KFDialog();
       },
     );
   }

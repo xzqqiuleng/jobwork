@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/identity_model.dart';
@@ -26,8 +28,10 @@ import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 import 'package:recruit_app/pages/utils/cashfile_utils.dart';
+import 'package:recruit_app/widgets/kf_dialog.dart';
 import 'package:recruit_app/widgets/progress_dialog.dart';
 import 'package:recruit_app/widgets/remind_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../permision_web.dart';
 import '../share_helper.dart';
@@ -74,15 +78,21 @@ class _MineState extends State<Mine> {
         automaticallyImplyLeading: false,
         elevation: 0,
         actions: <Widget>[
-//          IconButton(
-//              icon: Image.asset(
-//                'images/img_setting_white.png',
-//                width: 24,
-//                height: 24,
-//              ),
-//              onPressed: () {
-//                Navigator.push(context, MaterialPageRoute(builder: (context)=>Setting(), ),);
-//              }),
+          IconButton(
+              icon: Image.asset(
+                'images/kf.png',
+                width: 30,
+                height: 30,
+              ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return KFDialog();
+                        },
+                      );
+
+              }),
         ],
         backgroundColor: Colours.app_main,
       ),

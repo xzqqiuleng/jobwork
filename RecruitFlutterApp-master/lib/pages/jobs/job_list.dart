@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/job_list.dart';
 import 'package:recruit_app/pages/jobs/city_filter.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
@@ -125,11 +127,20 @@ class _JobBodyListState extends State<JobBodyList> with AutomaticKeepAliveClient
   RefreshController(initialRefresh: true);
   int page;
   List data =List();
+  String city;
+  StreamSubscription  _eventChangeSub;
+  void _eventSub(){
+    _eventChangeSub= eventBus.on<CitySelectEvent>().listen((event) {
+      city = event.city;
+      print(city);
+      _OnRefresh();
+    });
 
+  }
   _OnRefresh(){
     page=0;
 
-    new MiviceRepository().getWorkList(page,widget.type).then((value) {
+    new MiviceRepository().getWorkList(page,widget.type,address: city).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -157,6 +168,18 @@ class _JobBodyListState extends State<JobBodyList> with AutomaticKeepAliveClient
       }
     });
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _eventSub();
+  }
+
+  @override
+  void dispose() {
+    _eventChangeSub.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -209,6 +232,7 @@ class _JobListState extends State<JobList> with SingleTickerProviderStateMixin{
     _scrollViewController = ScrollController(initialScrollOffset: 0.0);
     _tabController = TabController(length: 3,vsync:this);
   }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

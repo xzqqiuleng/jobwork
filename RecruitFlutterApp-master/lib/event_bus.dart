@@ -6,4 +6,8 @@ EventBus eventBus = EventBus();
    ChatReplayEvent(this.type);
 }
 
+class CitySelectEvent {
+  String city;
+  CitySelectEvent(this.city);
+}
 
