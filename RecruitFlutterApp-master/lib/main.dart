@@ -18,6 +18,7 @@ void main() async {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
   runApp(MyApp());
 }
 

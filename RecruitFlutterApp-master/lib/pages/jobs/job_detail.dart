@@ -528,6 +528,7 @@ class _JobDetailState extends State<JobDetail> {
                                                     fontSize: 14,
                                                     color: Color.fromRGBO(37, 38, 39, 1))),
                                             SizedBox(height: 5),
+
                                             Text(compay_desc,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
