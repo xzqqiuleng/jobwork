@@ -96,7 +96,7 @@ showUpdateAlertDialog(context, AppUpdateInfo appUpdateInfo) async {
 
   Widget _getW(){
     if (!forceUpdate){
-      Align(
+      return  Align(
         alignment: Alignment.topRight,
         child:  GestureDetector(
           onTap: () {
@@ -135,7 +135,7 @@ showUpdateAlertDialog(context, AppUpdateInfo appUpdateInfo) async {
                Gaps.vGap10,
 
                 _getW(),
-
+//
                 Gaps.vGap12,
                 Text(
                   "更新版本",
@@ -151,7 +151,6 @@ showUpdateAlertDialog(context, AppUpdateInfo appUpdateInfo) async {
                   appUpdateInfo.nowVersion,
                   style: TextStyle(
                       color: Colours.app_main,
-                      fontWeight: FontWeight.bold,
                       fontSize: 15,
                       decoration: TextDecoration.none
                   ),
@@ -333,4 +332,33 @@ showReDownloadAlertDialog(context) async {
               ),
             ],
           ));
+}
+Future downloadUrlApp(BuildContext context, String murl) async {
+  var url = murl;
+  var extDir = await getExternalStorageDirectory();
+  debugPrint('extDir path: ${extDir.path}');
+  String apkPath =
+      '${extDir.path}/tuiguagn.apk';
+  File file = File(apkPath);
+  debugPrint('apkPath path: ${file.path}');
+  if (!file.existsSync()) {
+    // 没有下载过
+    if (await showDownloadDialog(context, url, apkPath) ?? false) {
+      OpenFile.open(apkPath);
+    }
+  } else {
+    var reDownload = await showReDownloadAlertDialog(context);
+    //因为点击android的返回键,关闭dialog时的返回值为null
+    if (reDownload != null) {
+      if (reDownload) {
+        //重新下载
+        if (await showDownloadDialog(context, url, apkPath) ?? false) {
+          OpenFile.open(apkPath);
+        }
+      } else {
+        //直接安装
+        OpenFile.open(apkPath);
+      }
+    }
+  }
 }

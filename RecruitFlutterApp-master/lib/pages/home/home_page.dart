@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:recruit_app/model/banner_model.dart';
 import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/home/search_bar.dart';
+import 'package:recruit_app/pages/storage_manager.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 import 'home_headplan.dart';
 import 'home_joblist.dart';
@@ -34,11 +37,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   bool _isTabbarItemClick = false;
   bool _isNavgationBarHidden = false;
   bool isScrool=false;
-  void _rightTabItemPressed() {
-    Navigator.push(
+  String city = "全国";
+  void _rightTabItemPressed()async {
+    String mcity= await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CityPage()));
+    if(mcity != null && !mcity.isEmpty){
+      setState(() {
+        city = mcity;
+      });
+    }
   }
 
   void _leftTabItemPressed() {
@@ -134,10 +143,28 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   fetchData()  {
 
       setState(() {
-          BannerModel bannerModel1 = BannerModel(imageUrl: "images/banner1.jpg",link: "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3778115985,3313781102&fm=26&gp=0.jpg");
+
+        if(StorageManager.sharedPreferences.getString("open_status")  == "1"){
+          if(StorageManager.sharedPreferences.getString("two").isNotEmpty){
+            List banners = json.decode(StorageManager.sharedPreferences.getString("two"));
+            for(var item in banners){
+              BannerModel bannerModel1 = BannerModel(imageUrl: item["img_url"],link: item["link_url"],go_type: item["go_type"]);
+              this.topBannerDatas.add(bannerModel1);
+            }
+          }else{
+            BannerModel bannerModel1 = BannerModel(imageUrl: "images/banner1.jpg");
+            BannerModel bannerModel2 = BannerModel(imageUrl: "images/banner2.jpg");
+            this.topBannerDatas.add(bannerModel1);
+            this.topBannerDatas.add(bannerModel2);
+          }
+        }else{
+          BannerModel bannerModel1 = BannerModel(imageUrl: "images/banner1.jpg");
           BannerModel bannerModel2 = BannerModel(imageUrl: "images/banner2.jpg");
-        this.topBannerDatas.add(bannerModel1);
-        this.topBannerDatas.add(bannerModel2);
+          this.topBannerDatas.add(bannerModel1);
+          this.topBannerDatas.add(bannerModel2);
+        }
+
+
 
 
         TopicTabModel tabModel1 = TopicTabModel(picture: "images/home_tab1.png",link: "职位库");
@@ -240,7 +267,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                       Center(
                           child:  Text(
-                            "武汉",
+                            city,
                             style: TextStyle(
                               color: Color.lerp(Colors.white, Colors.black87, _navAplpha),
                               fontSize: 16

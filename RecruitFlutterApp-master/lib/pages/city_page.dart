@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
 
+import '../event_bus.dart';
 import 'jobs/all/citys_select.dart';
 
 class CityPage extends StatefulWidget {
@@ -41,6 +42,8 @@ class _CityPageState extends State<CityPage> {
         locationIcon: "images/select_loc.png",
         onValueChanged: (city) {
             Navigator.of(context).pop(city);
+            eventBus.fire(CitySelectEvent(city));
+            print(city);
         },
       ),
     );

@@ -19,6 +19,7 @@ import 'package:recruit_app/pages/msg/agreement.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
+import 'package:recruit_app/widgets/kf_dialog.dart';
 import 'package:recruit_app/widgets/remind_dialog.dart';
 
 import '../share_helper.dart';
@@ -112,6 +113,28 @@ class _BossMineState extends State<BossMine> {
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+              icon: Image.asset(
+                'images/kf.png',
+                width: 30,
+                height: 30,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return KFDialog();
+                  },
+                );
+
+              }),
+        ],
+        backgroundColor: Colours.app_main,
+      ),
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[

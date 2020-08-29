@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/provider/update_info.dart';
 /// App相关接口
@@ -8,7 +9,7 @@ class AppRepository {
   static Dio dio;
 //  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-  static String baseUrl = 'http://192.168.1.5/';      //开发
+  static String baseUrl = 'http://www.18hrzp.net/crawler/';    //开发
   AppRepository(){
 
 
@@ -19,18 +20,17 @@ class AppRepository {
   }
    Future<AppUpdateInfo> checkUpdate(String version) async {
     debugPrint('检查更新,当前版本为===>$version');
-    var response = await dio.get('api-user/version/getVersion', queryParameters: {
+    var response = await dio.get('version/last', queryParameters: {
       'version': version,
     });
    var jsroStr =  json.decode(response.toString());
 
-    if(jsroStr["resp_code"] ==0 ){
-      var result = AppUpdateInfo.fromMap(jsroStr["datas"]);
-      result.buildHaveNewVersion = true;
+    if(jsroStr["status"] =="success"){
+      var result = AppUpdateInfo.fromMap(jsroStr["result"]);
       debugPrint('发现新版本===>');
       return result;
     }
-    debugPrint('没有发现新版本');
+
     return null;
   }
 }

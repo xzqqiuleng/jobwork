@@ -25,7 +25,7 @@ class ChatRowItem extends StatelessWidget {
   Function  agree(){
     if(chat.content.contains("state")&&chat.content.contains("msg")&&chat.content.contains("type")&&chat.content.contains("userId")){
       Map msgMap = json.decode(chat.content);
-    msgMap["state"] = 2;
+    msgMap["state"] = "2";
       String  type = msgMap["type"];
       String userId;
       if(ShareHelper.isBossLogin()){
@@ -39,7 +39,8 @@ class ChatRowItem extends StatelessWidget {
       map["reply_id"] =chat.replayId;
       map["uuid"] =msgMap["uuid"];
       MiviceRepository().agreeRe(map).then((value) {
-               eventBus.fire(ChatReplayEvent(value));
+        print(value);
+               eventBus.fire(ChatReplayEvent(type));
            });
     }
 
@@ -47,7 +48,7 @@ class ChatRowItem extends StatelessWidget {
   Function  refum(){
     if(chat.content.contains("state")&&chat.content.contains("msg")&&chat.content.contains("type")&&chat.content.contains("userId")){
       Map msgMap = json.decode(chat.content);
-      msgMap["state"] =1;
+      msgMap["state"] ="1";
       String userId;
       if(ShareHelper.isBossLogin()){
         userId = ShareHelper.getBosss().userId;
@@ -76,7 +77,7 @@ class ChatRowItem extends StatelessWidget {
       }
 
         Map msgMap = json.decode(chat.content);
-        String  state = msgMap["state"];
+        String  state = msgMap["state"].toString();
         String  msg = msgMap["msg"];
         String  type = msgMap["type"];
         String  userId = msgMap["userId"];
@@ -166,11 +167,12 @@ class ChatRowItem extends StatelessWidget {
            }else{
 
              return Container(
-                 height:160,
+                 height:100,
                  alignment: Alignment.center,
                  margin: EdgeInsets.all(20),
                  decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(4)
+                     borderRadius: BorderRadius.circular(4),
+                         color: Colors.white
                  ),
                  child:Column(
                    children: [
