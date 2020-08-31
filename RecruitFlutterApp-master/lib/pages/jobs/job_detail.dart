@@ -38,6 +38,7 @@ class _JobDetailState extends State<JobDetail> {
   String address = "暂无地址";
   String compay_desc = "暂无公司信息";
   bool isSvae = false;
+  String company="未注册";
   _loadData(){
 
  if(widget.id == null){
@@ -51,6 +52,7 @@ class _JobDetailState extends State<JobDetail> {
 
         setState(() {
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
+          company = infors["company"];
           replayId = infors["reply_id"];  //"com_id" -> 10057  "job_id" -> 120587312
           print(infors);
           datalist = data["jobs"];
@@ -653,7 +655,7 @@ class _JobDetailState extends State<JobDetail> {
                     color: Colours.app_main,
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user,reply_id: replayId,type: 1,user_id: ShareHelper.getUser().userId,)));
+                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user=="HR发布"?company:user,reply_id: replayId,type: 1,user_id: ShareHelper.getUser().userId,)));
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),
