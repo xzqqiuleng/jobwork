@@ -220,17 +220,18 @@ child: _buildMiddelBar(topicTabMenus,context),
             onRefresh: _OnRefresh,
             onLoading: _loadMore,
             enablePullUp: true,
-            child: ListView.builder(itemBuilder: (context, index) {
+            child: ListView.builder(itemBuilder: (BuildContext context, int index) {
           if (data.length >0 ) {
-            var key = GlobalKey<SlideButtonState>();
             return GestureDetector(
               onTap: (){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getBosss().userId ,reply_id: data[index]["userInfo"]["user_id"],head_icon:data[index]["userInfo"]["head_img"],title: data[index]["userInfo"]["user_name"],type: 0,)));
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getBosss().userId ,reply_id: data[index]["userInfo"]["user_id"].toString(),head_icon:data[index]["userInfo"]["head_img"],title: data[index]["userInfo"]["user_name"],type: 0,)));
               },
               behavior: HitTestBehavior.opaque,
-              child:BossChatItem(btnKey: key,mapData: data[index],) ,
+              child:BossChatItem(mapData: data[index],) ,
             ) ;
+          }else{
+            return Text("");
           }
 
             },
@@ -322,9 +323,9 @@ Widget _buildMiddelBar( List<TopicTabModel> topicTabMenus,BuildContext context) 
   );
 }
 class BossChatItem extends StatefulWidget {
-  final GlobalKey<SlideButtonState> btnKey;
+
   final  Map mapData;
-  const BossChatItem({Key key, @required this.btnKey,this.mapData}) : super(key: key);
+  const BossChatItem({Key key,this.mapData}) : super(key: key);
 
   @override
   _BossChatItemState createState() => _BossChatItemState();
@@ -343,10 +344,7 @@ class _BossChatItemState extends State<BossChatItem> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SlideButton(
-          key: widget.btnKey,
-          singleButtonWidth: ScreenUtil().setWidth(116),
-          child: Container(
+        Container(
             color: Colors.white,
             padding: EdgeInsets.only(
               top: ScreenUtil().setWidth(38),
@@ -429,12 +427,7 @@ class _BossChatItemState extends State<BossChatItem> {
               ],
             ),
           ),
-          buttons: <Widget>[
-            buildAction(widget.btnKey, Colors.red, () {
-              widget.btnKey.currentState.close();
-            }),
-          ],
-        ),
+
         Container(
             color: Color.fromRGBO(245, 245, 245, 1),
             height: ScreenUtil().setWidth(4)),
