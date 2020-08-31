@@ -16,6 +16,7 @@ import 'package:recruit_app/pages/mine/me_gzjl.dart';
 import 'package:recruit_app/pages/mine/me_qw.dart';
 import 'package:recruit_app/pages/mine/project_item.dart';
 import 'package:recruit_app/pages/mine/work_item.dart';
+import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 
@@ -743,8 +744,17 @@ _getDetail() {
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ChatRoom(head_icon: headImag,title: infor["姓名"],reply_id:  replayId,user_id: ShareHelper.getBosss().userId,type: 0,)));
+                      if(ShareHelper.getBosss().realStatus == "1"){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ChatRoom(head_icon: headImag,title: infor["姓名"],reply_id:  replayId,user_id: ShareHelper.getBosss().userId,type: 0,)));
+                      }else{
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PermissionWeb(),
+                            ));
+                      }
+
                     },
                     textColor: Colors.white,
                     child: Text("立即沟通"),

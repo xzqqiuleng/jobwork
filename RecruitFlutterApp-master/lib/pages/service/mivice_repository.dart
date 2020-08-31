@@ -249,4 +249,5 @@ class MiviceRepository{
     var response = await dio.post<Map>('/banner/getBanners');
     return response;
   }
+
 }

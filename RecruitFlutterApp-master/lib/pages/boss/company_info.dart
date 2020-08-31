@@ -63,7 +63,7 @@ class _CompanyInfoState extends State<CompanyInfo> {
     }
 
   }
-  String id;
+  var id;
   String inforJson;
   int clickPos = -1;
   String m1;
@@ -72,11 +72,12 @@ class _CompanyInfoState extends State<CompanyInfo> {
   _getCompany(){
     MiviceRepository().getCompany(ShareHelper.getBosss().userMail).then((value) {
       var reponse = json.decode(value.toString());
+      print(reponse);
       if(reponse["status"] == "success"){
         Map data = reponse["result"];
         inforJson=   data["company_info"];
-        id =data["id"].toString();
-        shState= data["sh_state"];
+        id =data["id"];
+        shState= data["sh_state"].toString();
          if(inforJson != null && inforJson != ""){
            Map map = json.decode(inforJson);
            m1 = map["公司介绍"];

@@ -213,6 +213,7 @@ class _JobManageDetailState extends State<JobManageDetail> {
                         child: MaterialButton(
                           color: Colours.app_main,
                           onPressed: () {
+
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

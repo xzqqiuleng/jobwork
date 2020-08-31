@@ -300,8 +300,8 @@ class _OnlineResumeState extends State<OnlineResume> {
           leading: IconButton(
               icon: Image.asset(
                 'images/ic_back_arrow.png',
-                width: 24,
-                height: 24,
+                width: 18,
+                height: 18,
               ),
               onPressed: () {
                 _back();

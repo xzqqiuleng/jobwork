@@ -100,6 +100,7 @@ class _MineState extends State<Mine> {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(
+
             child: Container(
               padding: EdgeInsets.only(
                   left: ScreenUtil().setWidth(48),
@@ -132,7 +133,7 @@ class _MineState extends State<Mine> {
                           ),
                         ),
                         SizedBox(
-                          width: ScreenUtil().setWidth(15),
+                          width: ScreenUtil().setWidth(30),
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -148,17 +149,27 @@ class _MineState extends State<Mine> {
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              height: ScreenUtil().setWidth(20),
+                              height: ScreenUtil().setWidth(10),
                             ),
-                            Text(
-                              ShareHelper.getUser().mail,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil().setSp(30),
+                            GestureDetector(
+                              child:    Text(
+                                "在线编辑简历",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(30),
+                                ),
                               ),
-                            ),
+                              onTap: (){
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => OnlineResume()));
+
+                              },
+                            )
+
 
                           ],
 
@@ -296,6 +307,7 @@ class _MineState extends State<Mine> {
             ),
           ),
           SliverToBoxAdapter(
+
             child:Row(
               children: <Widget>[
                 Expanded(
@@ -305,7 +317,7 @@ class _MineState extends State<Mine> {
                           Navigator.push(context,MaterialPageRoute(builder: (context)=>SaveJob(),),);
                       },
                       behavior: HitTestBehavior.opaque,
-                      child: Card( 
+                      child: Card(
                         elevation: 2,
                              shape:RoundedRectangleBorder(
                                borderRadius:BorderRadius.circular(2)
