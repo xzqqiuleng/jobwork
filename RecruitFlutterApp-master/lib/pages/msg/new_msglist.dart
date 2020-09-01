@@ -179,7 +179,8 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
         data.clear();
 
         setState(() {
-          data = reponse["result"];
+         List sdata = reponse["result"];
+         data.addAll(sdata);
         });
 
         _refreshController.refreshCompleted();
@@ -219,18 +220,17 @@ child: _buildMiddelBar(topicTabMenus,context),
             onRefresh: _OnRefresh,
             onLoading: _loadMore,
             enablePullUp: true,
-            child: ListView.builder(itemBuilder: (context, index) {
-          if (data.length >0 ) {
-            var key = GlobalKey<SlideButtonState>();
+            child: ListView.builder(itemBuilder: (BuildContext context,int index) {
+              int sindex = index;
             return GestureDetector(
               onTap: (){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"],head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"]==null?data[index]["reply_id"].toString():data[index]["comInfo"]["user_id"].toString(),head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
               },
               behavior: HitTestBehavior.opaque,
-              child:MsgChatItem(btnKey: key,mapData: data[index],) ,
+              child:MsgChatItem(mapData: data[sindex],) ,
             ) ;
-          }
+
 
             },
 

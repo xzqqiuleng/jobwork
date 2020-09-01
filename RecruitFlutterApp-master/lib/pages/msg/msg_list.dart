@@ -143,9 +143,9 @@ class _MsgListState extends State<MsgList> {
                     delegate: SliverChildBuilderDelegate((cxt, idx) {
                       var key = GlobalKey<SlideButtonState>();
                       if (_firstType && _secondType) {
-                        return MsgChatItem(btnKey: key);
+                        return MsgChatItem();
                       } else if (_firstType && !_secondType) {
-                        return MsgChatItem(btnKey: key);
+                        return MsgChatItem();
                       } else if (!_firstType && _secondType) {
                         return MsgInterviewItem(btnKey: key);
                       } else if (!_firstType && !_secondType) {

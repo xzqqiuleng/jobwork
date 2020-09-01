@@ -3,9 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/widgets/slide_button.dart';
 
 class MsgChatItem extends StatefulWidget {
-  final GlobalKey<SlideButtonState> btnKey;
   final  Map mapData;
-  const MsgChatItem({Key key, @required this.btnKey,this.mapData}) : super(key: key);
+  const MsgChatItem({Key key,this.mapData}) : super(key: key);
 
   @override
   _MsgChatItemState createState() => _MsgChatItemState();
@@ -23,10 +22,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SlideButton(
-          key: widget.btnKey,
-          singleButtonWidth: ScreenUtil().setWidth(116),
-          child: Container(
+       Container(
             color: Colors.white,
             padding: EdgeInsets.only(
               top: ScreenUtil().setWidth(38),
@@ -109,12 +105,8 @@ class _MsgChatItemState extends State<MsgChatItem> {
               ],
             ),
           ),
-          buttons: <Widget>[
-            buildAction(widget.btnKey, Colors.red, () {
-              widget.btnKey.currentState.close();
-            }),
-          ],
-        ),
+
+
         Container(
             color: Color.fromRGBO(245, 245, 245, 1),
             height: ScreenUtil().setWidth(4)),
