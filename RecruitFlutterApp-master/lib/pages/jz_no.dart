@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
+import 'jobs/job_detail.dart';
+import 'jobs/job_row_item.dart';
+import 'share_helper.dart';
+
 
 
 class JZNo extends StatefulWidget{
@@ -26,8 +30,29 @@ class _JZState extends State<JZNo>{
   List data =List();
 
   _OnRefresh(){
+    Map params = Map();
+    int classStr;
+    params["user_mail"] = ShareHelper.getUser().userMail;
+    if(widget.title == "浏览过"){
+      classStr = 1;
+    }else if(widget.title == "已沟通"){
+      classStr = 2;
+    }else{
+      classStr = 0;
+    }
+    params["class"] = classStr;
+    new MiviceRepository().getJodSaveListByType(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        data.clear();
 
-
+        setState(() {
+          data = reponse["result"];
+        });
+        print(data);
+        _refreshController.refreshCompleted();
+      }
+    });
 
   _refreshController.refreshCompleted();
   }
@@ -35,6 +60,47 @@ class _JZState extends State<JZNo>{
     _refreshController.loadComplete();
 
   }
+
+  Widget getContent(){
+    if(data.length >0){
+    return ListView.builder(itemBuilder: (context, index) {
+      if (data.length >0 && index < data.length) {
+        return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            child: JobRowItem(
+                job: data[index],
+                index: index,
+                lastItem: index == data.length - 1),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JobDetail(data[index]["job_id"]),
+                  ));
+            });
+      }
+      return null;
+    },
+      itemCount: data.length,
+    );
+
+    }else{
+      return  Center(
+          child:  Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset("images/empty_work.png",width: 60,height: 60,),
+              Text(
+                  "暂无数据，请前去投递工作"
+              )
+            ],
+          )
+      );
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -72,17 +138,7 @@ class _JZState extends State<JZNo>{
           onRefresh: _OnRefresh,
           onLoading: _loadMore,
           enablePullUp: true,
-          child: Center(
-              child:  Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset("images/empty_work.png",width: 60,height: 60,),
-                  Text(
-                      "暂无数据，请前去投递工作"
-                  )
-                ],
-              )
-          )
+          child: getContent()
       )
     );
   }

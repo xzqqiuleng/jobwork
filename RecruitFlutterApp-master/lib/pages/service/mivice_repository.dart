@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class MiviceRepository{
 
-//  static String baseUrl = 'http://192.168.1.9:8080/';      //开发
+//  static String baseUrl = 'http://192.168.1.21:8080/';      //开发
 //  static String socketUrl = 'ws://192.168.1.9:8080/ws/msg?';
   static String baseUrl = 'http://www.18hrzp.net/crawler/';      //开发
   static String socketUrl = 'ws://www.18hrzp.net/crawler/ws/msg?';      //开发
@@ -64,16 +64,17 @@ class MiviceRepository{
     });
     return response;
   }
-  Future getJobDetail(int jobId) async {
+  Future getJobDetail(int jobId,String userMail) async {
     var response = await dio.post<Map>('/job/info',queryParameters: {
 
       'jobId': jobId,
+      'userMail': userMail,
     });
     return response;
   }
-  Future getCompanyDetail(int jobId) async {
+  Future getCompanyDetail(int jobId,String userMail) async {
     var response = await dio.post<Map>('/company/info',queryParameters: {
-
+      'userMail': userMail,
       'comId': jobId,
     });
     return response;
@@ -214,9 +215,10 @@ class MiviceRepository{
     return response;
   }
 
-  Future getResumeInfo(String jobId) async {
+  Future getResumeInfo(String jobId,String userMail) async {
     var response = await dio.get<Map>('/resume/info', queryParameters: {
-      "jobId":jobId
+      "jobId":jobId,
+      'userMail': userMail,
     });
     return response;
   }
@@ -250,4 +252,52 @@ class MiviceRepository{
     return response;
   }
 
+  Future saveJobByType(Map map) async {
+    var response = await dio.post<Map>('/collect/job', data: {
+      "user_mail":map["user_mail"],
+      "job_id":map["job_id"],
+      "type":map["type"],
+      "class":map["class"],
+    });
+    return response;
+  }
+  Future getJodSaveListByType(Map map) async {
+    var response = await dio.post<Map>('/collect/getJobs', data: {
+      "usermail":map["user_mail"],
+      "class":map["class"],
+    });
+    return response;
+  }
+
+  Future saveResumeByType(Map map) async {
+    var response = await dio.post<Map>('/collect/resume', data: {
+      "user_mail":map["user_mail"],
+      "resume_id":map["job_id"],
+      "type":map["type"],
+      "class":map["class"],
+    });
+    return response;
+  }
+  Future getResumeSaveListByType(Map map) async {
+    var response = await dio.post<Map>('/collect/getResumes', data: {
+      "usermail":map["user_mail"],
+      "class":map["class"],
+    });
+    return response;
+  }
+
+  Future saveCom(Map map) async {
+    var response = await dio.post<Map>('/collect/com', data: {
+      "user_mail":map["user_mail"],
+      "com_id":map["com_id"],
+      "type":map["type"],
+    });
+    return response;
+  }
+  Future getComList(Map map) async {
+    var response = await dio.post<Map>('/collect/getComs', data: {
+      "usermail":map["user_mail"],
+    });
+    return response;
+  }
 }

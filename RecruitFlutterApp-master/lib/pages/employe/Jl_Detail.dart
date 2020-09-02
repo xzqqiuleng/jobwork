@@ -4,18 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
-import 'package:recruit_app/model/job_intent_list.dart';
-import 'package:recruit_app/model/mine_edu_list.dart';
-import 'package:recruit_app/model/mine_project_list.dart';
-import 'package:recruit_app/model/mine_work_list.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
-import 'package:recruit_app/pages/mine/edu_item.dart';
-import 'package:recruit_app/pages/mine/job_intent_item.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
-import 'package:recruit_app/pages/mine/me_gzjl.dart';
-import 'package:recruit_app/pages/mine/me_qw.dart';
-import 'package:recruit_app/pages/mine/project_item.dart';
-import 'package:recruit_app/pages/mine/work_item.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -36,8 +26,21 @@ class _JLDetailState extends State<JLDetail> {
   String headImag = "";
   Map infor;
   String replayId="";
+
+  int is_collect = 0;
+
+  _saveByType(int type,int classStr){
+    Map params = Map();
+    params["user_mail"] = ShareHelper.getBosss().userMail;
+    params["job_id"] = widget.jobId;
+    params["class"] = classStr;
+    params["type"] = type;
+    new MiviceRepository().saveResumeByType(params).then((value) {
+
+    });
+  }
 _getDetail() {
-  new MiviceRepository().getResumeInfo(widget.jobId).then((value) {
+  new MiviceRepository().getResumeInfo(widget.jobId,ShareHelper.getBosss().userMail).then((value) {
     var reponse = json.decode(value.toString());
     print(reponse);
     if (reponse["status"] == "success") {
@@ -45,6 +48,7 @@ _getDetail() {
       headImag= reponse["result"]["info"]['head_img'].toString();
       replayId =  reponse["result"]["info"]['reply_id'].toString();
       infor = json.decode(inforJson);
+      is_collect =  reponse["result"]["info"]["is_collect"];
       tags.clear();
       if (infor["性别"] != "") {
         tags.add(infor["性别"]);
@@ -302,6 +306,7 @@ _getDetail() {
     // TODO: implement initState
     super.initState();
    _getDetail();
+    _saveByType(1,1);
   }
 
 
@@ -436,6 +441,26 @@ _getDetail() {
 //                height: 24,
 //              ),
 //              onPressed: () {}),
+          IconButton(
+              icon: Image.asset(
+                is_collect == 1 ?'images/save_yes.png':'images/save_no.png',
+                width: 24,
+                height: 24,
+              ),
+              onPressed: () {
+
+                setState(() {
+                  if( is_collect == 1){
+                    is_collect = 0;
+                    _saveByType(0, 0);
+                  }else{
+                    is_collect = 1;
+                    _saveByType(1, 0);
+
+                  }
+                });
+
+              }),
           IconButton(
               icon: Image.asset(
                 'images/ic_action_report_black.png',
@@ -744,7 +769,9 @@ _getDetail() {
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
+                      _saveByType(1,2);
                       if(ShareHelper.getBosss().realStatus == "1"){
+
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => ChatRoom(head_icon: headImag,title: infor["姓名"],reply_id:  replayId,user_id: ShareHelper.getBosss().userId,type: 0,)));
                       }else{

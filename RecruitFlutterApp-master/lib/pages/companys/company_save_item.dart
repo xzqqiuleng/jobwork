@@ -7,12 +7,12 @@ import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/utils/html_init.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
-class CompanyRowItem extends StatelessWidget {
+class CompanySaveItem extends StatelessWidget {
   final Map<String,dynamic> company;
   final int index;
   final bool lastItem;
 
-  const CompanyRowItem({Key key, this.company, this.index, this.lastItem})
+  const CompanySaveItem({Key key, this.company, this.index, this.lastItem})
       : super(key: key);
 
   @override
@@ -145,65 +145,7 @@ class CompanyRowItem extends StatelessWidget {
               height: 0.4,
               dashWidth:2,
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(32),top: ScreenUtil().setWidth(20),),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '热招中: ',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
-                            color: Color.fromRGBO(151, 151, 151, 1),
-                          ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            company["jobs"][0]["title"],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(24),
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
 
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(22),
-                  ),
-                  Text(
-                    company["nums"].toString(),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: Colours.app_main,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  Text(
-                    '个岗位',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: Color.fromRGBO(151, 151, 151, 1),
-                    ),
-                  ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(22),
-                  ),
-                  Image.asset('images/img_arrow_right_blue.png',
-                      width: ScreenUtil().setWidth(10),
-                      height: ScreenUtil().setWidth(20),
-                      fit: BoxFit.cover)
-                ],
-              ),
-            ),
           ],
         ),
       )

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_review/launch_review.dart';
@@ -17,11 +19,13 @@ import 'package:recruit_app/pages/mine/push_set.dart';
 import 'package:recruit_app/pages/mine/ys_set.dart';
 import 'package:recruit_app/pages/msg/agreement.dart';
 import 'package:recruit_app/pages/permision_web.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 import 'package:recruit_app/widgets/kf_dialog.dart';
 import 'package:recruit_app/widgets/remind_dialog.dart';
 
+import '../reusme_save.dart';
 import '../share_helper.dart';
 
 class BossMine extends StatefulWidget {
@@ -36,7 +40,52 @@ class _BossMineState extends State<BossMine> {
 
   List<Me> options=List();
 
+  int num1 = 0;
+  int num2 = 0;
+  int num3 = 0;
+  void getNUms(){
+    Map params = Map();
+    params["user_mail"] = ShareHelper.getBosss().userMail;
+    params["class"] = 1;
+    new MiviceRepository().getResumeSaveListByType(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
 
+        setState(() {
+          List data = reponse["result"];
+          num1= data.length;
+        });
+
+      }
+    });
+
+    params["class"] = 2;
+    new MiviceRepository().getResumeSaveListByType(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+
+        setState(() {
+          List data = reponse["result"];
+          num2= data.length;
+        });
+
+      }
+    });
+
+    params["class"] = 0;
+    new MiviceRepository().getResumeSaveListByType(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+
+        setState(() {
+          List data = reponse["result"];
+          num3= data.length;
+        });
+
+      }
+    });
+
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -47,7 +96,7 @@ class _BossMineState extends State<BossMine> {
     options.add( Me(imgPath: 'images/me3.png', itemName: '给个好评', itemStatus: ''));
     options.add( Me(imgPath: 'images/me4.png', itemName: '用户隐私协议', itemStatus: ''));
     options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
-
+getNUms();
 
   }
 
@@ -221,7 +270,7 @@ class _BossMineState extends State<BossMine> {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
-                                        '0',
+                                        num1.toString(),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -231,7 +280,7 @@ class _BossMineState extends State<BossMine> {
                                         height: 5,
                                       ),
                                       Text(
-                                        '已邀请',
+                                        '浏览过',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -246,7 +295,7 @@ class _BossMineState extends State<BossMine> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              JZNo("已邀请")));
+                                              ResumeSave("浏览过")));
                                 },
                               ),
                             ),
@@ -260,14 +309,14 @@ class _BossMineState extends State<BossMine> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              JZNo("已面试")));
+                                              ResumeSave("已沟通")));
                                 },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '0',
+                                     num2.toString(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -277,7 +326,7 @@ class _BossMineState extends State<BossMine> {
                                       height: 5,
                                     ),
                                     Text(
-                                      '已面试',
+                                      '已沟通',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -296,7 +345,7 @@ class _BossMineState extends State<BossMine> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '0',
+                                     num3.toString(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -306,7 +355,7 @@ class _BossMineState extends State<BossMine> {
                                       height: 5,
                                     ),
                                     Text(
-                                      '已拒绝',
+                                      '已收藏',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -319,7 +368,7 @@ class _BossMineState extends State<BossMine> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              JZNo("已拒绝")));
+                                              ResumeSave("已收藏")));
                                 },
                               ),
                             ),

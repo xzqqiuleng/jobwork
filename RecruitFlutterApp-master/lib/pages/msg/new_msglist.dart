@@ -221,14 +221,13 @@ child: _buildMiddelBar(topicTabMenus,context),
             onLoading: _loadMore,
             enablePullUp: true,
             child: ListView.builder(itemBuilder: (BuildContext context,int index) {
-              int sindex = index;
-            return GestureDetector(
+                         return GestureDetector(
               onTap: (){
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"]==null?data[index]["reply_id"].toString():data[index]["comInfo"]["user_id"].toString(),head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
               },
               behavior: HitTestBehavior.opaque,
-              child:MsgChatItem(mapData: data[sindex],) ,
+              child:MsgChatItem(mapData: data[index],) ,
             ) ;
 
 

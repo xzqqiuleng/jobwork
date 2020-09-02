@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
+import 'employe/Jl_Detail.dart';
+import 'employe/employe_row_item.dart';
 import 'jobs/job_detail.dart';
 import 'jobs/job_row_item.dart';
 import 'share_helper.dart';
 
 
 
-class JZNo extends StatefulWidget{
+class ResumeSave extends StatefulWidget{
   String title;
- JZNo(this.title);
+ ResumeSave(this.title);
 
   @override
   _JZState createState() {
@@ -23,7 +25,7 @@ class JZNo extends StatefulWidget{
 
 }
 
-class _JZState extends State<JZNo>{
+class _JZState extends State<ResumeSave>{
   RefreshController _refreshController =
   RefreshController(initialRefresh: true);
 
@@ -32,7 +34,7 @@ class _JZState extends State<JZNo>{
   _OnRefresh(){
     Map params = Map();
     int classStr;
-    params["user_mail"] = ShareHelper.getUser().userMail;
+    params["user_mail"] = ShareHelper.getBosss().userMail;
     if(widget.title == "浏览过"){
       classStr = 1;
     }else if(widget.title == "已沟通"){
@@ -41,7 +43,7 @@ class _JZState extends State<JZNo>{
       classStr = 0;
     }
     params["class"] = classStr;
-    new MiviceRepository().getJodSaveListByType(params).then((value) {
+    new MiviceRepository().getResumeSaveListByType(params).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         data.clear();
@@ -67,15 +69,15 @@ class _JZState extends State<JZNo>{
       if (data.length >0 && index < data.length) {
         return GestureDetector(
             behavior: HitTestBehavior.opaque,
-            child: JobRowItem(
-                job: data[index],
+            child: EmployeeRowItem(
+                employee: data[index],
                 index: index,
                 lastItem: index == data.length - 1),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => JobDetail(data[index]["job_id"]),
+                    builder: (context) => JLDetail(data[index]["job_id"].toString()),
                   ));
             });
       }

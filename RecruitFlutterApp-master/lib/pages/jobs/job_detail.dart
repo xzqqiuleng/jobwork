@@ -37,21 +37,36 @@ class _JobDetailState extends State<JobDetail> {
   Map com_label;
   String address = "暂无地址";
   String compay_desc = "暂无公司信息";
-  bool isSvae = false;
+
   String company="未注册";
+  int is_collect = 0;
+
+  _saveByType(int type,int classStr){
+    Map params = Map();
+    params["user_mail"] = ShareHelper.getUser().userMail;
+    params["job_id"] = widget.id;
+    params["class"] = classStr;
+    params["type"] = type;
+    new MiviceRepository().saveJobByType(params).then((value) {
+
+    });
+  }
+
   _loadData(){
 
  if(widget.id == null){
    widget.id = 113546932;
  }
-    new MiviceRepository().getJobDetail(widget.id).then((value) {
+    new MiviceRepository().getJobDetail(widget.id,ShareHelper.getUser().userMail).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
 
 
         setState(() {
+
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
+          is_collect = infors["is_collect"];
           company = infors["company"];
           replayId = infors["reply_id"];  //"com_id" -> 10057  "job_id" -> 120587312
           print(infors);
@@ -289,12 +304,13 @@ class _JobDetailState extends State<JobDetail> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     _loadData();
 
-      isSvae = ShareHelper.isHaveData(widget.id.toString(),"work");
 
 
 
+    _saveByType(1,1);
   }
 
 
@@ -326,21 +342,21 @@ class _JobDetailState extends State<JobDetail> {
 //                onPressed: () {}),
             IconButton(
                 icon: Image.asset(
-                  isSvae ?'images/save_yes.png':'images/save_no.png',
+                  is_collect == 1 ?'images/save_yes.png':'images/save_no.png',
                   width: 24,
                   height: 24,
                 ),
                 onPressed: () {
-                  if(isSvae){
-                    ShareHelper.deletData(widget.id.toString(),"work");
-                  }else{
-                    Map saveDatas = infors;
-                    saveDatas["id"]=widget.id.toString();
-                    ShareHelper.saveData(saveDatas,"work");
 
-                  }
                   setState(() {
-                    isSvae = !isSvae;
+                    if( is_collect == 1){
+                      is_collect = 0;
+                     _saveByType(0, 0);
+                    }else{
+                      is_collect = 1;
+                      _saveByType(1, 0);
+
+                    }
                   });
 
                 }),
@@ -655,6 +671,7 @@ class _JobDetailState extends State<JobDetail> {
                   child: MaterialButton(
                     color: Colours.app_main,
                     onPressed: () {
+                      _saveByType(1,2);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => ChatRoom(head_icon: userImg,title: user=="HR发布"?company:user,reply_id: replayId,type: 1,user_id: ShareHelper.getUser().userId,)));
                     },

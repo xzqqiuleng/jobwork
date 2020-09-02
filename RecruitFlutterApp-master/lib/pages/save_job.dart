@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/pages/companys/company_c_item.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
+
+import 'companys/company_detail.dart';
+import 'companys/company_row_item.dart';
+import 'companys/company_save_item.dart';
 
 
 class SaveJob extends StatefulWidget{
@@ -25,13 +30,19 @@ class _JobState extends State<SaveJob>{
   RefreshController(initialRefresh: true);
   List data =List();
   _OnRefresh(){
-    String jsonStr;
+    Map params = Map();
+    params["user_mail"] = ShareHelper.getUser().userMail;
+    new MiviceRepository().getComList(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+        data.clear();
 
-    jsonStr = StorageManager.sharedPreferences.getString(ShareHelper.getUser().userId+"work");
-
-
-    setState(() {
-      data =  json.decode(jsonStr);
+        setState(() {
+          data = reponse["result"];
+        });
+        print(data);
+        _refreshController.refreshCompleted();
+      }
     });
 
     _refreshController.refreshCompleted();
@@ -45,6 +56,46 @@ class _JobState extends State<SaveJob>{
     super.initState();
 
   }
+  Widget getContent(){
+    if(data.length >0){
+      return   ListView.builder(itemBuilder: (context, index) {
+        if (data.length >0 && index < data.length) {
+          return  GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            child: CompanySaveItem(
+                company: data[index],
+                index: index,
+                lastItem: index == data.length - 1),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CompanyDetail( data[index]["id"]),
+                  ));
+            },
+          );
+        }
+        return Text("");
+      },
+        itemCount: data.length,
+      );
+
+    }else{
+      return  Center(
+          child:  Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset("images/empty_work.png",width: 60,height: 60,),
+              Text(
+                  "暂无数据，请前去投递工作"
+              )
+            ],
+          )
+      );
+    }
+
+
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -53,7 +104,7 @@ class _JobState extends State<SaveJob>{
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text("我的收藏",
+        title: Text("公司收藏",
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -82,26 +133,8 @@ class _JobState extends State<SaveJob>{
           onRefresh: _OnRefresh,
           onLoading: _loadMore,
           enablePullUp: true,
-          child: ListView.builder(itemBuilder: (context, index) {
-            if (data.length >0 && index <data.length) {
-              return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: CompanyCItem(
-                      job: data[index],
-                      index: index,
-                      lastItem: index ==  data.length - 1),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => JobDetail( int.parse(data[index]["id"])),
-                        ));
-                  });
-            }
-            return null;
-          },
-            itemCount: data.length,
-          )
+          child: getContent(),
+
       )
     );
   }

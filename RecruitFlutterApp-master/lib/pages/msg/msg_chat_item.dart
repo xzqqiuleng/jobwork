@@ -64,16 +64,7 @@ class _MsgChatItemState extends State<MsgChatItem> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(16),
-                              ),
-                              Text(
-                                '离线',
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(24),
-                                  color: Color.fromRGBO(176, 181, 180, 1),
-                                ),
-                              ),
+
                             ],
                           ),
                         ),

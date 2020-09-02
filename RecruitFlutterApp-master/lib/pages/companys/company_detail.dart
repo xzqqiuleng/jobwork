@@ -20,6 +20,7 @@ import 'package:recruit_app/pages/companys/gs_info.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/widgets/bottom_drawer_widget.dart';
 
 class CompanyDetail extends StatefulWidget {
@@ -40,6 +41,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
   Map compay_info;
   String address="";
   List<GSInfo> gsInfos=List();
+  int is_collect = 0;
+
   @override
   void initState() {
     super.initState();
@@ -48,12 +51,22 @@ class _CompanyDetailState extends State<CompanyDetail> {
 
     _loadData();
   }
+
+  _saveByType(int type){
+    Map params = Map();
+    params["user_mail"] = ShareHelper.getUser().userMail;
+    params["com_id"] = widget.id;
+    params["type"] = type;
+    new MiviceRepository().saveCom(params).then((value) {
+
+    });
+  }
   _loadData(){
 
     if(widget.id == null){
       widget.id = 8192;
     }
-    new MiviceRepository().getCompanyDetail(widget.id).then((value) {
+    new MiviceRepository().getCompanyDetail(widget.id,ShareHelper.getUser().userMail).then((value) {
       var reponse = json.decode(value.toString());
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
@@ -61,6 +74,7 @@ class _CompanyDetailState extends State<CompanyDetail> {
         print(data);
         setState(() {
           infors = data["com"];
+          is_collect= infors["is_collect"];
           address = infors["address"];
         List  jobList = data["jobs"];
         datalist.clear();
@@ -280,17 +294,32 @@ class _CompanyDetailState extends State<CompanyDetail> {
             actions: <Widget>[
               IconButton(
                   icon: Image.asset(
-                    'images/ic_action_favor_off_black.png',
+                    is_collect == 1 ?'images/save_yes.png':'images/save_no.png',
                     width: 24,
                     height: 24,
+                    color: Colors.white,
                   ),
-                  onPressed: () {}),
+                  onPressed: () {
+
+                    setState(() {
+                      if( is_collect == 1){
+                        is_collect = 0;
+                        _saveByType(0);
+                      }else{
+                        is_collect = 1;
+                        _saveByType(1);
+
+                      }
+                    });
+
+                  }),
 
               IconButton(
                   icon: Image.asset(
                     'images/ic_action_report_black.png',
                     width: 24,
                     height: 24,
+                    color: Colors.white,
                   ),
                   onPressed: () {
                     _showSexPop(context);

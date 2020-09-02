@@ -24,6 +24,7 @@ import 'package:recruit_app/pages/mine/send_resume.dart';
 import 'package:recruit_app/pages/mine/ys_set.dart';
 import 'package:recruit_app/pages/msg/agreement.dart';
 import 'package:recruit_app/pages/save_job.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/setting/setting.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
@@ -64,10 +65,66 @@ class _MineState extends State<Mine> {
    if(jsonStr !=null &&jsonStr!="" ){
      save =  json.decode(jsonStr);
    }
-
+    getNUms();
   }
+ int num1 = 0;
+ int num2 = 0;
+ int num3 = 0;
+ int num = 0;
+void getNUms(){
+  Map params = Map();
+  params["user_mail"] = ShareHelper.getUser().userMail;
+  params["class"] = 1;
+    new MiviceRepository().getJodSaveListByType(params).then((value) {
+      var reponse = json.decode(value.toString());
+      if(reponse["status"] == "success"){
+
+        setState(() {
+          List data = reponse["result"];
+          num1= data.length;
+        });
+
+      }
+    });
+
+  params["class"] = 2;
+  new MiviceRepository().getJodSaveListByType(params).then((value) {
+    var reponse = json.decode(value.toString());
+    if(reponse["status"] == "success"){
+
+      setState(() {
+        List data = reponse["result"];
+        num2= data.length;
+      });
+
+    }
+  });
+
+  params["class"] = 0;
+  new MiviceRepository().getJodSaveListByType(params).then((value) {
+    var reponse = json.decode(value.toString());
+    if(reponse["status"] == "success"){
+
+      setState(() {
+        List data = reponse["result"];
+        num3= data.length;
+      });
+
+    }
+  });
+  new MiviceRepository().getComList(params).then((value) {
+    var reponse = json.decode(value.toString());
+    if(reponse["status"] == "success"){
 
 
+      setState(() {
+        List data = reponse["result"];
+        num= data.length;
+      });
+
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +247,7 @@ class _MineState extends State<Mine> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                '0',
+                                num1.toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -201,7 +258,7 @@ class _MineState extends State<Mine> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '已面试',
+                                '浏览过',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -213,7 +270,7 @@ class _MineState extends State<Mine> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已面试"),),);
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("浏览过"),),);
 
                           },
                         ),
@@ -234,7 +291,7 @@ class _MineState extends State<Mine> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                '0',
+                               num2.toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -245,7 +302,7 @@ class _MineState extends State<Mine> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '待面试',
+                                '已沟通',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -255,7 +312,7 @@ class _MineState extends State<Mine> {
                               ),
                             ],
                           ),
-                          onTap: () {    Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("待面试"),),);},
+                          onTap: () {    Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已沟通"),),);},
                         ),
                       ),
                       Container(
@@ -274,7 +331,7 @@ class _MineState extends State<Mine> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Text(
-                                '0',
+                                num3.toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -285,7 +342,7 @@ class _MineState extends State<Mine> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                '已投递',
+                                '已收藏',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -296,7 +353,7 @@ class _MineState extends State<Mine> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已投递"),),);
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>JZNo("已收藏"),),);
                           },
                         ),
                       ),
@@ -334,7 +391,7 @@ class _MineState extends State<Mine> {
                                    children: <Widget>[
                                      SizedBox(height: 16),
                                      Text(
-                                       "职位收藏",
+                                       "公司收藏",
                                        style: TextStyle(
 
 
@@ -344,7 +401,7 @@ class _MineState extends State<Mine> {
                                        height: 7,
                                      ),
                                      Text(
-                                       "${save==null?0:save.length}个",style: TextStyle(
+                                       "${num}个",style: TextStyle(
                                          color: Colors.grey,
                                          fontSize: 10,
                                          fontWeight: FontWeight.w100
