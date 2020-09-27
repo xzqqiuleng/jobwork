@@ -1,18 +1,21 @@
+
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:flutter_tag_layout/flutter_tag_layout.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/companys/company_detail.dart';
+import 'package:recruit_app/pages/companys/company_welfare_item.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
+import 'package:recruit_app/pages/jubao.dart';
+import 'package:recruit_app/pages/map_nav.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
-import 'job_row_item.dart';
+
 
 class JobDetail extends StatefulWidget {
   int id;
@@ -40,7 +43,9 @@ class _JobDetailState extends State<JobDetail> {
 
   String company="未注册";
   int is_collect = 0;
-
+  String lat="";
+  String lng="";
+ List<String> tip = new List();
   _saveByType(int type,int classStr){
     Map params = Map();
     params["user_mail"] = ShareHelper.getUser().userMail;
@@ -62,13 +67,25 @@ class _JobDetailState extends State<JobDetail> {
       if(reponse["status"] == "success"){
         var   data = reponse["result"];
 
-
         setState(() {
 
           infors = data["info"];  //"com_id" -> 10057  "job_id" -> 120587312
+          print(infors);
           is_collect = infors["is_collect"];
           company = infors["company"];
           replayId = infors["reply_id"];  //"com_id" -> 10057  "job_id" -> 120587312
+        String  tipJson = infors["tips"];  //"com_id" -> 10057  "job_id" -> 120587312
+
+
+          if(tipJson != null && tipJson != ""){
+          List<dynamic>  tipss = json.decode(tipJson);
+      for(var item in tipss){
+        tip.add(item);
+      }
+          }else{
+            tip=["五险一金","餐饮补贴","年终奖金","节日福利"];
+          }
+
           print(infors);
           datalist = data["jobs"];
            summary = json.decode(infors["summary"].toString());
@@ -77,10 +94,21 @@ class _JobDetailState extends State<JobDetail> {
              com_label = json.decode(infors["com_label"].toString());
            }
 
+          if(infors["lat"] !=null && infors["lat"] != ""){
+           lat = infors["lat"];
+           lng = infors["lng"];
+           print(lat);
+          }
+
       print(infors["company_img"]);
 
           labels = infors["label"].toString().split("|");
           address  = labels[0];
+          if(infors["address"] == null ||infors["address"] == ""){
+            address  = labels[0];
+          }else{
+            address  =  infors["address"];
+          }
           labels.removeAt(0);
           if(infors["pub_img"] == ""){
             if( infors["mook_img"] != null){
@@ -204,101 +232,8 @@ class _JobDetailState extends State<JobDetail> {
 
     }
   }
-  List _sexList=["违法违纪，敏感言论","色情，辱骂，粗俗","职位虚假，信息不真实","违法，欺诈，诱导欺骗","收取求职者费用","变相发布广告和招商","其他违规行为"];
-
-  void _showSexPop(BuildContext context){
-    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context){
-          return _buildBottonPicker(
-              CupertinoPicker(
-
-                magnification: 1,
-                itemExtent:58 ,
-                backgroundColor: Colors.white,
-                useMagnifier: true,
-                scrollController: scrollController,
-                onSelectedItemChanged: (int index){
 
 
-                },
-                children: List<Widget>.generate(_sexList.length, (index){
-                  return Center(
-                    child: Text(_sexList[index]),
-                  );
-                }),
-              )
-          );
-        });
-  }
-
-  Widget _buildBottonPicker(Widget picker) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 52,
-          color: Color(0xfff6f6f6),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-
-                left: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("取消",
-                    style: TextStyle(
-                        color: Colours.black_212920,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none
-                    ),),
-                ),
-              ),
-              Positioned(
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                   showToast("举报已发送，我们会尽快审核信息");
-                  },
-                  child: Text("确定",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colours.app_main,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold
-                    ),),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 190,
-          padding: EdgeInsets.only(top: 6),
-          color: Colors.white,
-          child: DefaultTextStyle(
-            style: const TextStyle(
-                color: Colours.black_212920,
-                fontSize: 18
-            ),
-            child: GestureDetector(
-              child: SafeArea(
-                top: false,
-                child: picker,
-              ),
-            ),
-          ),
-        )
-      ],
-
-    );
-  }
 
   @override
   void initState() {
@@ -312,7 +247,6 @@ class _JobDetailState extends State<JobDetail> {
 
     _saveByType(1,1);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +302,10 @@ class _JobDetailState extends State<JobDetail> {
                   height: 24,
                 ),
                 onPressed: () {
-                  _showSexPop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => JubaoPages(1,widget.id.toString())));
                 })
           ],
         ),
@@ -499,6 +436,28 @@ class _JobDetailState extends State<JobDetail> {
                         height: 1,
                         margin: EdgeInsets.only(top: 8, bottom: 8),
                       ),
+                      Container(
+                        height: 40,
+                        child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: tip.length,
+                            itemBuilder: (context, index) {
+                              if (index < tip.length) {
+                                return CompanyWelfareItem(
+                                  welfareData: tip[index],
+                                  index: index,
+                                  isLastItem: index == tip.length - 1,
+                                );
+                              }
+                              return null;
+                            }),
+                      ),
+                      Container(
+                        height: 1,
+                        margin: EdgeInsets.only(top: 8, bottom: 8),
+                      ),
                       _getTip(),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -574,48 +533,58 @@ class _JobDetailState extends State<JobDetail> {
                               SizedBox(
                                 height: 16,
                               ),
-                            Container(
-                              height: 80,
-                              child:  Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    right: 0,
-                                    child:  ClipRRect(
-                                      borderRadius: BorderRadius.all(Radius.circular(2)),
-                                      child: Image.asset('images/map_icon.jpg',
-                                          height: 100, fit: BoxFit.cover),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MapNavWeb(address,lat,lng)));
+                              },
+                              behavior: HitTestBehavior.opaque,
+                              child: Container(
+                                height: 80,
+                                child:  Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      child:  ClipRRect(
+                                        borderRadius: BorderRadius.all(Radius.circular(2)),
+                                        child: Image.asset('images/map_icon.jpg',
+                                            height: 100, fit: BoxFit.cover),
+                                      ),
                                     ),
-                                  ),
 
-                                  Container(
-                                    alignment: Alignment.center,
-                                    color: Colors.white,
-                                     height: 44,
-                                     margin: EdgeInsets.only(left: 30,right: 30),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset('images/loc_address.png',
-                                            width: 16,
-                                            height: 16, fit: BoxFit.cover),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                          address
-                                        )
-                                      ],
+                                    Container(
+                                      alignment: Alignment.center,
+                                      color: Colors.white,
+                                      height: 44,
+                                      margin: EdgeInsets.only(left: 12,right: 12),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset('images/loc_address.png',
+                                              width: 16,
+                                              height: 16, fit: BoxFit.cover),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            address.length>13?address.substring(0,13):address,
+                                          )
+                                        ],
 
-                                    ),
-                                  )
+                                      ),
+                                    )
 
 
-                                ],
+                                  ],
 
+                                ),
                               ),
                             )
+
 
 
                             ],

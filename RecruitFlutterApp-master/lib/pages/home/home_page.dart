@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             builder: (context) => CityPage()));
     if(mcity != null && !mcity.isEmpty){
       setState(() {
-        city = mcity;
+        city = mcity.toString().split("|")[1];
       });
     }
   }

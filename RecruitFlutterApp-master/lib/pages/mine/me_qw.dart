@@ -165,7 +165,7 @@ class _MeQWState extends State<MeQW> {
                 ));
             setState(() {
               if(reslut != null){
-                _city = reslut;
+                _city = reslut.toString().split("|")[1];
               }
             });
           },
@@ -275,6 +275,8 @@ class _MeQWState extends State<MeQW> {
 
   List _salaryList=["2000以上","3000以上","4000以上","5000以上","6000以上","7000以上","8000以上","9000以上","1万以上","2万以上","3万以上","4万以上","5万以上"];
   String _salary="选择薪资";
+  String _msalary = "2000以上";
+
   void _showSexPop(BuildContext context){
     FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
     showCupertinoModalPopup<void>(
@@ -289,14 +291,11 @@ class _MeQWState extends State<MeQW> {
                 useMagnifier: true,
                 scrollController: scrollController,
                 onSelectedItemChanged: (int index){
-                  if(mounted){
-                    setState(() {
 
-                        _salary = _salaryList[index];
+                  _msalary = _salaryList[index];
 
 
-                    });
-                  }
+
                 },
                 children: List<Widget>.generate(_salaryList.length, (index){
                   return Center(
@@ -307,23 +306,80 @@ class _MeQWState extends State<MeQW> {
           );
         });
   }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    if(mounted){
+                      setState(() {
+                        if(_msalary != null){
+                          _salary =     _msalary;
+                        }
+
+
+                      });
+                    }
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
 }

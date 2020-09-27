@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mobsms/mobsms.dart';
 import 'package:oktoast/oktoast.dart';
@@ -11,7 +10,7 @@ import 'package:recruit_app/widgets/log_reg_textfield.dart';
 
 class ForgetPage extends StatefulWidget{
   int type;
-  ForgetPage(type);
+  ForgetPage(this.type);
   @override
   _ForgetState createState() {
     // TODO: implement createState
@@ -39,6 +38,7 @@ class _ForgetState extends State<ForgetPage>{
   }
 
   void setNewPd(){
+
     if(_newPdController.text.length <6 || _ConfirmPdController.text.length<6){
       showToast("密码格式不正确，最低6位数");
     } else if(_newPdController.text != _ConfirmPdController.text){
@@ -49,10 +49,12 @@ class _ForgetState extends State<ForgetPage>{
           showToast("验证码验证失败");
         }
         else{
+
       MiviceRepository().forgetPd(_phoneController.text, _newPdController.text,widget.type).then((value) {
         var reponse = json.decode(value.toString());
         if(reponse["status"] == "success") {
               Navigator.of(context).pop();
+              showToast("密码修改成功");
         }else{
           showToast(reponse["msg"]);
         }
@@ -64,6 +66,7 @@ class _ForgetState extends State<ForgetPage>{
   }
   @override
   Widget build(BuildContext context) {
+    print(widget.type);
     // TODO: implement build
   return Scaffold(
     body: SingleChildScrollView(
@@ -131,7 +134,7 @@ class _ForgetState extends State<ForgetPage>{
                                     right: 0,
                                     bottom: 10,
                                     child: GestureDetector(
-                                        child: CodeSendBtn(key:_codeSendKey),
+                                        child: CodeSendBtn(1,key:_codeSendKey),
                                         onTap: (){
                                           _codeSendKey.currentState.clickCode(_phoneController.text);
                                         }

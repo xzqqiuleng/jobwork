@@ -13,13 +13,17 @@ import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/widgets/log_reg_textfield.dart';
 import 'package:recruit_app/widgets/photo_select.dart';
 
-class FeedbackPage extends StatelessWidget{
+class JubaoPages extends StatelessWidget{
+  int type;
+  String id;
+  JubaoPages(this.type,this.id);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colours.bg_color,
-        title: Text("意见反馈",
+        title: Text("举报反馈",
           style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -39,7 +43,7 @@ class FeedbackPage extends StatelessWidget{
         elevation: 0,
       ),
 
-      body:FeedBackWidget(),
+      body:FeedBackWidget(type,id),
 
       resizeToAvoidBottomPadding: false,
     );
@@ -48,7 +52,9 @@ class FeedbackPage extends StatelessWidget{
 }
 
 class FeedBackWidget extends StatefulWidget{
-
+  int type;
+  String id;
+  FeedBackWidget(this.type,this.id);
 
   @override
   _FeedBackState createState() {
@@ -68,6 +74,123 @@ class _FeedBackState extends State<FeedBackWidget>{
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
 
+  List jbList1=["违法违纪，敏感言论","色情，辱骂，粗俗","职位虚假，信息不真实","违法，欺诈，诱导欺骗","收取求职者费用","变相发布广告和招商","其他违规违法行为"];
+  List jbList2=["公司信息虚假","变相发布广告和招商信息","包含，欺诈，诱导欺骗等信息","其他违规违法行为"];
+  List jbList3=["职位虚假，信息不真实","欺骗，诱导获取联系方式","聊天信息不真实，身份有风险","其他违规违法行为"];
+  List jbList4=["简历信息虚假","信息错误，包含夸张修饰","包含，欺诈，诱导欺骗等信息","其他违规行为"];
+  List jbList;
+  String jbStr="请选择举报类型";
+  void _showSexPop(BuildContext context){
+
+    if(widget.type == 1){
+      jbList = jbList1;
+    }else if(widget.type == 2){
+      jbList = jbList2;
+    }else if(widget.type == 3){
+      jbList = jbList3;
+    }else{
+      jbList = jbList4;
+    }
+
+    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context){
+          return _buildBottonPicker(
+              CupertinoPicker(
+
+                magnification: 1,
+                itemExtent:58 ,
+                backgroundColor: Colors.white,
+                useMagnifier: true,
+                scrollController: scrollController,
+                onSelectedItemChanged: (int index){
+
+                  jbStr = jbList[index];
+                },
+                children: List<Widget>.generate(jbList.length, (index){
+                  return Center(
+                    child: Text(jbList[index]),
+                  );
+                }),
+              )
+          );
+        });
+  }
+
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                  setState(() {
+
+                  });
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
+    );
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,42 +200,41 @@ class _FeedBackState extends State<FeedBackWidget>{
 
             children: <Widget>[
 
-              Flex(
-                direction: Axis.horizontal,
-                children: <Widget>[
-                  Gaps.hGap20,
-                  Text("*",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colours.red_ffd5351c
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: ()async{
+                _showSexPop(context);
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Gaps.hGap20,
+                    Expanded(
+                      child:   Text(jbStr,
+                          style: TextStyle(
+                              wordSpacing: 1,
+                              letterSpacing: 1,
+                              fontSize: 14,
+                              color: Colors.black87)),
                     ),
-
-                  ),
-                  Text("遇到的问题",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colours.black_212920,
-                        fontWeight: FontWeight.bold
+                    SizedBox(width: 8,height: 40,),
+                    Image.asset(
+                      'images/arrow_right.png',
+                      width: 18,
+                      height: 18,
+                      color: Colors.black54,
+                      fit: BoxFit.cover,
                     ),
-
-                  ),
-
-
-                ],
-              ) ,
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 10, 16,10),
-
-                child:  LogRegTextField(
-                  controller: _titleController,
-                  label: "简单的概括",
-                  textInputAction: TextInputAction.next,
-                  textInputType: TextInputType.text,
-                  obscureText: false,
-
-                )
+                    Gaps.hGap20,
+                  ],
+                ),
               ),
-
+             Container(
+               margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+               color: Colours.gray_8A8F8A,
+               height: 0.2,
+             ),
               Stack(
                 children: <Widget>[
                   Stack(
@@ -138,7 +260,7 @@ class _FeedBackState extends State<FeedBackWidget>{
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color:  Colors.transparent),
                             ),
-                            hintText: "请详细描述你遇到的问题，最好请上传问题截图。",
+                            hintText: "请详细描述你的举报内容，最好请上传相关截图。",
                             hintStyle: TextStyle(
                                 fontSize: 12,
                                 color: Colours.gray_8A8F8A
@@ -212,21 +334,7 @@ class _FeedBackState extends State<FeedBackWidget>{
           );
 
   }
-
-  _putFeed(){
-    if(_titleController.text.isEmpty){
-      showToast("请填写标题");
-      return;
-    }
-    if(_contentController.text.isEmpty){
-      showToast("请填写内容");
-      return;
-    }
-    Map map = Map();
-    map["title"] = _titleController.text;
-    map["content"] = _contentController.text;
-    map["user_id"] = ShareHelper.isLogin() ? ShareHelper.getUser().userId :ShareHelper.getBosss().userId;
-    map["type"] =0;
+  _upLoadImage(Map map){
     if(fileStrs != null && fileStrs.length >0){
       MiviceRepository.upLoadPicture(fileStrs[0]).then((value) {
         var reponse = json.decode(value.toString());
@@ -250,6 +358,23 @@ class _FeedBackState extends State<FeedBackWidget>{
       });
     }
 
+  }
+  _putFeed(){
+    if(jbStr == "请选择举报类型"){
+      showToast("请选择举报类型");
+      return;
+    }
+    if(_contentController.text.isEmpty){
+      showToast("请填写内容");
+      return;
+    }
+    Map map = Map();
+    map["title"] = jbStr;
+    map["content"] = _contentController.text;
+    map["user_id"] = ShareHelper.isLogin() ? ShareHelper.getUser().userId :ShareHelper.getBosss().userId;
+    map["type"] = widget.type;
+    map["q_id"] =widget.id;
+    _upLoadImage(map);
 
 
 

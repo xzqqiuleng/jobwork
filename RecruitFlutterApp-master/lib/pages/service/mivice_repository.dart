@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 
 class MiviceRepository{
 
 //  static String baseUrl = 'http://192.168.1.21:8080/';      //开发
 //  static String socketUrl = 'ws://192.168.1.9:8080/ws/msg?';
-  static String baseUrl = 'http://www.18hrzp.net/crawler/';      //开发
-  static String socketUrl = 'ws://www.18hrzp.net/crawler/ws/msg?';      //开发
+  static String baseUrl = 'http://www.18pinpin.com/crawler/';      //开发
+  static String socketUrl = 'ws://www.18pinpin.com/crawler/ws/msg?';      //开发
 
   static Dio dio;
 
@@ -97,6 +98,15 @@ class MiviceRepository{
 
       'user_mail': phone,
       'password': pwd,
+      'type': type,
+    });
+    return response;
+  }
+  Future changePhone(String phone,String new_phone,int type) async {
+    var response = await dio.post<Map>('/user/updateMobile',data: {
+
+      'mobile': phone,
+      'new_mobile': new_phone,
       'type': type,
     });
     return response;
@@ -198,7 +208,7 @@ class MiviceRepository{
     FormData formData = FormData.fromMap({
       "file": image
     });
-    var response = await Dio().post('http://62.60.174.78:8088/upload', data: formData);
+    var response = await Dio().post('http://file.18pinpin.com/upApi/upload', data: formData);
     return response;
   }
 
@@ -244,6 +254,19 @@ class MiviceRepository{
       "user_id":map["user_id"],
       "title":map["title"],
       "content":map["content"],
+      "feed_type":map["type"],  //种类    //0意见反馈， 1 工作举报。2公司举报，3聊天举报，4简历举报
+      "img":map["img"],  //图片
+      "q_id":map["q_id"],  //问题id
+
+
+    });
+    return response;
+  }
+
+  Future getFeed(String id) async {
+    var response = await dio.post<Map>('/user/noticeList', data: {
+      "user_id":id,
+
     });
     return response;
   }

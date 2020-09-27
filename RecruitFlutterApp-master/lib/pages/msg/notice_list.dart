@@ -5,10 +5,12 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/topictab_model.dart';
+import 'package:recruit_app/pages/feed_detail.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
 import 'package:recruit_app/pages/jobs/job_list.dart';
 import 'package:recruit_app/pages/msg/service_chat_room.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
+import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 import 'package:recruit_app/widgets/slide_button.dart';
 
@@ -252,11 +254,39 @@ class _XTListState extends State<XTList> with AutomaticKeepAliveClientMixin{
 
 
   _OnRefresh(){
+    String id;
+    if(ShareHelper.isBossLogin()){
+      id = ShareHelper.getBosss().userId;
+    }else{
+      id= ShareHelper.getUser().userId;
+    }
+
+      new MiviceRepository().getFeed(id).then((value) {
+        var reponse = json.decode(value.toString());
+        print(reponse);
+        if(reponse["status"] == "success"){
+          feedLists = reponse["result"];
+          _refreshController.refreshCompleted();
+          setState(() {
+
+          });
+        }
+      });
+
     _refreshController.refreshCompleted();
   }
   _loadMore(){
     _refreshController.loadComplete();
   }
+  List feedLists=new List();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+//    _OnRefresh();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -270,37 +300,61 @@ class _XTListState extends State<XTList> with AutomaticKeepAliveClientMixin{
         onRefresh: _OnRefresh,
         onLoading: _loadMore,
         enablePullUp: true,
-        child: ListView.builder(itemBuilder: (context, index) {
-//          if (data.length >0 && index < data.length) {
-//            return  GestureDetector(
-//              behavior: HitTestBehavior.opaque,
-//              child: MsgChatItem(btnKey: key),
-//            );
-//          }
+        child: feedLists.length == 0 ? ListView.builder(itemBuilder: (context, index) {
+
           var key = GlobalKey<SlideButtonState>();
+
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
-            child: MsgNotifyItem(
+            child:MsgNotifyItem(
               btnKey: key,
-              title: index % 2 == 0 ? '通知' : '我的客服',
-              content: index % 2 == 0
-                  ? '欢迎注册本APP，海量求职信息每日更新，并且官方将根据你的简历，进行私人定制，为你推荐最符合你的职位。'
-                  : '您好，请问有什么可以为您服务的吗？',
-              imgPath: index % 2 == 0
-                  ? 'images/notice_m.png'
-                  : 'images/kf_m.png',
+              title: '通知',
+              content:'欢迎注册本APP，海量求职信息每日更新，并且官方将根据你的简历，进行私人定制，为你推荐最符合你的职位。',
+              imgPath:"images/notice_m.png",
+              time: "2020-9-16 12:20:24",
             ),
             onTap: () {
-              if(index%2==0){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>MsgNotify()));
-              }else {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>ServiceChatRoom()));
-              }
+            },
+          );
+        },
+          itemCount: 1,
+        ): ListView.builder(itemBuilder: (context, index) {
+
+          var key = GlobalKey<SlideButtonState>();
+
+          Map item = feedLists[index];
+          String tmitle = "";
+          String type = item["feed_type"];
+          if(type == "0") {
+            tmitle = "意见反馈已回复";
+          }else  if(type == "1") {
+            tmitle = "职位举报结果";
+          }else  if(type == "2") {
+            tmitle = "公司举报结果";
+          }else  if(type == "3") {
+            tmitle = "聊天举报结果";
+          }else  if(type == "4") {
+            tmitle = "简历举报结果";
+          }else  if(type == "6") {
+            tmitle = "公司审核失败";
+          }
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            child:MsgNotifyItem(
+                btnKey: key,
+                title: tmitle,
+                content:item["feed_content"],
+                imgPath:"images/notice_m.png",
+              time: item["feed_time"],
+            ),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>FeedDetai(item)));
             },
           );
         },
 
-          itemCount: 1,
+          itemCount: feedLists.length,
         )
     );
 

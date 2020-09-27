@@ -97,9 +97,14 @@ class _JobLocSelectState extends State<JobLocSelelct>{
          Padding(
              padding: EdgeInsets.symmetric(horizontal: 40),
              child:GestureDetector(
-               onTap: ()async {city = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CityPage()));setState(() {
-
-               });},
+               onTap: ()async {
+               var  mcity = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CityPage()));
+                 if(mcity != null){
+                   setState(() {
+                       city = mcity;
+                   });
+                 }
+              ;},
                behavior: HitTestBehavior.opaque,
                child:Container(
 
@@ -133,7 +138,7 @@ class _JobLocSelectState extends State<JobLocSelelct>{
            btnColor: Colours.app_main,
            onPressed: (){
              if(textEditingController.text.trim().length > 0 && city != "选择城市"){
-               ShareHelper.putCity(city);
+               ShareHelper.putCity(city.split("|")[0]);
                Navigator.pushReplacement(context, MaterialPageRoute(
                    builder: (context) => JobSearchPage(textEditingController.text)));
              }

@@ -22,6 +22,7 @@ import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/setting/new_setting.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
+import 'package:recruit_app/pages/zs_page.dart';
 import 'package:recruit_app/widgets/kf_dialog.dart';
 import 'package:recruit_app/widgets/remind_dialog.dart';
 
@@ -96,6 +97,7 @@ class _BossMineState extends State<BossMine> {
     options.add( Me(imgPath: 'images/me3.png', itemName: '给个好评', itemStatus: ''));
     options.add( Me(imgPath: 'images/me4.png', itemName: '用户隐私协议', itemStatus: ''));
     options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
+    options.add( Me(imgPath: 'images/hz.png', itemName: '福利招商', itemStatus: ''));
 getNUms();
 
   }
@@ -107,9 +109,14 @@ getNUms();
 
       return GestureDetector(
 
-        onTap: (){
+        onTap: () async{
 
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>PermissionWeb(),),);
+        bool isRefresh =  await Navigator.push(context,MaterialPageRoute(builder: (context)=>PermissionWeb(),),);
+        if(isRefresh != null && isRefresh){
+          setState(() {
+
+          });
+        }
 
         },
         child:Card(
@@ -671,7 +678,7 @@ getNUms();
                               MaterialPageRoute(
                                   builder: (context) => FeedbackPage()));
                         } else if (index == 3) {
-                          LaunchReview.launch(androidAppId: "com.shuibian.jobwork");
+                          LaunchReview.launch(androidAppId: "com.pinpin.jobwork");
                         }else if(index == 4){
                           Navigator.push(
                               context,
@@ -683,15 +690,20 @@ getNUms();
                               MaterialPageRoute(
                                   builder: (context) => NewSetting()));
                if(result != null && result){
-                 model.changeIdentity( Identity.employee);
+                 model.changeIdentity( Identity.boss);
                  StorageManager.localStorage.deleteItem(ShareHelper.BOSSUser);
                  StorageManager.sharedPreferences.setBool(
                      ShareHelper.is_BossLogin, false);
                  Navigator.pushReplacement(
                      context,
                      MaterialPageRoute(
-                         builder: (context) => LoginPdPage(1)));
+                         builder: (context) => LoginPdPage(0)));
                  }
+                        }else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ZSPage()));
                         }
                       },
                     );
@@ -757,7 +769,7 @@ getNUms();
                 height: 20,
               ),
               Text(
-                '客服电话 400-666-6666 工作时间9:30-18:30',
+             '',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 textAlign: TextAlign.center,

@@ -9,6 +9,7 @@ import 'constant.dart';
 class ShareHelper{
  static String is_fist = "is_first";
  static String search_history_job = "search_history_job";
+ static String normal_world = "normal_world";
  static String search_history_company = "search_history_company";
  static String search_history_jl = "search_history_jl";
  static String city = "city";
@@ -87,7 +88,29 @@ class ShareHelper{
 
 
  }
+ static List<dynamic> getNormal(){
+   List <dynamic> searchLists ;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(normal_world) !=null&&StorageManager.sharedPreferences.getString(normal_world) !=""){
 
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(normal_world));
+   }
+   return searchLists;
+
+ }
+ static void putNormal(String job){
+   List <dynamic> searchLists;
+   if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(normal_world) !=null&&StorageManager.sharedPreferences.getString(normal_world) !=""){
+     searchLists = json.decode(StorageManager.sharedPreferences.getString(normal_world));
+     searchLists.insert(0,job);
+   }else{
+     searchLists= new List();
+     searchLists.add(job);
+   }
+
+   StorageManager.sharedPreferences.setString(normal_world, json.encode(searchLists));
+
+
+ }
  static List<dynamic> getSearchCompany(){
    List <dynamic> searchLists ;
    if(StorageManager.sharedPreferences != null && StorageManager.sharedPreferences.getString(search_history_company) !=null&&StorageManager.sharedPreferences.getString(search_history_company) !=""){

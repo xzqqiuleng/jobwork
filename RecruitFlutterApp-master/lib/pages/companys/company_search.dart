@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:recruit_app/pages/companys/company_detail.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 
@@ -106,7 +107,7 @@ class _csState extends State<CompanySearch>{
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => JobDetail(data[index]["job_id"])
+                          builder: (context) => CompanyDetail(data[index]["id"])
                         ));
                   });
             }

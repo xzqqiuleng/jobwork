@@ -36,6 +36,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../permision_web.dart';
 import '../share_helper.dart';
+import '../zs_page.dart';
 import 'feedback.dart';
 
 class Mine extends StatefulWidget {
@@ -60,7 +61,7 @@ class _MineState extends State<Mine> {
     options.add( Me(imgPath: 'images/me3.png', itemName: '给个好评', itemStatus: ''));
     options.add( Me(imgPath: 'images/me4.png', itemName: '用户隐私协议', itemStatus: ''));
     options.add( Me(imgPath: 'images/me5.png', itemName: '设置', itemStatus: ''));
-
+    options.add( Me(imgPath: 'images/hz.png', itemName: '福利招商', itemStatus: ''));
     String jsonStr=    StorageManager.sharedPreferences.getString(ShareHelper.getUser().userId+"work");
    if(jsonStr !=null &&jsonStr!="" ){
      save =  json.decode(jsonStr);
@@ -599,7 +600,7 @@ void getNUms(){
                               MaterialPageRoute(
                                   builder: (context) => FeedbackPage()));
                         } else if (index == 3) {
-                          LaunchReview.launch(androidAppId: "com.shuibian.jobwork");
+                          LaunchReview.launch(androidAppId: "com.pinpin.jobwork");
                         }else if(index == 4){
                           Navigator.push(
                               context,
@@ -612,15 +613,20 @@ void getNUms(){
                                   builder: (context) => NewSetting()));
                        if(result != null && result){
 
-                         model.changeIdentity( Identity.boss);
+                         model.changeIdentity( Identity.employee);
                          StorageManager.localStorage.deleteItem(ShareHelper.kUser);
                          StorageManager.sharedPreferences.setBool(
                              ShareHelper.is_Login, false);
                          Navigator.pushReplacement(
                              context,
                              MaterialPageRoute(
-                                 builder: (context) => LoginPdPage(0)));
+                                 builder: (context) => LoginPdPage(1)));
                        }
+                        }else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ZSPage()));
                         }
                       },
                     );

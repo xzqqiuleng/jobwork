@@ -47,93 +47,120 @@ class _ForgetState extends State<RegPage>{
 
     super.dispose();
   }
+  bool isSend = true;
+  int send_time = 3;
+  delay(){
+    Future.delayed(Duration(seconds: 1), (){
+      if(send_time == 0){
+        isSend = true;
+      }else{
+          send_time--;
+        delay();
+      }
+    });
+  }
 
   void setNewPd(){
     if(_newPdController.text.length <6 || _ConfirmPdController.text.length<6){
       showToast("密码格式不正确，最低6位数");
     } else if(_newPdController.text != _ConfirmPdController.text){
        showToast("两次密码输入不一致");
+    }else if(_codeController.text.length != 6){
+      showToast("验证码格式有误，请重新输入");
     }else {
-      Smssdk.commitCode(_phoneController.text,"86",_codeController.text, (dynamic ret, Map err){
-        if(err!=null){
-          showToast("验证码验证失败");
+      try{
+        if(!isSend){
+          showToast("操作过于频繁，请稍后点击！");
+          return;
         }
-        else
-        {
-          MiviceRepository().registerPd(_phoneController.text, _newPdController.text, widget.type).then((value) {
-            var reponse = json.decode(value.toString());
+         isSend = false;
+        send_time = 3;
+        delay();
+        Smssdk.commitCode(_phoneController.text,"86",_codeController.text, (dynamic ret, Map err){
+          if(err!=null){
+            showToast("验证码验证失败");
+          }
+          else
+          {
+            MiviceRepository().registerPd(_phoneController.text, _newPdController.text, widget.type).then((value) {
+              var reponse = json.decode(value.toString());
 
-            //"result": {
-            //        "user_mail": "15671621652",
-            //        "type": "1",
-            //        "create_time": 1594561222638,
-            //        "user_id": "b0fdb885476d46dab13ccc1a82b98070",
-            //        "user_name": "15671621652"
-            //    },
-            if(reponse["status"] == "success") {
-              var data = reponse["result"];
-
-
-              User user = User.fromJson(data);
-              if(widget.type == 0){
-                StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
-                StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
-              }else{
-                StorageManager.localStorage.setItem(ShareHelper.kUser, user);
-                StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
-              }
+              //"result": {
+              //        "user_mail": "15671621652",
+              //        "type": "1",
+              //        "create_time": 1594561222638,
+              //        "user_id": "b0fdb885476d46dab13ccc1a82b98070",
+              //        "user_name": "15671621652"
+              //    },
+              if(reponse["status"] == "success") {
+                var data = reponse["result"];
 
 
+                User user = User.fromJson(data);
+                if(widget.type == 0){
+                  StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
+                  StorageManager.sharedPreferences.setBool(ShareHelper.is_BossLogin, true);
+                }else{
+                  StorageManager.localStorage.setItem(ShareHelper.kUser, user);
+                  StorageManager.sharedPreferences.setBool(ShareHelper.is_Login, true);
+                }
 
 
-              if(widget.type == 0){
-                if(user.infoStatus == "1" && user.companyStatus == "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecruitHomeApp(),
-                      ));
-                }else if(user.infoStatus != "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MineInfor(widget.type),
-                      ));
-                }else if(user.companyStatus != "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CompanyEdit(),
-                      ));
+
+
+                if(widget.type == 0){
+                  if(user.infoStatus == "1" && user.companyStatus == "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecruitHomeApp(),
+                        ));
+                  }else if(user.infoStatus != "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MineInfor(widget.type),
+                        ));
+                  }else if(user.companyStatus != "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CompanyEdit(),
+                        ));
+                  }
+
+                }else{
+                  if(user.infoStatus == "1" && user.jlStatus == "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecruitHomeApp(),
+                        ));
+                  }else if(user.infoStatus != "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MineInfor(widget.type),
+                        ));
+                  }else if(user.companyStatus != "1"){
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OnlineResume(),
+                        ));
+                  }
                 }
               }else{
-                if(user.infoStatus == "1" && user.jlStatus == "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecruitHomeApp(),
-                      ));
-                }else if(user.infoStatus != "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MineInfor(widget.type),
-                      ));
-                }else if(user.companyStatus != "1"){
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OnlineResume(),
-                      ));
-                }
+                showToast(reponse["msg"]);
               }
-            }else{
-              showToast(reponse["msg"]);
-            }
-          });
+            });
 
-        }
-      });
+          }
+        });
+      }catch(e){
+
+      }
+
 
     }
 
@@ -142,7 +169,15 @@ class _ForgetState extends State<RegPage>{
   Widget build(BuildContext context) {
     // TODO: implement build
   return Scaffold(
-    body: SingleChildScrollView(
+    body: WillPopScope(
+      onWillPop: () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginPdPage(widget.type),
+            ));
+      },
+     child: SingleChildScrollView(
 
 
         child: Stack(
@@ -210,7 +245,7 @@ class _ForgetState extends State<RegPage>{
                                     right: 0,
                                     bottom: 10,
                                     child: GestureDetector(
-                                        child: CodeSendBtn(key:_codeSendKey),
+                                        child: CodeSendBtn(0,key:_codeSendKey),
                                         onTap: (){
                                           _codeSendKey.currentState.clickCode(_phoneController.text);
                                         }
@@ -283,7 +318,7 @@ class _ForgetState extends State<RegPage>{
 
                 ],
 
-              ),
+              )),
     ),
     resizeToAvoidBottomPadding: false,
   );

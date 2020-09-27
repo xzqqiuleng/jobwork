@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/me_list.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
+import 'package:recruit_app/pages/change_phone.dart';
 import 'package:recruit_app/pages/mine/about_us.dart';
 import 'package:recruit_app/pages/utils/cashfile_utils.dart';
 import 'package:recruit_app/widgets/common_appbar_widget.dart';
@@ -24,7 +25,7 @@ class _NewSettingState extends State<NewSetting> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    options.add( Me(imgPath: 'images/p_bd.png', itemName: '绑定新手机', itemStatus: ''));
     options.add( Me(imgPath: 'images/set1.png', itemName: '清理缓存', itemStatus: ''));
     options.add( Me(imgPath: 'images/set2.png', itemName: '关于我们', itemStatus: ''));
     options.add( Me(imgPath: 'images/set3.png', itemName: '注销账号', itemStatus: ''));
@@ -163,15 +164,20 @@ class _NewSettingState extends State<NewSetting> {
                     ),
                   ),
                   onTap: () {
-                    if (index == 0) {
+                    if (index == 1) {
                       _clearCach();
-                    } else if (index == 1) {
+                    } else if (index == 2) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AboutUsPage()));
-                    } else if (index == 2) {
+                    } else if (index == 3) {
                       _showDeleteDialog(context);
+                    }else{
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangePhone()));
                     }
                   },
                 ),

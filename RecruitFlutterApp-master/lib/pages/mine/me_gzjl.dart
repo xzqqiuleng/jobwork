@@ -389,6 +389,9 @@ class _MeGzjlState extends State<MeGzjl> {
  String startDate="";
  String stopDate="";
 
+  String mstartDate;
+  String mstopDate;
+
   void _showDatePop(BuildContext context,int type){
 
     showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
@@ -399,36 +402,94 @@ class _MeGzjlState extends State<MeGzjl> {
         mode: CupertinoDatePickerMode.date,
         initialDateTime: _initDate,
         onDateTimeChanged: (DateTime dataTime){
-          if(mounted){
-            setState(() {
+
               if(type == 0){
-                startDate =     formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+                mstartDate =     formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
               }else{
-                stopDate =  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+                mstopDate =  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
               }
-            });
-          }
+
         },
       ));
     });
   }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    if(mounted){
+                      setState(() {
+                        if(mstartDate != null){
+                          startDate =     mstartDate;
+                        }
+                        if(mstopDate != null){
+                          stopDate = mstopDate;
+                        }
+
+
+                      });
+                    }
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
 }

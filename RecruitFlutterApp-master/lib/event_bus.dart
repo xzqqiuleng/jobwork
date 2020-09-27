@@ -10,4 +10,3 @@ class CitySelectEvent {
   String city;
   CitySelectEvent(this.city);
 }
-

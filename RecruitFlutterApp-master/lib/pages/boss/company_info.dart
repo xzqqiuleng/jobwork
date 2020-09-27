@@ -27,7 +27,10 @@ class _CompanyInfoState extends State<CompanyInfo> {
  String c_img="";
 
   _pubCompany(){
-
+    if(shState == "0"){
+      showToast("对不起，你的公司信息认证失败，暂时不能更新信息");
+      return;
+    }
     if(m1 != null && m2 != null && m3 !=null){
       bool isSave = false;
       for(var item in _attrList){

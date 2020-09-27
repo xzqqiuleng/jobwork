@@ -32,7 +32,8 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
   @override
   TabbarPopType popType =TabbarPopType.popSelectNone;
   Function tabbarReset;
-  String cityName=ShareHelper.getCity();
+  String cityName="";
+  String provinceName="";
   String sortName;
   Map filters;
   RefreshController _refreshController =
@@ -134,7 +135,7 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
   }
 
   Widget _buildTabBar() {
-    return JobTabbar(cityName: cityName,sortName: sortName,popTypeChanged: (type) {
+    return JobTabbar(cityName: provinceName==""?"全国":provinceName,sortName: sortName,popTypeChanged: (type) {
 
       setState(() {
         popType = type;
@@ -154,7 +155,8 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
               locationIcon: "images/select_loc.png",
               onValueChanged: (city) {
                 setState(() {
-                  cityName = city;
+                  cityName = city.split("|")[0];
+                  provinceName = city.split("|")[1];
                   Future.delayed(const Duration(milliseconds: 600), () {
                     tabbarReset();
                     setState(() {

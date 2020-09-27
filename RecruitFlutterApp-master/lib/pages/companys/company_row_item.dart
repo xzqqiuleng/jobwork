@@ -17,6 +17,16 @@ class CompanyRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+String titlss="暂无职位招聘";
+
+   try{
+
+     titlss= company["jobs"][0]["title"];
+
+   }catch(e){
+
+   }
+
     final companyItem = Card(
       margin: EdgeInsets.only(
         top: ScreenUtil().setWidth(22),
@@ -163,7 +173,7 @@ class CompanyRowItem extends StatelessWidget {
                         ),
                         Flexible(
                           child: Text(
-                            company["jobs"][0]["title"],
+                            titlss,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

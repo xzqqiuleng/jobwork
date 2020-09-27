@@ -10,6 +10,7 @@ import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/city_page.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/home/recruit_home_app.dart';
+import 'package:recruit_app/pages/map_loc.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
@@ -31,13 +32,17 @@ class _CompanyEditState extends State<CompanyEdit> {
  String name;
   String code ;
   String city="";
-  String address="";
+  String address1="";
+  String address2="";
+  String province="";
+  String lat="";
+  String lng;
   String c_img="http://www.zaojiong.com/data/logo/20170418/14906489056.PNG";
   String license_url="";
  String companyState = "";
  String id ;
  String img_state ="";
-
+  static const _regExp=r"^[ZA-ZZa-z0-9_]+$";
 
   _back(){
     if(companyState != "1"){
@@ -61,7 +66,10 @@ class _CompanyEditState extends State<CompanyEdit> {
 //    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
 //    imags.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=209265447,2361612875&fm=26&gp=0.jpg");
 //    String imagsJson = json.encode(imags);
-
+    if(RegExp(_regExp).firstMatch(_codeController.text)==null){
+      showToast("统一信用代码格式错误");
+      return ;
+    }
   if(_nameController.text.length <2||_addressController.text.length <2 ||_codeController.text.length<2||license_url.length<2||c_img.length<2 || city ==""){
     showToast("请填写完整信息");
     return;
@@ -70,11 +78,15 @@ class _CompanyEditState extends State<CompanyEdit> {
     Map data = Map();
     data["name"] = _nameController.text;
     data["certificate"] = _codeController.text;
-    data["address"] = city+"·"+_addressController.text;
+    data["address"] = address1+"·"+_addressController.text;
     data["license_url"] = license_url;
     data["user_mail"] =ShareHelper.getBosss().userMail;
 //    data["company_info"] =inforJson;
     data["company_img"] =c_img;
+    data["city"] =city;
+    data["lat"] =lat;
+    data["lng"] =lng;
+    data["province"] =province;
 //    data["label"] ="{}";   //jsonmp，网上爬的
 //    data["img_list"] =imagsJson;
     data["id"] =id;
@@ -116,18 +128,22 @@ class _CompanyEditState extends State<CompanyEdit> {
        Map data = reponse["result"];
        name=  data["name"];
        code = data["certificate"];
+       city = data["city"];
       String maddress =data["address"];
 
 _nameController.text=  data["name"];
  _codeController.text= data["certificate"];
        if(maddress.contains("·")){
-         city = maddress.split("·")[0];
-         address = maddress.split("·")[1];
-         _addressController.text = address;
+
+             address1 = maddress.split("·")[0];
+         address2 = maddress.split("·")[1];
+
+
+         _addressController.text = address2;
        }
        license_url =  data["license_url"];
        c_img= data["company_img"];
-       shState= data["sh_state"];
+       shState= data["sh_state"].toString();
        id =data["id"].toString();
        setState(() {
 
@@ -154,7 +170,7 @@ _nameController.text=  data["name"];
      color: Colors.redAccent,
      padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
      child: Text(
-       "公司信息审核失败，请修改后重新提交审核！",
+       "公司信息认证失败，请修改后重新提交审核！",
        style: TextStyle(
            color: Colors.white
        ),
@@ -298,7 +314,7 @@ _nameController.text=  data["name"];
                           ),
                           SizedBox(height: 20),
                           Text(
-                            '* 城市',
+                            '* 地址定位',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -312,23 +328,39 @@ _nameController.text=  data["name"];
                             child:   GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () async {
-                                var    reslut = await  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CityPage(),
-                                    ));
-                                setState(() {
-                                  if(reslut != null){
-                                    city = reslut;
+//                                var    reslut = await  Navigator.push(
+//                                    context,
+//                                    MaterialPageRoute(
+//                                      builder: (context) => CityPage(),
+//                                    ));
+//                                setState(() {
+//                                  if(reslut != null){
+//                                    city = reslut;
+//                                  }
+//                                });
+
+                                var    reslut = await   Navigator.push(context,  MaterialPageRoute(
+                                  builder: (context) => MapLoc(),
+                                ));
+                                if(reslut != null){
+                                   List infros= reslut.toString().split("|");
+
+                                    lat = infros[0];
+                                    lng = infros[1];
+                                   province = infros[2];
+                                    city = infros[3];
+                                    setState(() {
+                                      address1 = infros[4];
+                                    });
+
                                   }
-                                });
                               },
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Expanded(
-                                    child:   Text(city,
+                                    child:   Text(address1,
                                         style: TextStyle(
                                           wordSpacing: 1,
                                           letterSpacing: 1,
@@ -355,7 +387,7 @@ _nameController.text=  data["name"];
                           ),
                           SizedBox(height: 10),
                           Text(
-                            '* 公司地址',
+                            '* 详细地址信息(楼层，门牌号)',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -366,7 +398,7 @@ _nameController.text=  data["name"];
                           SizedBox(height: 16),
                           LogRegTextField(
 
-                            label: address,
+                            label: address2,
                             controller:  _addressController,
                             textInputAction: TextInputAction.next,
                             textInputType: TextInputType.phone,
@@ -390,7 +422,7 @@ _nameController.text=  data["name"];
                             label: code,
                             controller:  _codeController,
                             textInputAction: TextInputAction.next,
-                            textInputType: TextInputType.phone,
+                            textInputType: TextInputType.emailAddress,
                             obscureText: false,
 
                           ),

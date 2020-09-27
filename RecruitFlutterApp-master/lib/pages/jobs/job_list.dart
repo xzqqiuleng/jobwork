@@ -131,7 +131,7 @@ class _JobBodyListState extends State<JobBodyList> with AutomaticKeepAliveClient
   StreamSubscription  _eventChangeSub;
   void _eventSub(){
     _eventChangeSub= eventBus.on<CitySelectEvent>().listen((event) {
-      city = event.city;
+      city = event.city.split("|")[0];
       print(city);
       _OnRefresh();
     });

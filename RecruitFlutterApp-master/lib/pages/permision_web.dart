@@ -32,31 +32,34 @@ class _ComponentWebviewState extends State<PermissionWeb> {
       if(null != value&& value != ""){
 
      setState(() {
-       url ="https://brain.baidu.com/face/print/?token=${value}&successUrl=http://116.62.45.24/html/success.html&failedUrl=http://116.62.45.24/html/fail.html";
+       url ="https://brain.baidu.com/face/print/?token=${value}&successUrl=http://18pinpin.com/html/fail.html&failedUrl=http://18pinpin.com/html/success.html";
      });
       }
     });
   }
+ initSMRZ()async{
+   Map userMap = Map();
+   userMap["real_status"] ="1";
+   userMap["user_id"] =ShareHelper.getBosss().userId;
+   MiviceRepository().updateUser(userMap).then((value) {
 
+       User user = ShareHelper.getBosss();
+       user.realStatus="1";
+       StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
+       Navigator.of(context).pop(true);
+       showToast("实名认证成功");
+   });
+ }
   @override
   Widget build(BuildContext context) {
     //加载  远程网页 OR 本地网页
     Set<JavascriptChannel> jsChannels = [
       JavascriptChannel(
           name: 'faceResult',
-          onMessageReceived: (JavascriptMessage message) {
+          onMessageReceived: (JavascriptMessage message)  {
             print(message.message);
             if(message.message == "success"){
-              Map userMap = Map();
-              userMap["real_status"] ="1";
-              userMap["user_id"] =ShareHelper.getBosss().userId;
-              MiviceRepository().updateUser(userMap).then((value) {
-                 if(value){
-                   User user = ShareHelper.getBosss();
-                   user.realStatus="1";
-                   StorageManager.localStorage.setItem(ShareHelper.BOSSUser, user);
-                 }
-              });
+            initSMRZ();
 
             }else{
               showToast("验证失败");

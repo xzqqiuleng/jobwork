@@ -9,7 +9,7 @@ class AppRepository {
   static Dio dio;
 //  static String baseUrl = 'http://116.62.45.24/crawler/';      //开发
 
-  static String baseUrl = 'http://www.18hrzp.net/crawler/';    //开发
+  static String baseUrl = 'http://www.18pinpin.com/crawler/';    //开发
   AppRepository(){
 
 

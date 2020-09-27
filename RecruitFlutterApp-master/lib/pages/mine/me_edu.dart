@@ -385,6 +385,7 @@ class _MeEduState extends State<MeEdu> {
 
   List _salaryList=["初中及以下","高中","中专","大专","本科","研究生","硕士","博士"];
   String _xl="";
+  String _mxl="初中及以下";
   void _showSexPop(BuildContext context){
     FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
     showCupertinoModalPopup<void>(
@@ -399,14 +400,12 @@ class _MeEduState extends State<MeEdu> {
                 useMagnifier: true,
                 scrollController: scrollController,
                 onSelectedItemChanged: (int index){
-                  if(mounted){
-                    setState(() {
-
-                        _xl = _salaryList[index];
 
 
-                    });
-                  }
+                      _mxl = _salaryList[index];
+
+
+
                 },
                 children: List<Widget>.generate(_salaryList.length, (index){
                   return Center(
@@ -419,6 +418,7 @@ class _MeEduState extends State<MeEdu> {
   }
   DateTime _initDate = DateTime.now();
   String  datss = "";
+  String  mdatss ;
   void _showDatePop(BuildContext context){
 
     showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
@@ -429,34 +429,92 @@ class _MeEduState extends State<MeEdu> {
         mode: CupertinoDatePickerMode.date,
         initialDateTime: _initDate,
         onDateTimeChanged: (DateTime dataTime){
-          if(mounted){
-            setState(() {
 
-                datss =     formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
 
-            });
-          }
+              mdatss =     formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+
+
         },
       ));
     });
   }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    if(mounted){
+                      setState(() {
+                    if(mdatss != null){
+                      datss =     mdatss;
+                    }
+                    if(_mxl != null){
+                         _xl = _mxl;
+                    }
+
+
+                      });
+                    }
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
 }

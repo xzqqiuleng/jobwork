@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
 import 'citys_model.dart';
+
 
 class CitysSelect extends StatefulWidget {
   final double height;
@@ -24,7 +24,7 @@ class _CitysSelectState extends State<CitysSelect> {
  int currentSelect = 0;
  bool isTap = false;
  bool isHotCitys = false;
- String selectCityName;
+ String selectCityName; 
 
 
  Future<void> fetchData() async {
@@ -34,7 +34,7 @@ class _CitysSelectState extends State<CitysSelect> {
       var response = json.decode(responseStr);
       var responseJson = response["data"];
       List moduleData = responseJson['provinces'];
-      List hotData = ["广东"];
+      List hotData = responseJson['hotCitys'];
 
       List<String> hotCitys = [];
       if (hotData !=null && hotData.length > 0) {
@@ -44,9 +44,9 @@ class _CitysSelectState extends State<CitysSelect> {
       }
 
       List<String> historyCitys = [];
-      historyCitys.addAll(["广东"]);
+      historyCitys.addAll(["广州","深圳","东莞"]);
 
-      CitysModel hotModel = CitysModel(name: "常用",currentCity: "",citys: hotCitys,historyCitys: historyCitys);
+      CitysModel hotModel = CitysModel(name: "常用",currentCity: "广州",citys: hotCitys,historyCitys: historyCitys);
       models.add(hotModel);
 
       moduleData.forEach((data) {
@@ -64,7 +64,7 @@ class _CitysSelectState extends State<CitysSelect> {
   bool isSelect(int index) {
     return currentSelect == index ? true : false;
   }
- String selectCity="";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,7 +72,7 @@ class _CitysSelectState extends State<CitysSelect> {
 
     fetchData();
   }
-
+String proviceName="";
   Widget _buildProvincesItem(CitysModel model,int index) {
     return new Container(
       height: 50,
@@ -80,7 +80,7 @@ class _CitysSelectState extends State<CitysSelect> {
         onTap: () {
           setState(() {
             currentSelect = index;
-            selectCity = model.name;
+            proviceName = model.name;
           });
         },
         child: new Row(
@@ -122,14 +122,58 @@ class _CitysSelectState extends State<CitysSelect> {
       children: citys.map((cityName) {
         return new InkWell(
           onTap: () {
+            if(proviceName == "常用"){
+              switch(cityName){
+                case "北京":
+                proviceName = "北京";
+                break;
+                case "上海":
+                  proviceName = "上海";
+                  break;
+                case "深圳":
+                  proviceName = "广东";
+                  break;
+                case "广州":
+                  proviceName = "广东";
+                  break;
+                case "杭州":
+                  proviceName = "浙江";
+                  break;
+                case "成都":
+                  proviceName = "四川";
+                  break;
+                case "武汉":
+                proviceName = "湖北";
+                break;
+                case "西安":
+                  proviceName = "陕西";
+                  break;
+                case "南京":
+                  proviceName = "江苏";
+                  break;
+                case "长沙":
+                  proviceName = "湖南";
+                  break;
+                case "郑州":
+                  proviceName = "河南";
+                  break;
+                  case "重庆":
+                proviceName = "重庆";
+                break;
+                case "天津":
+                  proviceName = "天津";
+                  break;
+                case "苏州":
+                  proviceName = "江苏";
+                  break;
+                case "厦门":
+                  proviceName = "福建";
+                  break;
 
-            if(!selectCity.contains("常用")){
-              widget.onValueChanged(selectCity);
-            }else{
-              widget.onValueChanged("广东");
-              print(cityName);
+              }
             }
 
+            widget.onValueChanged(proviceName+"|"+cityName);
             selectCityName = cityName;
             isHotCitys = isHot;
             setState(() {
@@ -163,11 +207,11 @@ class _CitysSelectState extends State<CitysSelect> {
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Container(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-//                new Text("当前定位",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
+//          new Container(
+//            child: new Column(
+//              crossAxisAlignment: CrossAxisAlignment.start,
+//              children: <Widget>[
+////                new Text("当前定位",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
 //                new Container(
 //                  margin: EdgeInsets.only(top: 15.0,bottom: 15.0),
 //                  child: new Container(
@@ -197,22 +241,22 @@ class _CitysSelectState extends State<CitysSelect> {
 //                    ),
 //                  ),
 //                )
-              ],
-            ),
-          ),
-          new Container(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text("最近访问",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
-                new Container(
-                  margin: EdgeInsets.only(top: 15.0),
-                  height: historyCitysHeight,
-                  child:_buildCitysItem(models[currentSelect].historyCitys,false),
-                )
-              ],
-            ),
-          ),
+//              ],
+//            ),
+//          ),
+////          new Container(
+////            child: new Column(
+////              crossAxisAlignment: CrossAxisAlignment.start,
+////              children: <Widget>[
+////                new Text("最近访问",style: new TextStyle(fontSize: 15.0,color: Colors.black)),
+////                new Container(
+////                  margin: EdgeInsets.only(top: 15.0),
+////                  height: historyCitysHeight,
+////                  child:_buildCitysItem(models[currentSelect].historyCitys,false),
+////                )
+////              ],
+////            ),
+////          ),
           new Container(
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,

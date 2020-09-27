@@ -9,10 +9,14 @@ import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/chat_list.dart';
+import 'package:recruit_app/pages/companys/company_welfare_item.dart';
 import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
 import 'package:recruit_app/pages/jobs/chat_row_item.dart';
+import 'package:recruit_app/pages/jubao.dart';
+import 'package:recruit_app/pages/normal_world.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -152,6 +156,7 @@ class _ChatRoomState extends State<ChatRoom> {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
+
   _initData(){
     MiviceRepository().getAllMessage(widget.user_id,widget.reply_id).then((value) {
       var reponse = json.decode(value.toString());
@@ -186,101 +191,115 @@ class _ChatRoomState extends State<ChatRoom> {
       }
     });
   }
-  List _sexList=["违法违纪，敏感言论","色情，辱骂，粗俗","职位虚假，信息不真实","违法，欺诈，诱导欺骗","收取求职者费用","变相发布广告和招商","其他违规行为"];
 
-  void _showSexPop(BuildContext context){
-    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
-    showCupertinoModalPopup<void>(
+
+
+  void showNormalWord(){
+    List<dynamic> tip = ShareHelper.getNormal();
+    List<dynamic>getTips;
+    if(ShareHelper.isBossLogin()){
+      getTips=["我能要一份你的联系方式吗","你对我们公司的职位有兴趣吗","你好，可以聊一聊么。","我对你的简历很感兴趣，希望可以进一步沟通。","我认为你很符合这个职位，希望可以聊一下"];
+    }else{
+      getTips=["您好，请问公司还在招人吗！","Boss,你好。","你好，可以聊一聊么。","我对贵公司的职位很感兴趣，希望可以进一步沟通。","我认为我符合这个职位，希望可以聊一下"];
+    }
+
+ if(tip == null){
+   tip = new List();
+ }
+    tip.addAll(getTips);
+
+    showModalBottomSheet(
         context: context,
-        builder: (BuildContext context){
-          return _buildBottonPicker(
-              CupertinoPicker(
-
-                magnification: 1,
-                itemExtent:58 ,
-                backgroundColor: Colors.white,
-                useMagnifier: true,
-                scrollController: scrollController,
-                onSelectedItemChanged: (int index){
-
-
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gaps.vGap16,
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NormalWord(),
+                      ));
                 },
-                children: List<Widget>.generate(_sexList.length, (index){
-                  return Center(
-                    child: Text(_sexList[index]),
-                  );
+                child:  Text("    + 添加常用语",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colours.app_main,
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+
+            Gaps.vGap8,
+            Container(
+            color: Colors.transparent,
+            child:  ListView.builder(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: tip.length,
+                itemBuilder: (context, index) {
+                  if (index < tip.length) {
+                    return  GestureDetector(
+                      child: ChatItem(
+                        welfareData: tip[index],
+                        index: index,
+                        isLastItem: index == tip.length - 1,
+                      ),
+                      behavior: HitTestBehavior.opaque,
+                      onTap: (){
+                        if(widget.type == 0){
+                          Map map = Map();
+                          map["user_info"] =jsonStr;
+
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =tip[index];
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getBosss().headImg,
+                                content: tip[index]));
+
+                          });
+                          Navigator.of(context).pop();
+                        }else{
+                          Map map = Map();
+
+                          map["com_info"] =jsonStr;
+                          map["user_id"] = widget.user_id;
+                          map["reply_id"] =widget.reply_id;
+                          map["message"] =tip[index];
+                          channel.sink.add(json.encode(map));
+                          setState(() {
+                            _chatList.add(Chat(
+                                isMine: true,
+                                user_icon: ShareHelper.getUser().headImg,
+                                content: tip[index]));
+
+                          });
+                          Navigator.of(context).pop();
+                        }
+
+
+                        _controllerjumpTo();
+                      },
+                    ) ;
+                  }
+                  return null;
                 }),
-              )
-          );
+          )
+            ],
+          ) ;
         });
   }
 
-  Widget _buildBottonPicker(Widget picker) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 52,
-          color: Color(0xfff6f6f6),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-
-                left: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("取消",
-                    style: TextStyle(
-                        color: Colours.black_212920,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none
-                    ),),
-                ),
-              ),
-              Positioned(
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showToast("举报已发送，我们会尽快审核信息");
-                  },
-                  child: Text("确定",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colours.app_main,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold
-                    ),),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 190,
-          padding: EdgeInsets.only(top: 6),
-          color: Colors.white,
-          child: DefaultTextStyle(
-            style: const TextStyle(
-                color: Colours.black_212920,
-                fontSize: 18
-            ),
-            child: GestureDetector(
-              child: SafeArea(
-                top: false,
-                child: picker,
-              ),
-            ),
-          ),
-        )
-      ],
-
-    );
-  }
   @override
   Widget build(BuildContext context) {
     final editController = TextEditingController();
@@ -326,7 +345,12 @@ class _ChatRoomState extends State<ChatRoom> {
                   width: 20,
                   height: 20,
                 ),
-                onPressed: () {_showSexPop(context);}),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => JubaoPages(3,widget.reply_id)));
+                }),
           ],
         ),
         body: Column(
@@ -580,25 +604,28 @@ class _ChatRoomState extends State<ChatRoom> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-//                    GestureDetector(
-//                      behavior: HitTestBehavior.opaque,
-//                      onTap: () {},
-//                      child: Container(
-//                        padding:
-//                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-////                        child: Text(
-////                          "常用语",
-////                          style: TextStyle(
-////                            fontSize: 14,
-////                            color: Colors.white,
-////                          ),
-////                        ),
-//                        decoration: new BoxDecoration(
-//                          color: Color.fromRGBO(0, 188, 173, 1),
-//                          borderRadius: new BorderRadius.circular(5.0),
-//                        ),
-//                      ),
-//                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        showNormalWord();
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        child: Text(
+                          "常用语",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                        decoration: new BoxDecoration(
+                          color: Colours.app_main,
+                          borderRadius: new BorderRadius.circular(2.0),
+                        ),
+                      ),
+                    ),
+                    Gaps.hGap8,
                     Expanded(
                       child: TextField(
                         controller: editController,
@@ -609,13 +636,16 @@ class _ChatRoomState extends State<ChatRoom> {
                             fontSize: 16.0,
                             color: Color.fromRGBO(37, 38, 38, 1)),
                         decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(5.0),
-                            border: InputBorder.none),
+                            contentPadding: const EdgeInsets.all(4.0),
+                            hintText: "新消息",
+                            border:InputBorder.none,
+                            ),
                         onSubmitted: (text) {
                           print(text);
                         },
                       ),
                     ),
+                    Gaps.hGap4,
 //                    GestureDetector(
 //                      behavior: HitTestBehavior.opaque,
 //                      child: Padding(
@@ -679,9 +709,9 @@ class _ChatRoomState extends State<ChatRoom> {
                       },
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal:18, vertical:10),
+                        EdgeInsets.symmetric(horizontal:8, vertical:5),
                         child: Text(
-                          "发送",
+                          "发 送",
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -689,7 +719,7 @@ class _ChatRoomState extends State<ChatRoom> {
                         ),
                         decoration: new BoxDecoration(
                           color: Colours.app_main,
-                          borderRadius: new BorderRadius.circular(5.0),
+                          borderRadius: new BorderRadius.circular(2.0),
                         ),
                       ),
                     ),
@@ -701,7 +731,49 @@ class _ChatRoomState extends State<ChatRoom> {
         ));
   }
 }
+class ChatItem extends StatelessWidget {
+  final String welfareData;
+  final int index;
+  final bool isLastItem;
 
+  const ChatItem({Key key, this.welfareData, this.index,this.isLastItem})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final welfareItem = Container(
+      alignment: Alignment.centerLeft,
+      height: 40,
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
+//      decoration: BoxDecoration(
+//          borderRadius: BorderRadius.circular(6),
+//          border: Border.all(
+//              width: 0.4,
+//              color: Colors.black87,
+//              style: BorderStyle.solid)),
+      child: Text(
+        welfareData == ""?"公司福利": '${welfareData}',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14, color: Colors.black87),
+      ),
+    );
+
+    if(isLastItem){
+      return welfareItem;
+    }
+
+    return Column(
+      children: <Widget>[
+        welfareItem,
+        Container(
+         height: 0.2,
+          color: Colours.gray_8A8F8A,
+        ),
+      ],
+    );
+  }
+}
 class TopWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {

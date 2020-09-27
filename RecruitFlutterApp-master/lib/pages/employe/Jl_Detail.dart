@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
+import 'package:recruit_app/pages/jubao.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
@@ -310,101 +311,7 @@ _getDetail() {
   }
 
 
-  List _sexList=["简历信息虚假","信息错误，夸张","包含，欺诈，诱导欺骗等信息","其他违规行为"];
 
-  void _showSexPop(BuildContext context){
-    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context){
-          return _buildBottonPicker(
-              CupertinoPicker(
-
-                magnification: 1,
-                itemExtent:58 ,
-                backgroundColor: Colors.white,
-                useMagnifier: true,
-                scrollController: scrollController,
-                onSelectedItemChanged: (int index){
-
-
-                },
-                children: List<Widget>.generate(_sexList.length, (index){
-                  return Center(
-                    child: Text(_sexList[index]),
-                  );
-                }),
-              )
-          );
-        });
-  }
-
-  Widget _buildBottonPicker(Widget picker) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 52,
-          color: Color(0xfff6f6f6),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-
-                left: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("取消",
-                    style: TextStyle(
-                        color: Colours.black_212920,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none
-                    ),),
-                ),
-              ),
-              Positioned(
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showToast("举报已提交，我们会尽快审核信息");
-                  },
-                  child: Text("确定",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colours.app_main,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold
-                    ),),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 190,
-          padding: EdgeInsets.only(top: 6),
-          color: Colors.white,
-          child: DefaultTextStyle(
-            style: const TextStyle(
-                color: Colours.black_212920,
-                fontSize: 18
-            ),
-            child: GestureDetector(
-              child: SafeArea(
-                top: false,
-                child: picker,
-              ),
-            ),
-          ),
-        )
-      ],
-
-    );
-  }
 
 
   @override
@@ -468,7 +375,10 @@ _getDetail() {
                 height: 24,
               ),
               onPressed: () {
-                _showSexPop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => JubaoPages(4,widget.jobId)));
 
               })
         ],

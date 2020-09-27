@@ -9,19 +9,18 @@ import 'package:flutter_screenutil/screenutil.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_pic_list.dart';
-import 'package:recruit_app/model/company_welfare_list.dart';
 import 'package:recruit_app/model/job_list.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/companys/company_job.dart';
 import 'package:recruit_app/pages/companys/company_job_item.dart';
-import 'package:recruit_app/pages/companys/company_pic_item.dart';
 import 'package:recruit_app/pages/companys/company_welfare_item.dart';
 import 'package:recruit_app/pages/companys/gs_info.dart';
 import 'package:recruit_app/pages/constant.dart';
 import 'package:recruit_app/pages/jobs/job_detail.dart';
+import 'package:recruit_app/pages/jubao.dart';
+import 'package:recruit_app/pages/map_nav.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
-import 'package:recruit_app/widgets/bottom_drawer_widget.dart';
 
 class CompanyDetail extends StatefulWidget {
   int id;
@@ -40,6 +39,8 @@ class _CompanyDetailState extends State<CompanyDetail> {
   Map com_label;
   Map compay_info;
   String address="";
+  String lat="";
+  String lng="";
   List<GSInfo> gsInfos=List();
   int is_collect = 0;
 
@@ -76,17 +77,26 @@ class _CompanyDetailState extends State<CompanyDetail> {
           infors = data["com"];
           is_collect= infors["is_collect"];
           address = infors["address"];
+          lat = infors["lat"];
+          lng = infors["lng"];
         List  jobList = data["jobs"];
         datalist.clear();
           datalist.addAll(jobList);
-          compay_info = json.decode(infors["company_info"].toString());
+          try{
+            compay_info = json.decode(infors["company_info"].toString());
+          }catch(e){
+
+          }
+
 
           if(infors["label"] !=null && infors["label"] != ""){
             com_label = json.decode(infors["label"].toString());
           }
 
+             if( data["tip"]!= null && data["tip"]!= "" ){
+               tip = data["tip"].toString().split(" ");
+             }
 
-          tip = data["tip"].toString().split(" ");
 
           _getContent();
 
@@ -106,105 +116,6 @@ class _CompanyDetailState extends State<CompanyDetail> {
      gsInfos.add(gsInfo);
      });
     }
-
-
-
-
-  List _sexList=["公司信息虚假","变相发布广告和招商信息","包含，欺诈，诱导欺骗等信息","其他违规行为"];
-
-  void _showSexPop(BuildContext context){
-    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
-    showCupertinoModalPopup<void>(
-        context: context,
-        builder: (BuildContext context){
-          return _buildBottonPicker(
-              CupertinoPicker(
-
-                magnification: 1,
-                itemExtent:58 ,
-                backgroundColor: Colors.white,
-                useMagnifier: true,
-                scrollController: scrollController,
-                onSelectedItemChanged: (int index){
-
-
-                },
-                children: List<Widget>.generate(_sexList.length, (index){
-                  return Center(
-                    child: Text(_sexList[index]),
-                  );
-                }),
-              )
-          );
-        });
-  }
-
-  Widget _buildBottonPicker(Widget picker) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 52,
-          color: Color(0xfff6f6f6),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-
-                left: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("取消",
-                    style: TextStyle(
-                        color: Colours.black_212920,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none
-                    ),),
-                ),
-              ),
-              Positioned(
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showToast("举报已提交，我们会尽快审核信息");
-                  },
-                  child: Text("确定",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Colours.app_main,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold
-                    ),),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 190,
-          padding: EdgeInsets.only(top: 6),
-          color: Colors.white,
-          child: DefaultTextStyle(
-            style: const TextStyle(
-                color: Colours.black_212920,
-                fontSize: 18
-            ),
-            child: GestureDetector(
-              child: SafeArea(
-                top: false,
-                child: picker,
-              ),
-            ),
-          ),
-        )
-      ],
-
-    );
-  }
 
 
 
@@ -322,7 +233,10 @@ class _CompanyDetailState extends State<CompanyDetail> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    _showSexPop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => JubaoPages(2,widget.id.toString())));
                   })
             ],
           ),
@@ -633,48 +547,60 @@ class _CompanyDetailState extends State<CompanyDetail> {
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        height: 80,
-                        child:  Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              child:  ClipRRect(
-                                borderRadius: BorderRadius.all(Radius.circular(2)),
-                                child: Image.asset('images/map_icon.jpg',
-                                    height: 100, fit: BoxFit.cover),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MapNavWeb(address,lat,lng)));
+                        },
+                        child:  Container(
+                          height: 80,
+                          child:  Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                child:  ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                                  child: Image.asset('images/map_icon.jpg',
+                                      height: 100, fit: BoxFit.cover),
+                                ),
                               ),
-                            ),
 
-                            Container(
-                              alignment: Alignment.center,
-                              color: Colors.white,
-                              height: 44,
-                              margin: EdgeInsets.only(left: 30,right: 30),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Image.asset('images/loc_address.png',
-                                      width: 16,
-                                      height: 16, fit: BoxFit.cover),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                      address
-                                  )
-                                ],
+                              Container(
+                                alignment: Alignment.center,
+                                color: Colors.white,
+                                height: 44,
+                                margin: EdgeInsets.only(left: 30,right: 30),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Image.asset('images/loc_address.png',
+                                        width: 16,
+                                        height: 16, fit: BoxFit.cover),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
 
-                              ),
-                            )
+                                      address.length>13?address.substring(0,14):address,
+
+                                    )
+                                  ],
+
+                                ),
+                              )
 
 
-                          ],
+                            ],
 
+                          ),
                         ),
                       ),
+
 
                       SizedBox(
                         height: 20,

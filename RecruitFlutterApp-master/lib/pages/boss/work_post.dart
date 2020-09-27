@@ -7,6 +7,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/pages/btn_widget.dart';
 import 'package:recruit_app/pages/city_page.dart';
+import 'package:recruit_app/pages/fuli.dart';
 import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
@@ -28,10 +29,32 @@ class _WorkPostState extends State<WorkPost> {
   String work_time="";
   String salary="";
   String work_deteail ="";
-  String address ="";
+  String address ="暂无";
   String job_id;
- String city="";
+ String city="暂无";
 String company="";
+String jsonFuli;
+String fuliStr="";
+
+
+  Widget  _getShWidget(){
+    if(shState =="0"){
+      return  Container(
+        alignment: Alignment.center,
+        color: Colors.redAccent,
+        margin: EdgeInsets.only(bottom: 16),
+        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+        child: Text(
+          "公司信息认证失败，不能发布职位！",
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      );
+    }else{
+      return Text("");
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -57,6 +80,14 @@ String company="";
       type = widget.data["label"].toString().split("|")[1];
       xl = widget.data["label"].toString().split("|")[2];
       work_time = widget.data["label"].toString().split("|")[3];
+
+      jsonFuli =  widget.data["tips"];
+      if(jsonFuli.isNotEmpty){
+        List<dynamic>FLs = json.decode(jsonFuli);
+        for(var item in FLs){
+          fuliStr = item +","+fuliStr;
+        }
+      }
     }
   }
   _pubResume(){
@@ -71,12 +102,12 @@ if(shState == "0"){
 
      String tip = "五险一金 绩效奖金 弹性工作 通讯补贴";
 
-    if(city ==""||salary==""||workStr==""||type==""||xl==""||work_time==""||work_deteail==""||type=="" ||_ConfirmPdController.text.isEmpty){
+    if(city ==""||salary==""||workStr==""||type==""||xl==""||work_time==""||work_deteail==""||type=="" ||_ConfirmPdController.text.isEmpty||jsonFuli == null){
       showToast("请填写完整的招聘内容");
           return;
     }
     Map data = Map();
-    address = city+"·"+_ConfirmPdController.text;
+    address = city+"·"+"暂无";
     data["salary"] = salary;
     data["user_mail"] = ShareHelper.getBosss().userMail;
     data["company"] =company;
@@ -87,6 +118,7 @@ if(shState == "0"){
     data["summary"] =dJson;
     data["mook_img"] ="";
     data["job_id"] =job_id;
+    data["tips"] =jsonFuli;
 
 
     MiviceRepository().pubJob(data).then((value) {
@@ -107,12 +139,17 @@ if(shState == "0"){
       if(reponse["status"] == "success"){
         Map data = reponse["result"];
         company=  data["name"];
-        shState=  data["shState"];
+        shState=  data["sh_state"].toString();
+         setState(() {
 
+         });
       }else{
 
       }
     });
+  }
+  void showBottomFl(){
+
   }
   @override
   Widget build(BuildContext context) {
@@ -156,6 +193,7 @@ if(shState == "0"){
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    _getShWidget(),
                     Text(
                       '* 职位类型',
                       maxLines: 1,
@@ -406,6 +444,7 @@ if(shState == "0"){
                        });
                      }
                       },
+
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -436,42 +475,46 @@ if(shState == "0"){
                       height: 1,
                     ),
                     Text(
-                      '* 工作地点',
+                      '* 福利待遇',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600
+                          fontSize: 13, fontWeight: FontWeight.w600
                       ),
                     ),
                     SizedBox(height: 8),
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTap: ()async{
-                     var  cc=await   Navigator.push(
+                      onTap: () async{
+                     List<String>resultList = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CityPage(),
+                              builder: (context) => Fuli(),
                             ));
-                     if(cc != null){
-                       setState(() {
-                         city = cc;
-                       });
+                     if(resultList == null){
+                       return;
                      }
+                     jsonFuli = json.encode(resultList);
+                     for(var item in resultList){
+                        fuliStr =item+"," +fuliStr;
+                     }
+                     setState(() {
+
+                     });
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
-                            child:   Text(city,
+                            child:   Text(fuliStr,
                                 style: TextStyle(
                                     wordSpacing: 1,
                                     letterSpacing: 1,
                                     fontSize: 14,
                                     color: Color.fromRGBO(136, 138, 138, 1))),
                           ),
-                          SizedBox(width: 8,),
+                          SizedBox(width: 8,height: 40,),
                           Image.asset(
                             'images/arrow_right.png',
                             width: 18,
@@ -481,18 +524,69 @@ if(shState == "0"){
                         ],
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 15),
-                      color: Color.fromRGBO(242, 243, 244, 1),
-                      height: 1,
-                    ),
-                    LogRegTextField(
-
-                      label: "请输入具体的地址",
-                      controller:  _ConfirmPdController,
-                      textInputType: TextInputType.text,
-
-                    ),
+//                    Container(
+//                      margin: EdgeInsets.symmetric(vertical: 10),
+//                      color: Color.fromRGBO(242, 243, 244, 1),
+//                      height: 1,
+//                    ),
+//                    Text(
+//                      '* 工作地点',
+//                      maxLines: 1,
+//                      overflow: TextOverflow.ellipsis,
+//                      style: const TextStyle(
+//                          fontSize: 13,
+//                          fontWeight: FontWeight.w600
+//                      ),
+//                    ),
+//                    SizedBox(height: 8),
+//                    GestureDetector(
+//                      behavior: HitTestBehavior.opaque,
+//                      onTap: ()async{
+//                     var  cc=await   Navigator.push(
+//                            context,
+//                            MaterialPageRoute(
+//                              builder: (context) => CityPage(),
+//                            ));
+//                     if(cc != null){
+//                       setState(() {
+//                         city = cc.toString().split("|")[1];
+//                       });
+//                     }
+//                      },
+//                      child: Row(
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+//                        mainAxisAlignment: MainAxisAlignment.start,
+//                        children: <Widget>[
+//                          Expanded(
+//                            child:   Text(city,
+//                                style: TextStyle(
+//                                    wordSpacing: 1,
+//                                    letterSpacing: 1,
+//                                    fontSize: 14,
+//                                    color: Color.fromRGBO(136, 138, 138, 1))),
+//                          ),
+//                          SizedBox(width: 8,),
+//                          Image.asset(
+//                            'images/arrow_right.png',
+//                            width: 18,
+//                            height: 18,
+//                            fit: BoxFit.cover,
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                    Container(
+//                      margin: EdgeInsets.symmetric(vertical: 15),
+//                      color: Color.fromRGBO(242, 243, 244, 1),
+//                      height: 1,
+//                    ),
+//                    LogRegTextField(
+//
+//                      label: "请输入具体的地址",
+//                      controller:  _ConfirmPdController,
+//                      textInputType: TextInputType.text,
+//
+//                    ),
                     SizedBox(
                       height: 60,
                     )
@@ -523,6 +617,11 @@ if(shState == "0"){
     "15-20万/年", "20-30万/年", "30-40万/年"];
   List timeList=["不限","1年经验", "2年经验", "3-4年经验", "5-7年经验", "8-9年经验","10年及以上"];
 
+
+
+  String mxl ="不限" ;
+  String mwork_time="不限";
+  String msalary="面议";
   void _showSexPop(BuildContext contex, int type){
      List popList = List();
     if(type == 0){
@@ -550,11 +649,11 @@ if(shState == "0"){
                     setState(() {
 
                        if(type == 0){
-                         xl = popList[index];
+                         mxl = popList[index];
                        }else if(type == 1){
-                         work_time = popList[index];
+                         mwork_time = popList[index];
                        }else if(type == 2){
-                         salary= popList[index];
+                         msalary= popList[index];
                        }
 
 
@@ -568,50 +667,96 @@ if(shState == "0"){
                   );
                 }),
               )
-          );
+          ,type);
         });
   }
   DateTime _initDate = DateTime.now();
   String birthday="";
 
-  void _showDatePop(BuildContext context){
 
-    showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
 
-      return _buildBottonPicker(CupertinoDatePicker(
-        minimumYear: _initDate.year-100,
-        maximumYear: _initDate.year,
-        mode: CupertinoDatePickerMode.date,
-        initialDateTime: _initDate,
-        onDateTimeChanged: (DateTime dataTime){
-          if(mounted){
-            setState(() {
+  Widget _buildBottonPicker(Widget picker,int type) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
 
-              birthday =  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
 
-            });
-          }
-        },
-      ));
-    });
-  }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+                    Navigator.pop(context);
+                    setState(() {
+                      if(mounted){
+                        setState(() {
+
+                          if(type == 0 && mxl != null){
+                            xl = mxl;
+                          }else if(type == 1 && mwork_time != null){
+                            work_time = mwork_time;
+                          }else if(type == 2 && msalary != null){
+                            salary= msalary;
+                          }
+
+
+
+                        });
+                      }
+                    });
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
+
 }

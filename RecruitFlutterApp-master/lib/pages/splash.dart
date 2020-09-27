@@ -25,7 +25,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
 
   void _autoTurn() async{
-
+   indes = 0;
     bool isBossLogin =await ShareHelper.isBossLogin();
     bool isUserLogin =await ShareHelper.isLogin();
     if(isBossLogin){

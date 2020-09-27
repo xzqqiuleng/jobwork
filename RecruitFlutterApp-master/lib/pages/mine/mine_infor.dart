@@ -13,6 +13,7 @@ import 'package:recruit_app/pages/mine/me_desc.dart';
 import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/widgets/photo_select.dart';
 
 import '../btn_widget.dart';
@@ -212,6 +213,16 @@ class _MineInforState extends State<MineInfor> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
+                        Text(
+                          '* 编辑头像',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        Gaps.vGap10,
                         GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: (){
@@ -521,6 +532,7 @@ class _MineInforState extends State<MineInfor> {
     ) ;
   }
   List _sexList=["男","女"];
+  String _msex = "男";
   void _showSexPop(BuildContext context){
     FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
     showCupertinoModalPopup<void>(
@@ -535,14 +547,13 @@ class _MineInforState extends State<MineInfor> {
                 useMagnifier: true,
                 scrollController: scrollController,
                 onSelectedItemChanged: (int index){
-                  if(mounted){
-                    setState(() {
-
-                      sex = _sexList[index];
 
 
-                    });
-                  }
+                      _msex = _sexList[index];
+
+
+
+
                 },
                 children: List<Widget>.generate(_sexList.length, (index){
                   return Center(
@@ -554,13 +565,13 @@ class _MineInforState extends State<MineInfor> {
         });
   }
   DateTime _initDate = DateTime.now();
-
+  String mbirthDay;
   void _showDatePop(BuildContext context){
 
     showCupertinoModalPopup<void>(context: context, builder: (BuildContext cotext){
 
       return _buildBottonPicker(CupertinoDatePicker(
-        minimumYear: _initDate.year-100,
+        minimumYear: _initDate.year-70,
         maximumYear: _initDate.year,
         mode: CupertinoDatePickerMode.date,
         initialDateTime: _initDate,
@@ -568,31 +579,93 @@ class _MineInforState extends State<MineInfor> {
           if(mounted){
             setState(() {
 
-              birthDay =  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
 
+              mbirthDay=  formatDate(dataTime, [yyyy,"-",mm,"-",dd]);
             });
           }
         },
       ));
     });
   }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    setState(() {
+                      if(mounted){
+                        setState(() {
+                           if(_msex != null){
+                             sex = _msex;
+                           }
+                        if(mbirthDay != null){
+                          birthDay = mbirthDay;
+                        }
+
+
+                        });
+                      }
+                    });
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
   ImagePicker _picker;
@@ -622,6 +695,7 @@ class _MineInforState extends State<MineInfor> {
   _upLoadImage(String path){
     MiviceRepository.upLoadPicture(path).then((value) {
       var reponse = json.decode(value.toString());
+      print(reponse);
       if(reponse["status"] == "success") {
         String   head_img = reponse["result"]["url"];
         setState(() {

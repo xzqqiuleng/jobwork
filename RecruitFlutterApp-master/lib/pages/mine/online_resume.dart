@@ -40,16 +40,16 @@ class _OnlineResumeState extends State<OnlineResume> {
   String work ="";
   String money ="";
   String city ="";
-  String work_company ="";
-  String work_pos ="";
-  String work_infro = "";
-  String start_time = "";
-  String stop_time = "";
-  String school = "";
-  String  zy= "";
+  String work_company ="暂未填写";
+  String work_pos ="暂未填写";
+  String work_infro = "暂未填写";
+  String start_time = "--";
+  String stop_time = "--";
+  String school = "暂未填写";
+  String  zy= "暂未填写";
   String xl = "";
-  String  by_time = "";
-  String  jl = "";
+  String  by_time = "--";
+  String  jl = "暂未填写";
   String jlState="";
   String job_id;
 
@@ -493,123 +493,171 @@ class _OnlineResumeState extends State<OnlineResume> {
                           color: Color.fromRGBO(242, 243, 244, 1),
                           height: 1,
                         ),
-
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                '* 工作经历',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold
+                        Text(
+                          '* 学历',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10,bottom: 10),
+                          child:   GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              _showSexPop(context);
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  child:   Text(xl,
+                                      style: TextStyle(
+                                        wordSpacing: 1,
+                                        letterSpacing: 1,
+                                        fontSize: 16,
+                                          color: Color.fromRGBO(136, 138, 138, 1)
+                                      )),
                                 ),
-                              ),
+                                SizedBox(width: 8,),
+                                Image.asset(
+                                  'images/ic_arrow_gray.png',
+                                  width: 18,
+                                  height: 18,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 8,),
-//                          GestureDetector(
-//                              onTap: (){
-//                                Navigator.push(
-//                                    context,
-//                                    MaterialPageRoute(
-//                                      builder: (context) => MeGzjl(),
-//                                    ));
-//                              },
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          color: Color.fromRGBO(242, 243, 244, 1),
+                          height: 1,
+                        ),
+
+
+//                        Row(
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          mainAxisAlignment: MainAxisAlignment.start,
+//                          children: <Widget>[
+//                            Expanded(
 //                              child: Text(
-//                                "添加",
-//                                style: TextStyle(
-//                                    color: Colours.app_main,
+//                                '* 工作经历',
+//                                maxLines: 1,
+//                                overflow: TextOverflow.ellipsis,
+//                                style: const TextStyle(
+//                                    fontSize: 14,
+//                                    color: Colors.black87,
 //                                    fontWeight: FontWeight.bold
 //                                ),
-//                              )
-//                          )
-                          ],
-                        ),
-                        SizedBox(height: 8,),
-                        GestureDetector(
-                            onTap: () async{
-                              Map m_wo = await   Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MeGzjl(),
-                                  ));
-                              if(m_wo != null){
-
-                                workMap = m_wo;
-                                setState(() {
-                                  work_company=   workMap["work_company"];
-                                  work_pos = workMap["work_pos"] ;
-                                  work_infro =workMap["work_infro"] ;
-                                  start_time = workMap["start_time"] ;
-                                  stop_time= workMap["stop_time"];
-                                });
-
-
-
-                              }
-                            },
-                            behavior: HitTestBehavior.opaque,
-                            child:  Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Text(work_company,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                wordSpacing: 1,
-                                                letterSpacing: 1,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color.fromRGBO(37, 38, 39, 1))),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text("${start_time}-${stop_time}",
-                                          style: TextStyle(
-                                              wordSpacing: 1,
-                                              letterSpacing: 1,
-                                              fontSize: 14,
-                                              color: Color.fromRGBO(159, 160, 161, 1))),
-                                      SizedBox(width: 15),
-                                      Image.asset('images/ic_arrow_gray.png',
-                                          width: 10, height: 10, fit: BoxFit.cover)
-                                    ],
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text('${work_pos}',
-                                      style: TextStyle(
-                                          wordSpacing: 1,
-                                          letterSpacing: 1,
-                                          fontSize: 14,
-                                          color: Color.fromRGBO(136, 138, 138, 1))),
-                                  SizedBox(height: 8),
-                                  Text('${work_infro}',
-                                      style: TextStyle(
-                                          wordSpacing: 1,
-                                          letterSpacing: 1,
-                                          fontSize: 14,
-                                          color: Color.fromRGBO(136, 138, 138, 1))),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-
-                                ],
-                              ),
-                            )
-                        ),
+//                              ),
+//                            ),
+//                            SizedBox(width: 8,),
+////                          GestureDetector(
+////                              onTap: (){
+////                                Navigator.push(
+////                                    context,
+////                                    MaterialPageRoute(
+////                                      builder: (context) => MeGzjl(),
+////                                    ));
+////                              },
+////                              child: Text(
+////                                "添加",
+////                                style: TextStyle(
+////                                    color: Colours.app_main,
+////                                    fontWeight: FontWeight.bold
+////                                ),
+////                              )
+////                          )
+//                          ],
+//                        ),
+//                        SizedBox(height: 8,),
+//                        GestureDetector(
+//                            onTap: () async{
+//                              Map m_wo = await   Navigator.push(
+//                                  context,
+//                                  MaterialPageRoute(
+//                                    builder: (context) => MeGzjl(),
+//                                  ));
+//                              if(m_wo != null){
+//
+//                                workMap = m_wo;
+//                                setState(() {
+//                                  work_company=   workMap["work_company"];
+//                                  work_pos = workMap["work_pos"] ;
+//                                  work_infro =workMap["work_infro"] ;
+//                                  start_time = workMap["start_time"] ;
+//                                  stop_time= workMap["stop_time"];
+//                                });
+//
+//
+//
+//                              }
+//                            },
+//                            behavior: HitTestBehavior.opaque,
+//                            child:  Padding(
+//                              padding: const EdgeInsets.symmetric(vertical: 10),
+//                              child: Column(
+//                                mainAxisAlignment: MainAxisAlignment.start,
+//                                crossAxisAlignment: CrossAxisAlignment.start,
+//                                children: <Widget>[
+//                                  Row(
+//                                    mainAxisAlignment: MainAxisAlignment.start,
+//                                    crossAxisAlignment: CrossAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      Expanded(
+//                                        child: Text(work_company,
+//                                            maxLines: 1,
+//                                            overflow: TextOverflow.ellipsis,
+//                                            style: const TextStyle(
+//                                                wordSpacing: 1,
+//                                                letterSpacing: 1,
+//                                                fontSize: 15,
+//                                                fontWeight: FontWeight.bold,
+//                                                color: Color.fromRGBO(37, 38, 39, 1))),
+//                                      ),
+//                                      SizedBox(
+//                                        width: 8,
+//                                      ),
+//                                      Text("${start_time}-${stop_time}",
+//                                          style: TextStyle(
+//                                              wordSpacing: 1,
+//                                              letterSpacing: 1,
+//                                              fontSize: 14,
+//                                              color: Color.fromRGBO(159, 160, 161, 1))),
+//                                      SizedBox(width: 15),
+//                                      Image.asset('images/ic_arrow_gray.png',
+//                                          width: 10, height: 10, fit: BoxFit.cover)
+//                                    ],
+//                                  ),
+//                                  SizedBox(height: 5),
+//                                  Text('${work_pos}',
+//                                      style: TextStyle(
+//                                          wordSpacing: 1,
+//                                          letterSpacing: 1,
+//                                          fontSize: 14,
+//                                          color: Color.fromRGBO(136, 138, 138, 1))),
+//                                  SizedBox(height: 8),
+//                                  Text('${work_infro}',
+//                                      style: TextStyle(
+//                                          wordSpacing: 1,
+//                                          letterSpacing: 1,
+//                                          fontSize: 14,
+//                                          color: Color.fromRGBO(136, 138, 138, 1))),
+//                                  SizedBox(
+//                                    height: 8,
+//                                  ),
+//
+//                                ],
+//                              ),
+//                            )
+//                        ),
 
 
 //                      Container(
@@ -660,105 +708,105 @@ class _OnlineResumeState extends State<OnlineResume> {
 //                        physics: const NeverScrollableScrollPhysics(),
 //                      ),
 
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 15),
-                          color: Color.fromRGBO(242, 243, 244, 1),
-                          height: 1,
-                        ),
-
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                '* 教育经历',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 8,),
-                          ],
-                        ),
-                        SizedBox(height: 8,),
-                        GestureDetector(
-                          onTap: () async{
-                            Map ss =  await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MeEdu(),
-                                ));
-                            if(ss != null){
-                              eduMap = ss;
-                              setState(() {
-
-                                school =eduMap["school"];
-                                zy= eduMap["zy"];
-                                by_time= eduMap["by_time"];
-                                jl= eduMap["jl"] ;
-                                xl= eduMap["xl"] ;
-                              });
-                            }
-                          },
-                          behavior: HitTestBehavior.opaque,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Text(school,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              wordSpacing: 1,
-                                              letterSpacing: 1,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color.fromRGBO(37, 38, 39, 1))),
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(by_time,
-                                        style: TextStyle(
-                                            wordSpacing: 1,
-                                            letterSpacing: 1,
-                                            fontSize: 14,
-                                            color: Color.fromRGBO(159, 160, 161, 1))),
-                                    SizedBox(width: 15),
-                                    Image.asset('images/ic_arrow_gray.png',
-                                        width: 10, height: 10, fit: BoxFit.cover)
-                                  ],
-                                ),
-                                SizedBox(height: 5),
-                                Text('${xl}•${zy}',
-                                    style: TextStyle(
-                                        wordSpacing: 1,
-                                        letterSpacing: 1,
-                                        fontSize: 14,
-                                        color: Color.fromRGBO(136, 138, 138, 1))),
-                              ],
-                            ),
-                          ),
-                        ),
-
-
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 15),
-                          color: Color.fromRGBO(242, 243, 244, 1),
-                          height: 1,
-                        ),
+//                        Container(
+//                          margin: EdgeInsets.symmetric(vertical: 15),
+//                          color: Color.fromRGBO(242, 243, 244, 1),
+//                          height: 1,
+//                        ),
+//
+//                        Row(
+//                          crossAxisAlignment: CrossAxisAlignment.center,
+//                          mainAxisAlignment: MainAxisAlignment.start,
+//                          children: <Widget>[
+//                            Expanded(
+//                              child: Text(
+//                                '* 教育经历',
+//                                maxLines: 1,
+//                                overflow: TextOverflow.ellipsis,
+//                                style: const TextStyle(
+//                                    fontSize: 14,
+//                                    color: Colors.black87,
+//                                    fontWeight: FontWeight.bold
+//                                ),
+//                              ),
+//                            ),
+//                            SizedBox(width: 8,),
+//                          ],
+//                        ),
+//                        SizedBox(height: 8,),
+//                        GestureDetector(
+//                          onTap: () async{
+//                            Map ss =  await Navigator.push(
+//                                context,
+//                                MaterialPageRoute(
+//                                  builder: (context) => MeEdu(),
+//                                ));
+//                            if(ss != null){
+//                              eduMap = ss;
+//                              setState(() {
+//
+//                                school =eduMap["school"];
+//                                zy= eduMap["zy"];
+//                                by_time= eduMap["by_time"];
+//                                jl= eduMap["jl"] ;
+//                                xl= eduMap["xl"] ;
+//                              });
+//                            }
+//                          },
+//                          behavior: HitTestBehavior.opaque,
+//                          child: Padding(
+//                            padding: const EdgeInsets.symmetric(vertical: 10),
+//                            child: Column(
+//                              mainAxisAlignment: MainAxisAlignment.start,
+//                              crossAxisAlignment: CrossAxisAlignment.start,
+//                              children: <Widget>[
+//                                Row(
+//                                  mainAxisAlignment: MainAxisAlignment.start,
+//                                  crossAxisAlignment: CrossAxisAlignment.center,
+//                                  children: <Widget>[
+//                                    Expanded(
+//                                      child: Text(school,
+//                                          maxLines: 1,
+//                                          overflow: TextOverflow.ellipsis,
+//                                          style: const TextStyle(
+//                                              wordSpacing: 1,
+//                                              letterSpacing: 1,
+//                                              fontSize: 15,
+//                                              fontWeight: FontWeight.bold,
+//                                              color: Color.fromRGBO(37, 38, 39, 1))),
+//                                    ),
+//                                    SizedBox(
+//                                      width: 8,
+//                                    ),
+//                                    Text(by_time,
+//                                        style: TextStyle(
+//                                            wordSpacing: 1,
+//                                            letterSpacing: 1,
+//                                            fontSize: 14,
+//                                            color: Color.fromRGBO(159, 160, 161, 1))),
+//                                    SizedBox(width: 15),
+//                                    Image.asset('images/ic_arrow_gray.png',
+//                                        width: 10, height: 10, fit: BoxFit.cover)
+//                                  ],
+//                                ),
+//                                SizedBox(height: 5),
+//                                Text('${xl}•${zy}',
+//                                    style: TextStyle(
+//                                        wordSpacing: 1,
+//                                        letterSpacing: 1,
+//                                        fontSize: 14,
+//                                        color: Color.fromRGBO(136, 138, 138, 1))),
+//                              ],
+//                            ),
+//                          ),
+//                        ),
+//
+//
+//                        Container(
+//                          margin: EdgeInsets.symmetric(vertical: 15),
+//                          color: Color.fromRGBO(242, 243, 244, 1),
+//                          height: 1,
+//                        ),
 
 //                      Row(
 //                        crossAxisAlignment: CrossAxisAlignment.center,
@@ -803,6 +851,117 @@ class _OnlineResumeState extends State<OnlineResume> {
           ),
         ),
       )
+    );
+  }
+
+
+  List _salaryList=["初中及以下","高中","中专","大专","本科","研究生","硕士","博士"];
+  String _mxl="初中及以下";
+  void _showSexPop(BuildContext context){
+    FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context){
+          return _buildBottonPicker(
+              CupertinoPicker(
+
+                magnification: 1,
+                itemExtent:58 ,
+                backgroundColor: Colors.white,
+                useMagnifier: true,
+                scrollController: scrollController,
+                onSelectedItemChanged: (int index){
+
+
+                  _mxl = _salaryList[index];
+
+
+
+                },
+                children: List<Widget>.generate(_salaryList.length, (index){
+                  return Center(
+                    child: Text(_salaryList[index]),
+                  );
+                }),
+              )
+          );
+        });
+  }
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    if(mounted){
+                      setState(() {
+
+                        if(_mxl != null){
+                          xl = _mxl;
+                        }
+
+
+                      });
+                    }
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
 }

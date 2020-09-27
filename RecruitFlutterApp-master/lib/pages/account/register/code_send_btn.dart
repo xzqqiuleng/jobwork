@@ -7,7 +7,8 @@ import 'package:recruit_app/colours.dart';
 class CodeSendBtn  extends StatefulWidget{
 //  PhoneCodeModel model;
 //  CodeSendBtn(this.model);
-  CodeSendBtn({Key key}) : super(key: key);
+  int type;
+  CodeSendBtn(this.type,{Key key}) : super(key: key);
   @override
   CodeSendBtnState createState() {
     // TODO: implement createState
@@ -60,9 +61,16 @@ class CodeSendBtnState extends State<CodeSendBtn>{
   }
   }
    void getSmsCode(String phone) async{
-
+    String code;
+      if(widget.type == 0){
+        code="8827336";             //注册
+      }else  if(widget.type == 1){
+        code="8827337";  ///忘记密码
+      }else {
+        code="14373645"; //绑定手机
+      }
     print(phone);
-    Smssdk.getTextCode(phone,"86","", (dynamic ret, Map err){
+    Smssdk.getTextCode(phone,"86",code, (dynamic ret, Map err){
       if(err!=null){
         print(err);
       }

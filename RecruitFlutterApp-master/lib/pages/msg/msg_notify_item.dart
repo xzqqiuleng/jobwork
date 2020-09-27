@@ -7,8 +7,8 @@ class MsgNotifyItem extends StatefulWidget {
   final String imgPath;
   final String title;
   final String content;
-
-  const MsgNotifyItem({Key key, @required this.btnKey, this.imgPath, this.title, this.content,}) : super(key: key);
+  final String time;
+  const MsgNotifyItem({Key key, @required this.btnKey, this.imgPath, this.title, this.content,this.time}) : super(key: key);
 
   @override
   _MsgNotifyItemState createState() => _MsgNotifyItemState();
@@ -65,9 +65,9 @@ class _MsgNotifyItemState extends State<MsgNotifyItem> {
                             width: ScreenUtil().setWidth(16),
                           ),
                           Text(
-                            '20:30',
+                            widget.time,
                             style: TextStyle(
-                              fontSize: ScreenUtil().setSp(24),
+                              fontSize: ScreenUtil().setSp(18),
                               color: Colors.grey,
                             ),
                           ),

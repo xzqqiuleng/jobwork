@@ -191,6 +191,7 @@ class _JobIntentState extends State<JobIntent> {
 
   List _salaryList=["离职-找工作","在职—找工作","在职-考虑机会","暂不考虑"];
   String _xl="离职-找工作";
+  String _mxl = "离职-找工作";
   void _showSexPop(BuildContext context){
     FixedExtentScrollController  scrollController = FixedExtentScrollController(initialItem:0);
     showCupertinoModalPopup<void>(
@@ -205,14 +206,13 @@ class _JobIntentState extends State<JobIntent> {
                 useMagnifier: true,
                 scrollController: scrollController,
                 onSelectedItemChanged: (int index){
-                  if(mounted){
-                    setState(() {
-
-                      _xl = _salaryList[index];
 
 
-                    });
-                  }
+                      _mxl = _salaryList[index];
+
+
+
+
                 },
                 children: List<Widget>.generate(_salaryList.length, (index){
                   return Center(
@@ -223,23 +223,81 @@ class _JobIntentState extends State<JobIntent> {
           );
         });
   }
-  Widget _buildBottonPicker(Widget picker){
-    return Container(
-      height: 190,
-      padding: EdgeInsets.only(top: 6),
-      color: Colors.white,
-      child: DefaultTextStyle(
-        style: const TextStyle(
-            color:Colors.black87,
-            fontSize: 18
-        ),
-        child: GestureDetector(
-          child: SafeArea(
-            top: false,
-            child: picker,
+  Widget _buildBottonPicker(Widget picker) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          height: 52,
+          color: Color(0xfff6f6f6),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("取消",
+                    style: TextStyle(
+                        color: Colours.black_212920,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none
+                    ),),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+//                    Navigator.pop(context);
+//                    showToast("举报已发送，我们会尽快审核信息");
+                    Navigator.pop(context);
+                    if(mounted){
+                      setState(() {
+                        if(_mxl != null){
+                          _xl =     _mxl;
+                        }
+
+
+
+                      });
+                    }
+                  },
+                  child: Text("确定",
+                    style: TextStyle(
+                        decoration: TextDecoration.none,
+                        color: Colours.app_main,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    ),),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
+        Container(
+          height: 190,
+          padding: EdgeInsets.only(top: 6),
+          color: Colors.white,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+                color: Colours.black_212920,
+                fontSize: 18
+            ),
+            child: GestureDetector(
+              child: SafeArea(
+                top: false,
+                child: picker,
+              ),
+            ),
+          ),
+        )
+      ],
+
     );
   }
 }
