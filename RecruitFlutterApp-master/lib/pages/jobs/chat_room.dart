@@ -1,16 +1,12 @@
 
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/chat_list.dart';
-import 'package:recruit_app/pages/companys/company_welfare_item.dart';
-import 'package:recruit_app/pages/jobs/chat_room_intro.dart';
 import 'package:recruit_app/pages/jobs/chat_row_item.dart';
 import 'package:recruit_app/pages/jubao.dart';
 import 'package:recruit_app/pages/normal_world.dart';
@@ -37,7 +33,7 @@ class ChatRoom extends StatefulWidget {
 class _ChatRoomState extends State<ChatRoom> {
   List<Chat> _chatList = [];
   final ScrollController _scrollController = ScrollController();
-  var channel;
+  var  channel;
   String  jsonStr;
 
   StreamSubscription  _eventChangeSub;
@@ -113,6 +109,7 @@ class _ChatRoomState extends State<ChatRoom> {
     // TODO: implement dispose
     super.dispose();
     _eventChangeSub.cancel();
+    channel.sink.close();
   }
   @override
   void initState() {

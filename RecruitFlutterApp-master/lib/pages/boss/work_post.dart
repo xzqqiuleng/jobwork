@@ -45,7 +45,20 @@ String fuliStr="";
         margin: EdgeInsets.only(bottom: 16),
         padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
         child: Text(
-          "公司信息认证失败，不能发布职位！",
+          "公司资质认证失败，不能发布职位！",
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      );
+    } else if(shState =="2"){
+      return  Container(
+        alignment: Alignment.center,
+        color: Colors.redAccent,
+        margin: EdgeInsets.only(bottom: 16),
+        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+        child: Text(
+          "公司资质正在审核中，暂时不能发布职位！",
           style: TextStyle(
               color: Colors.white
           ),
@@ -92,7 +105,11 @@ String fuliStr="";
   }
   _pubResume(){
 if(shState == "0"){
-  showToast("对不起，你的公司信息审核不通过，暂时不能发布职位");
+  showToast("对不起，你的公司资质审核不通过，暂时不能发布职位");
+  return;
+}
+if(shState == "2"){
+  showToast("对不起，你的公司资质正在审核中，暂时不能发布职位");
   return;
 }
     Map dMap = Map();

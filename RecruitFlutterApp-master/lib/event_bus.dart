@@ -10,3 +10,7 @@ class CitySelectEvent {
   String city;
   CitySelectEvent(this.city);
 }
+class RefreshEvent {
+  bool isRefresh;
+  RefreshEvent(this.isRefresh);
+}

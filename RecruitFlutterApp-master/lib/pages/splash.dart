@@ -109,20 +109,24 @@ class _SplashState extends State<Splash> {
             bannStr3.add(itme);
           }
         }
-        if(bannStr1.length>0 && open_status != "0"){
-         setState(() {
-           admap = bannStr1[0];
-         });
-
-        }
         if(bannStr2.length>0){
           ShareHelper.saveBanner(bannStr2, "two");
         }
         if(bannStr3.length>0){
           ShareHelper.saveBanner(bannStr3, "three");
         }
-      }else{
+        if(bannStr1.length>0 && open_status != "0"){
+         setState(() {
+           admap = bannStr1[0];
+           isSHow = false;
+         });
 
+        }else{
+          _autoTurn();
+        }
+
+      }else{
+             _autoTurn();
       }
     });
   }
@@ -145,10 +149,11 @@ class _SplashState extends State<Splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    delay();
     _getBanner();
+    delay();
+
   }
+  bool isSHow = true;
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, width: 750, height: 1334);
@@ -187,19 +192,22 @@ class _SplashState extends State<Splash> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: ()=>_autoTurn(),
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(10,4,10,4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.black12
-                        ),
-                        child: Text(
-                          "${indes}s |  跳过",
-                          style: TextStyle(
-                              color: Colors.white
-                          ),
-                        ),
+                      child:Offstage(
+                        offstage: isSHow,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10,4,10,4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.black12
+                    ),
+                    child: Text(
+                      "${indes}s |  跳过",
+                      style: TextStyle(
+                          color: Colors.white
                       ),
+                    ),
+                  ),
+                )
                     ),
                   )
                 ],

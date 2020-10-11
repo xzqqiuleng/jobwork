@@ -170,7 +170,19 @@ _nameController.text=  data["name"];
      color: Colors.redAccent,
      padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
      child: Text(
-       "公司信息认证失败，请修改后重新提交审核！",
+       "公司资质认证失败，请修改后重新提交审核！",
+       style: TextStyle(
+           color: Colors.white
+       ),
+     ),
+   );
+ }else if(shState =="2"){
+   return  Container(
+     alignment: Alignment.center,
+     color: Colors.redAccent,
+     padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+     child: Text(
+       "公司资质正在审核中！",
        style: TextStyle(
            color: Colors.white
        ),

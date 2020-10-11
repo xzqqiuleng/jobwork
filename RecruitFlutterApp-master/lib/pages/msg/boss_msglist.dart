@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
@@ -170,7 +172,12 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   List data =List();
   List<TopicTabModel> topicTabMenus=List();
   int type = 0;
-
+  StreamSubscription  _eventChangeSub;
+  void _eventSub() {
+    _eventChangeSub = eventBus.on<RefreshEvent>().listen((event) {
+      _OnRefresh();
+    });
+  }
   _OnRefresh(){
      //id，分为boss，用户
     new MiviceRepository().getMessageList(ShareHelper.getBosss().userId,0).then((value) {
@@ -189,6 +196,19 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   }
   _loadMore(){
     _refreshController.loadComplete();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _eventSub();
+
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _eventChangeSub.cancel();
   }
   @override
   Widget build(BuildContext context) {
@@ -224,8 +244,15 @@ child: _buildMiddelBar(topicTabMenus,context),
           if (data.length >0 ) {
             return GestureDetector(
               onTap: (){
+                String userId = data[index]["user_id"].toString();
+                String reply_id ;
+                if(userId == ShareHelper.getBosss().userId){
+                  reply_id = data[index]["reply_id"].toString();
+                }else{
+                  reply_id = userId;
+                }
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getBosss().userId ,reply_id: data[index]["userInfo"]["user_id"].toString(),head_icon:data[index]["userInfo"]["head_img"],title: data[index]["userInfo"]["user_name"],type: 0,)));
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getBosss().userId ,reply_id: reply_id,head_icon:data[index]["userInfo"]["head_img"],title: data[index]["userInfo"]["user_name"],type: 0,)));
               },
               behavior: HitTestBehavior.opaque,
               child:BossChatItem(mapData: data[index],) ,
@@ -356,14 +383,40 @@ class _BossChatItemState extends State<BossChatItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(ScreenUtil().setWidth(44))),
-                  child: Image.network(widget.mapData["userInfo"]["head_img"],
-                      width: ScreenUtil().setWidth(88),
-                      height: ScreenUtil().setWidth(88),
-                      fit: BoxFit.cover),
-                ),
+               Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(ScreenUtil().setWidth(44))),
+                            child: Image.network(widget.mapData["userInfo"]["head_img"],
+                                width: ScreenUtil().setWidth(88),
+                                height: ScreenUtil().setWidth(88),
+                                fit: BoxFit.cover),
+                          ),
+                          Positioned(
+                            right: 0,
+                            child:Offstage(
+                              offstage: widget.mapData["unread_num"].toString()=="0"?true:false ,
+                              child:Container(
+                                alignment: Alignment.center,
+                                width: 14,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    color: Colors.redAccent
+                                ),
+                                child: Text(
+                                  widget.mapData["unread_num"].toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ),
+                      ],
+                     ),
                 SizedBox(width: ScreenUtil().setWidth(32)),
                 Expanded(
                     child: Column(

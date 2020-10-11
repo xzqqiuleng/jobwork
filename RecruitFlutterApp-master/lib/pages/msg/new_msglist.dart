@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/topictab_model.dart';
 import 'package:recruit_app/pages/jobs/chat_room.dart';
 import 'package:recruit_app/pages/jobs/job_company_search.dart';
@@ -169,7 +171,12 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   List data =List();
   List<TopicTabModel> topicTabMenus=List();
   int type = 0;
-
+  StreamSubscription  _eventChangeSub;
+  void _eventSub() {
+    _eventChangeSub = eventBus.on<RefreshEvent>().listen((event) {
+      _OnRefresh();
+    });
+  }
   _OnRefresh(){
      //id，分为boss，用户
     new MiviceRepository().getMessageList(ShareHelper.getUser().userId,1).then((value) {
@@ -189,6 +196,20 @@ class _CompanyBodyListState extends State<CompanyBodyList> with AutomaticKeepAli
   }
   _loadMore(){
     _refreshController.loadComplete();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _eventSub();
+
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _eventChangeSub.cancel();
   }
   @override
   Widget build(BuildContext context) {
@@ -213,7 +234,6 @@ child: _buildMiddelBar(topicTabMenus,context),
       Expanded(
 
         child: SmartRefresher(
-
             header: WaterDropHeader(),
             footer: ClassicFooter(),
             controller: _refreshController,
@@ -223,8 +243,15 @@ child: _buildMiddelBar(topicTabMenus,context),
             child: ListView.builder(itemBuilder: (BuildContext context,int index) {
                          return GestureDetector(
               onTap: (){
+                String userId = data[index]["user_id"].toString();
+                String reply_id ;
+               if(userId == ShareHelper.getUser().userId){
+                 reply_id = data[index]["reply_id"].toString();
+               }else{
+                 reply_id = userId;
+               }
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: data[index]["comInfo"]["user_id"]==null?data[index]["reply_id"].toString():data[index]["comInfo"]["user_id"].toString(),head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
+                    MaterialPageRoute(builder: (context) => ChatRoom(user_id:ShareHelper.getUser().userId ,reply_id: reply_id,head_icon:data[index]["comInfo"]["company_img"],title: data[index]["comInfo"]["company_name"],type: 1,)));
               },
               behavior: HitTestBehavior.opaque,
               child:MsgChatItem(mapData: data[index],) ,

@@ -34,13 +34,41 @@ class _MsgChatItemState extends State<MsgChatItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(ScreenUtil().setWidth(44))),
-                  child: Image.network(widget.mapData["comInfo"]["company_img"],
-                      width: ScreenUtil().setWidth(88),
-                      height: ScreenUtil().setWidth(88),
-                      fit: BoxFit.cover),
+
+                Stack(
+                  children: [
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(ScreenUtil().setWidth(44))),
+                      child: Image.network(widget.mapData["comInfo"]["company_img"],
+                          width: ScreenUtil().setWidth(88),
+                          height: ScreenUtil().setWidth(88),
+                          fit: BoxFit.cover),
+                    ),
+                    Positioned(
+                      right: 0,
+                      child: Offstage(
+                      offstage: widget.mapData["unread_num"].toString()=="0"?true:false ,
+                      child: Container(
+                        width: 14,
+                        height: 14,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Colors.redAccent
+                        ),
+                        child: Text(
+                          widget.mapData["unread_num"].toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                        ),
+                      ),
+                       )
+                    ),
+                  ],
                 ),
                 SizedBox(width: ScreenUtil().setWidth(32)),
                 Expanded(

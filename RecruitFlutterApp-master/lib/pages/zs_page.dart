@@ -39,20 +39,20 @@ class ZSPage extends StatelessWidget {
           children: [
             Image.asset("images/zs.png"),
             Gaps.vGap32,
-            Text("1.工厂直招合作",style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-            ),),
-            Gaps.vGap10,
-            Text("2.人才中介合作",style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-            ),),
-            Gaps.vGap10,
-            Text("3.学生代理合作",style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-            ),),
+//            Text("1.工厂直招合作",style: TextStyle(
+//                fontSize: 20,
+//                fontWeight: FontWeight.bold
+//            ),),
+//            Gaps.vGap10,
+//            Text("2.人才中介合作",style: TextStyle(
+//                fontSize: 20,
+//                fontWeight: FontWeight.bold
+//            ),),
+//            Gaps.vGap10,
+//            Text("3.学生代理合作",style: TextStyle(
+//                fontSize: 20,
+//                fontWeight: FontWeight.bold
+//            ),),
             Container(
               margin: EdgeInsets.all(30),
               padding: EdgeInsets.fromLTRB(16, 6, 16, 6),

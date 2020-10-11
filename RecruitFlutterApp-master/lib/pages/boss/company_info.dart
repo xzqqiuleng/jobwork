@@ -28,7 +28,11 @@ class _CompanyInfoState extends State<CompanyInfo> {
 
   _pubCompany(){
     if(shState == "0"){
-      showToast("对不起，你的公司信息认证失败，暂时不能更新信息");
+      showToast("对不起，你的公司资质认证失败，暂时不能更新信息");
+      return;
+    }
+    if(shState == "2"){
+      showToast("对不起，你的公司资质正在审核中，暂时不能更新信息");
       return;
     }
     if(m1 != null && m2 != null && m3 !=null){
@@ -109,7 +113,19 @@ class _CompanyInfoState extends State<CompanyInfo> {
         color: Colors.redAccent,
         padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
         child: Text(
-          "公司信息审核失败，请修改后重新提交审核！",
+          "公司资质审核失败，请先修改！",
+          style: TextStyle(
+              color: Colors.white
+          ),
+        ),
+      );
+    } else if(shState =="2"){
+      return  Container(
+        alignment: Alignment.center,
+        color: Colors.redAccent,
+        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+        child: Text(
+          "公司资质正在审核中，暂时不能更新公司信息！",
           style: TextStyle(
               color: Colors.white
           ),

@@ -3,11 +3,12 @@ import 'package:recruit_app/pages/share_helper.dart';
 
 class MiviceRepository{
 
-//  static String baseUrl = 'http://192.168.1.21:8080/';      //开发
-//  static String socketUrl = 'ws://192.168.1.9:8080/ws/msg?';
-  static String baseUrl = 'http://www.18pinpin.com/crawler/';      //开发
-  static String socketUrl = 'ws://www.18pinpin.com/crawler/ws/msg?';      //开发
-
+//  static String baseUrl = 'http://192.168.1.25:8888/';      //开发
+//  static String socketUrl = 'ws://192.168.1.25:8888/ws/msg?';
+  static String baseUrl = 'http://18pinpin.com/crawler/';      //开发
+  static String socketUrl = 'ws://18pinpin.com/crawler/ws/msg?';      //开发
+// static String  unreadsocketUrl = 'ws://192.168.1.25:8888/ws/unread?';
+  static String  unreadsocketUrl = 'ws://18pinpin.com/crawler/ws/unread?';
   static Dio dio;
 
   MiviceRepository(){

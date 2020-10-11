@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/event_bus.dart';
 import 'package:recruit_app/model/identity_model.dart';
 import 'package:recruit_app/pages/boss/boss.dart';
 import 'package:recruit_app/pages/boss/work_post.dart';
@@ -21,9 +24,11 @@ import 'package:recruit_app/pages/msg/msg_list.dart';
 import 'package:recruit_app/pages/msg/new_msglist.dart';
 import 'package:recruit_app/pages/permision_web.dart';
 import 'package:recruit_app/pages/provider/app_update.dart';
+import 'package:recruit_app/pages/service/mivice_repository.dart';
 import 'package:recruit_app/pages/share_helper.dart';
 import 'package:recruit_app/pages/storage_manager.dart';
 import 'package:recruit_app/pages/web_page.dart';
+import 'package:web_socket_channel/io.dart';
 
 class RecruitHomeApp extends StatefulWidget {
   @override
@@ -44,71 +49,6 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
 
 
 
-  static List<BottomNavigationBarItem> _bossBottoms = <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b5.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b5on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      title: Text('人才'),
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b3.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b3on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      title: Text('消息'),
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b4.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b4on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
-        ),
-      ),
-      title: Text('我的'),
-    ),
-  ];
 
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
@@ -117,94 +57,201 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
     Mine(),
   ];
 
-  static List<BottomNavigationBarItem> _widgetBottoms =
-  <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b1.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+  List<BottomNavigationBarItem> getBossBottoms(){
+    return <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b5.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b1on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b5on.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
+        title: Text('人才'),
       ),
-      title: Text('职位'),
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b2.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+      BottomNavigationBarItem(
+        icon: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Badge(
+              showBadge: isSHowRead,
+              badgeContent: Text(unread,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                ),),
+              child: Image.asset(
+                'images/b3.png',
+                width: 24,
+                height: 24,
+                fit: BoxFit.contain,
+              ),
+            )
         ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b2on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Badge(
+            showBadge: isSHowRead,
+            badgeContent: Text(unread,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+              ),
+            ),
+            child: Image.asset(
+              'images/b3on.png',
+              width: 24,
+              height: 24,
+              fit: BoxFit.contain,
+            ),
+          ),
         ),
+        title: Text('消息'),
       ),
-      title: Text('公司'),
-    ),
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b3.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+      BottomNavigationBarItem(
+        icon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b4.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b3on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b4on.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
+        title: Text('我的'),
       ),
-      title: Text('消息'),
-    ),
+    ];
 
-    BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b4.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+  }
+  List<BottomNavigationBarItem> getBottoms(){
+
+    return   <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b1.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
-      ),
-      activeIcon: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Image.asset(
-          'images/b4on.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.contain,
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b1on.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
         ),
+        title: Text('职位'),
       ),
-      title: Text('我的'),
-    ),
-  ];
+      BottomNavigationBarItem(
+        icon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b2.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
+        ),
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b2on.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
+        ),
+        title: Text('公司'),
+      ),
+      BottomNavigationBarItem(
+        icon: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Badge(
+              showBadge: isSHowRead,
+              badgeContent: Text(unread,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                ),),
+              child: Image.asset(
+                'images/b3.png',
+                width: 24,
+                height: 24,
+                fit: BoxFit.contain,
+              ),
+            )
+        ),
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Badge(
+            showBadge: isSHowRead,
+            badgeContent: Text(unread,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 11,
+              ),
+            ),
+            child: Image.asset(
+              'images/b3on.png',
+              width: 24,
+              height: 24,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        title: Text('消息'),
+      ),
+
+      BottomNavigationBarItem(
+        icon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b4.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
+        ),
+        activeIcon: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset(
+            'images/b4on.png',
+            width: 24,
+            height: 24,
+            fit: BoxFit.contain,
+          ),
+        ),
+        title: Text('我的'),
+      ),
+    ];
+  }
+
+
+
 
 //  void _onItemTapped(int index) {
 //    setState(() {
@@ -213,11 +260,40 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
 //  }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  channel.sink.close();
+  }
+  IOWebSocketChannel channel;
+  bool isSHowRead = false;
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    String userId;
+    if(ShareHelper.isBossLogin()){
+      userId = ShareHelper.getBosss().userId;
+    }else{
+      userId = ShareHelper.getUser().userId;
+    }
+    channel = IOWebSocketChannel.connect("${MiviceRepository.unreadsocketUrl}${userId}");
+
+    channel.stream.listen((message) {
+      setState(() {
+         unread = message;
+         if(unread == "0"){
+           isSHowRead = false;
+         }else{
+           isSHowRead = true;
+         }
+         eventBus.fire(RefreshEvent(true));
+      });
+
+    });
     checkAppUpdate(context);
   }
+  String unread="0";
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +345,7 @@ class _RecruitHomeState extends State<RecruitHomeApp> {
         builder: (context, model, child) {
           return BottomNavigationBar(
             items:
-            model.identity == Identity.boss ? _bossBottoms : _widgetBottoms,
+            model.identity == Identity.boss ? getBossBottoms() : getBottoms(),
             type: BottomNavigationBarType.fixed,
             backgroundColor: Color.fromRGBO(255, 255, 255, 1),
             currentIndex: model.selectedIndex,
