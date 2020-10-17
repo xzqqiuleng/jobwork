@@ -11,10 +11,10 @@ class Gaps {
 
   static Widget line1 = const Divider(height: Dimens.gap_dp1,color: Colours.black_120000);
 
-
+  static Widget line4 = Container(height: 6,color: Color(0xfff4f4f4));
   static  Widget g_line_h =  Container(height: Dimens.gap_dp1,color: Colours.black_120000);
   static  Widget g_line_v =  Container(width: Dimens.gap_dp1,color: Colours.black_120000);
-
+  static Widget bline1 = const Divider(height: Dimens.gap_dp1,color: Colors.black38);
   
   /// 水平间隔
   static const Widget hGap4 = const SizedBox(width: Dimens.gap_dp4);

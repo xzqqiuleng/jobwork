@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/pages/utils/screen.dart';
 
 import 'animation_array.dart';
@@ -42,11 +43,12 @@ class _JobTabbarState extends State<JobTabbar> {
       });
     }
     return new Container(
-      height:  41,
+      height:  44,
       width: Screen.width,
       color: Colors.white,
       child: new Column(
         children: <Widget>[
+          Gaps.bline1,
           new Container(
             height: 40,
             child: new Row(
@@ -195,6 +197,7 @@ class _JobTabbarState extends State<JobTabbar> {
             height: 0.1,
             color: new Color.fromARGB(255, 242, 242, 245),
           ),
+          Gaps.bline1,
         ],
       ),
     );

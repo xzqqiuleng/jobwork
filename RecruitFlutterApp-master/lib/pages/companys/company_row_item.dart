@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/company_list.dart';
 import 'package:recruit_app/pages/constant.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/pages/utils/html_init.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
@@ -27,18 +28,7 @@ String titlss="暂无职位招聘";
 
    }
 
-    final companyItem = Card(
-      margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(22),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
-      ),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4)
-        ),
-        color: Colors.white,
-        elevation: 0.1,
-      child: Container(
+    final companyItem = Container(
         padding: EdgeInsets.only(
           top: ScreenUtil().setWidth(30),
           left: ScreenUtil().setWidth(30),
@@ -217,7 +207,7 @@ String titlss="暂无职位招聘";
           ],
         ),
       )
-    ) ;
+     ;
 
 //    if (lastItem) {
 //      return card;
@@ -229,8 +219,9 @@ String titlss="暂无职位招聘";
       children: <Widget>[
         companyItem,
         Container(
-          height: ScreenUtil().setWidth(4),
-          color: Color.fromRGBO(245, 245, 245, 1),
+          height: 6,
+          color: Color(0xfff4f4f4),
+
         ),
       ],
     );

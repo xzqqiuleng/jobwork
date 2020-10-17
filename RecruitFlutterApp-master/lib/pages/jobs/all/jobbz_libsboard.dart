@@ -82,6 +82,7 @@ class _JobBzLibsboardState extends State<JobBzLibsboard> {
 
   Widget _buildContent() {
     return new Container(
+      color: Colors.white,
       child: SmartRefresher(
 
           header: WaterDropHeader(),

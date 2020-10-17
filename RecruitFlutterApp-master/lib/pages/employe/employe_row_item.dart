@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/employe_list.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 
 class EmployeeRowItem extends StatelessWidget {
   final Map employee;
@@ -18,17 +19,15 @@ class EmployeeRowItem extends StatelessWidget {
    var dataItem = json.decode(employee["info"].toString());
    var head_icon = employee["head_img"].toString();
    List tags = List();
-   tags.add(dataItem["年龄"].toString());
+   bool isTrue = true;
+   if(dataItem["年龄"].toString() != ""){
+     tags.add(dataItem["年龄"].toString());
+     isTrue = false;
+   }
+
    tags.add(dataItem["性别"].toString());
    tags.add(dataItem["教育经历"].toString());
-    final employeeItem =
-      Card(
-        margin: EdgeInsets.fromLTRB(15,15,15,0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4)
-        ),
-        elevation:0.1,
-        child:Padding(
+    final employeeItem = Padding(
           padding: EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,13 +100,13 @@ class EmployeeRowItem extends StatelessWidget {
                 children: <Widget>[
                   Image.asset(
                     'images/hangye.png',
-                    width: 17,
-                    height: 18,
+                    width: 14,
+                    height: 14,
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 4),
                   Expanded(
-                      child: Text(      dataItem["求职行业"]==null?"暂无行业标签":dataItem["求职行业"],
+                      child: Text(  isTrue?dataItem["求职意向"]: dataItem["求职行业"]==null?"暂无行业标签":dataItem["求职行业"],
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -145,8 +144,8 @@ class EmployeeRowItem extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              Text( dataItem["求职意向"],
-                  maxLines: 2,
+              Text( isTrue? dataItem["求职行业"]: dataItem["求职意向"],
+                  maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       letterSpacing: 1,
@@ -154,10 +153,16 @@ class EmployeeRowItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       color: Color.fromRGBO(93, 94, 95, 1))),
+
             ],
           ),
-        ) ,
+        )
+    ;
+    return  Column(
+      children: [
+        employeeItem,
+        Gaps.line4
+      ],
     );
-    return  employeeItem;
   }
 }

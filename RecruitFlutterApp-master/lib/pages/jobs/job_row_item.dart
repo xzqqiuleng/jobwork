@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:recruit_app/colours.dart';
 import 'package:recruit_app/model/job_list.dart';
+import 'package:recruit_app/pages/utils/gaps.dart';
 import 'package:recruit_app/widgets/dash_line.dart';
 
 import '../constant.dart';
@@ -44,18 +45,7 @@ class JobRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final jobItem = Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4)
-      ),
-      color: Colors.white,
-      elevation: 0.1,
-      margin: EdgeInsets.only(
-          left: ScreenUtil(). setWidth(30),
-          right: ScreenUtil().setWidth(30),
-          top: ScreenUtil().setWidth(22),
-          bottom: 0),
-      child: Padding(
+    final jobItem =  Padding(
         padding: EdgeInsets.only(
             left: ScreenUtil().setWidth(28),
             right: ScreenUtil().setWidth(28),
@@ -79,8 +69,8 @@ class JobRowItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromRGBO(20, 20, 20, 1),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
@@ -105,7 +95,7 @@ class JobRowItem extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: ScreenUtil().setSp(23),
+                fontSize: ScreenUtil().setSp(26),
                 color: Color.fromRGBO(151, 151, 151, 1),
               ),
             ),
@@ -191,11 +181,15 @@ class JobRowItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      color: Color.fromRGBO(57, 57, 57, 1),
+                      fontSize: ScreenUtil().setSp(26),
+                      color: Colors.black54,
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: ScreenUtil().setWidth(16),
+                ),
+               Text("·"),
                 SizedBox(
                   width: ScreenUtil().setWidth(16),
                 ),
@@ -204,8 +198,8 @@ class JobRowItem extends StatelessWidget {
                   child: Text(
                     job["pub_date"].toString(),
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Color.fromRGBO(176, 181, 180, 1),
+                      fontSize: ScreenUtil().setSp(26),
+                      color: Colors.black54,
                     ),
                   ),
                )
@@ -225,13 +219,13 @@ class JobRowItem extends StatelessWidget {
 
                 Image.asset(
                   'images/qyrz.png',
-                  width: ScreenUtil().setWidth(24),
-                  height: ScreenUtil().setWidth(24),
+                  width: ScreenUtil().setWidth(26),
+                  height: ScreenUtil().setWidth(26),
                   fit: BoxFit.cover,
                 ),
 
                 SizedBox(
-                  width: ScreenUtil().setWidth(4),
+                  width: ScreenUtil().setWidth(10),
                 ),
                 Flexible(
                   child: Text(
@@ -239,7 +233,7 @@ class JobRowItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
+                      fontSize: ScreenUtil().setSp(24),
                       color: Color.fromRGBO(57, 57, 57, 1),
                     ),
                   ),
@@ -249,18 +243,18 @@ class JobRowItem extends StatelessWidget {
 
               ],
             ),
-
           ],
         ),
-      )
-    );
+      );
 
-    if (lastItem) {
-      return jobItem;
-    }
+
+//    if (lastItem) {
+//      return jobItem;
+//    }
     return Column(
       children: <Widget>[
         jobItem,
+     Gaps.line4,
       ],
     );
   }

@@ -46,8 +46,8 @@ android {
         applicationId "com.pinpin.jobwork"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 5
-        versionName "3.2"
+        versionCode 16
+        versionName "4.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

@@ -90,6 +90,7 @@ class _EmployLibsboardState extends State<EmployLibsboard> {
   
   Widget _buildContent() {
     return new Container(
+      color: Colors.white,
       child: SmartRefresher(
 
           header: WaterDropHeader(),

@@ -106,12 +106,12 @@ _getDetail() {
                SizedBox(
                  width: 8,
                ),
-               Text("${infor==null?"":infor["start_time"]}-${infor==null?"":infor["stop_time"]}",
-                   style: TextStyle(
-                       wordSpacing: 1,
-                       letterSpacing: 1,
-                       fontSize: 14,
-                       color: Color.fromRGBO(159, 160, 161, 1))),
+//               Text("${infor==null?"":infor["start_time"]}-${infor==null?"":infor["stop_time"]}",
+//                   style: TextStyle(
+//                       wordSpacing: 1,
+//                       letterSpacing: 1,
+//                       fontSize: 14,
+//                       color: Color.fromRGBO(159, 160, 161, 1))),
                SizedBox(width: 15),
 
              ],
